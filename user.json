@@ -1,0 +1,24 @@
+{
+    "users": [
+        {
+            "id": "user001",
+            "name": "Karl Marcus Peterson",
+            "email": "karlmp@gmail.com",
+        },
+        {
+            "id": "user002",
+            "name": "Tagao Matsuri",
+            "email": "tagaomsk@gmail.com",
+        },
+        {
+            "id": "user003",
+            "name": "Juan Dela Cruz",
+            "email": "delacruz@gmail.com"
+        },
+        {
+            "id": "",
+            "name": "",
+            "email": "",
+        },
+    ]
+}
