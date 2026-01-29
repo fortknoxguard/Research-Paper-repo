@@ -1,0 +1,42 @@
+{
+    "papers": [
+        {
+            "id": 1,
+            "Title": "Pscychological effects of Bullying among Highschool Students",
+            "Authors": "Karl Marcus Peterson",
+            "Abstract": "This paper discuss the effects of Bullying to student anf its mitigations",
+            "uploadDate": "2025-11-08",
+            "filePath": "uploads/the-effects-of-bullying.pdf",
+            "userId": "user001"
+        },
+        {
+            "id": 2,
+            "Title": "Mental Health among Japanese Students",
+            "Authors": "Tagako Matsuri",
+            "Abstract": "This paper delves deeper on Japanese Student's increasing Mental Health crissis and their Grueling Academic pressure",
+            "uploadDate": "2025-11-08",
+            "filePath": "uploads/Japanese-Metal-health-issues.pdf",
+            "userId": "user002"
+        },
+        {
+            "id": 3,
+            "Title": "Corruptuon Epidemic in The PHilippines",
+            "Authors": "Juan Dela Cruz",
+            "Abstract": "[Exploring the Systemic corruption ranging from small local enforcement to government level",
+            "uploadDate": "2025-11-08",
+            "filePath": "uploads/Corruption-in-The-Philippines.pdf",
+            "userId": "user003",
+
+        },
+        {
+            "id": 4, 
+            "Title": "",
+            "Authors": "",
+            "Abstract": "",
+            "uploadDate": "",
+            "filePath": "",
+            "userId": "",
+        },
+
+    ]
+}
