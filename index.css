@@ -1,105 +1,131 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICCTory Login</title>
 
-body {
-    height: 100vh;
-    background: linear-gradient(135deg, #0f4c81, #1e88e5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+  <!-- Your custom styles (kept exactly as you provided) -->
+  <link rel="stylesheet" href="index.css">
 
-.login-container {
-    width: 380px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-}
+  <!-- Roboto – Material's default font (optional but recommended) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 
-.logo-section {
-    background: #0f4c81;
-    color: #ffffff;
-    text-align: center;
-    padding: 25px 20px;
-}
+  <!-- Material Symbols (for <md-icon>) – lightweight & matches Material 3 -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 
-.logo {
-    width: 90px;
-    margin-bottom: 10px;
-}
+  <!-- Import map for @material/web (official quick-start recommendation) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@material/web/": "https://esm.run/@material/web@2/"
+    }
+  }
+  </script>
 
-.icctory-text {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
+  <!-- Override Material 3 tokens to match your blue theme -->
+  <style>
+    :root {
+      /* Primary color from your design */
+      --md-sys-color-primary: #1e88e5;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #bbdefb;
+      --md-sys-color-on-primary-container: #0d47a1;
 
-.login-form {
-    padding: 30px 25px;
-}
+      /* Background / surface to blend with your gradient body */
+      --md-sys-color-surface: #ffffff;
+      --md-sys-color-on-surface: #333333;
 
-.login-form h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #333;
-}
+      /* Shape & other tweaks to feel closer to your current design */
+      --md-sys-shape-corner-medium: 12px;
+      --md-outlined-text-field-outline-width: 1.5px;
+      --md-outlined-text-field-focus-outline-width: 2px;
+    }
 
-.input-group {
-    position: relative;
-    margin-bottom: 20px;
-}
+    body {
+      /* Your gradient is already in index.css – we keep it */
+      font-family: "Segoe UI", Roboto, Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-.input-group input {
-    width: 100%;
-    padding: 12px 40px 12px 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 15px;
-    outline: none;
-}
+    /* Make Material fields match your input-group spacing & style */
+    md-outlined-text-field {
+      width: 100%;
+      margin-bottom: 20px;
+      --md-outlined-field-outline-color: #ccc;
+      --md-outlined-field-focus-outline-color: #1e88e5;
+      --md-outlined-field-hover-outline-color: #aaa;
+      font-size: 15px;
+    }
 
-.input-group input:focus {
-    border-color: #1e88e5;
-}
+    /* Button styling to match your .login-button */
+    md-filled-button {
+      width: 100%;
+      --md-filled-button-container-color: #1e88e5;
+      --md-filled-button-hover-container-color: #1565c0;
+      --md-filled-button-label-text-color: #ffffff;
+      --md-filled-button-container-shape: 8px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      height: auto;
+      margin-top: 10px;
+    }
 
-.input-group i {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    color: #777;
-}
+    /* Icon inside field */
+    md-icon {
+      color: #777;
+    }
 
-.login-button {
-    width: 100%;
-    padding: 12px;
-    background: #1e88e5;
-    border: none;
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    /* Optional: make label behave like placeholder when empty */
+    md-outlined-text-field::part(label) {
+      transition: all 0.2s;
+    }
+  </style>
+</head>
+<body>
 
-.login-button:hover {
-    background: #1565c0;
-}
+  <div class="login-container">
+    <div class="logo-section">
+      <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg" 
+           alt="ICCT Colleges Foundation Inc. Logo" 
+           class="logo">
+      <div class="icctory-text">ICCTory</div>
+    </div>
 
-.signup-link {
-    display: block;
-    text-align: center;
-    margin-top: 18px;
-    text-decoration: none;
-    color: #1e88e5;
-    font-size: 14px;
-}
+    <div class="login-form">
+      <h2>Log in</h2>
 
-.signup-link:hover {
-    text-decoration: underline;
-}
+      <form action="login.php" method="post">
+        <md-outlined-text-field 
+          name="username" 
+          label="Username" 
+          required
+          autocomplete="username">
+          <md-icon slot="leading-icon">person</md-icon>
+        </md-outlined-text-field>
+
+        <md-outlined-text-field 
+          type="password" 
+          name="password" 
+          label="Password" 
+          required
+          autocomplete="current-password">
+          <md-icon slot="leading-icon">lock</md-icon>
+        </md-outlined-text-field>
+
+        <md-filled-button type="submit">Log In</md-filled-button>
+      </form>
+
+      <a href="signup.html" class="signup-link">No account yet? Sign up here.</a>
+    </div>
+  </div>
+
+  <!-- Load only the components we use -->
+  <script type="module">
+    import '@material/web/textfield/outlined-text-field.js';
+    import '@material/web/button/filled-button.js';
+    import '@material/web/icon/icon.js';
+  </script>
+
+</body>
+</html>
