@@ -4,17 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ICCTory Login</title>
-
-  <!-- Your custom styles -->
-  <link rel="stylesheet" href="index.css">
-
-  <!-- Google Fonts (Roboto is the Material default) -->
+  <!-- Google Fonts (Roboto) -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-
-  <!-- Font Awesome (for any extra icons you might want later) -->
+  <!-- Font Awesome (optional icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- Import map for bare module specifiers (@material/web/...) -->
+  <!-- Material Web import map -->
   <script type="importmap">
   {
     "imports": {
@@ -23,27 +17,33 @@
   }
   </script>
 
-  <!-- Material 3 theme basics (you can generate full theme later at https://m3.material.io/theme-builder) -->
   <style>
     :root {
-      /* Very basic light theme tokens – override in index.css if needed */
-      --md-sys-color-primary: #6750a4;
+      --md-sys-color-primary: #1e88e5;
       --md-sys-color-on-primary: #ffffff;
-      --md-sys-color-primary-container: #eaddff;
-      --md-sys-color-on-primary-container: #21005d;
+      --md-sys-color-primary-container: #bbdefb;
+      --md-sys-color-on-primary-container: #0d47a1;
       --md-sys-color-background: #fef7ff;
       --md-sys-color-on-background: #1d1b20;
-      --md-ref-palette-primary40: #6750a4;
     }
 
     body {
       font-family: 'Roboto', system-ui, sans-serif;
-      background: var(--md-sys-color-background);
-      color: var(--md-sys-color-on-background);
       margin: 0;
       min-height: 100dvh;
       display: grid;
       place-items: center;
+
+      /* === NEW BACKGROUND === */
+      background-image: url('https://www.shutterstock.com/shutterstock/photos/2534111515/display_1500/stock-photo-blurred-background-of-a-modern-university-campus-in-singapore-showcasing-contemporary-architecture-2534111515.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      /* Optional: slight dark overlay if text readability is an issue */
+      /* background-color: rgba(0, 0, 0, 0.25); */
+      /* background-blend-mode: multiply; */
     }
 
     .login-container {
@@ -51,8 +51,11 @@
       width: 90%;
       padding: 2.5rem 2rem;
       border-radius: 28px;
-      background: white;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      background: rgba(255, 255, 255, 0.88);   /* semi-transparent white for contrast */
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);             /* glass/matte effect – looks premium */
+      -webkit-backdrop-filter: blur(12px);     /* Safari support */
+      border: 1px solid rgba(255,255,255,0.3);
     }
 
     md-filled-text-field {
@@ -108,50 +111,42 @@
   </style>
 </head>
 <body>
-
   <div class="login-container">
     <div class="logo-section">
-      <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg" 
-           alt="ICCT Colleges Foundation Inc. Logo" 
+      <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg"
+           alt="ICCT Colleges Foundation Inc. Logo"
            class="logo">
       <div class="icctory-text">ICCTory</div>
     </div>
-
     <div class="login-form">
       <h2>Log in</h2>
-
       <form action="login.php" method="post">
-        <!-- Material 3 filled text field with leading icon -->
-        <md-filled-text-field 
-          name="username" 
-          label="Username" 
+        <md-filled-text-field
+          name="username"
+          label="Username"
           value=""
           required>
           <md-icon slot="leading-icon">person</md-icon>
         </md-filled-text-field>
-
-        <md-filled-text-field 
-          type="password" 
-          name="password" 
-          label="Password" 
+        <md-filled-text-field
+          type="password"
+          name="password"
+          label="Password"
           value=""
           required>
           <md-icon slot="leading-icon">lock</md-icon>
         </md-filled-text-field>
-
         <md-filled-button type="submit">Log In</md-filled-button>
       </form>
-
       <a href="signup.html" class="signup-link">No account yet? Sign up here.</a>
     </div>
   </div>
 
-  <!-- Load the components you use -->
+  <!-- Material Web components -->
   <script type="module">
     import '@material/web/textfield/filled-text-field.js';
     import '@material/web/button/filled-button.js';
-    import '@material/web/icon/icon.js';           // for <md-icon>
+    import '@material/web/icon/icon.js';
   </script>
-
 </body>
 </html>
