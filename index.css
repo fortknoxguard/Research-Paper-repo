@@ -21,7 +21,7 @@
       height: 100vh;
       background: 
         linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
-        url('https://raw.githubusercontent.com/fortknoxguard/Reseach-Paper-repo/main/background-purple.jpg') center / cover no-repeat fixed;
+        url('https://github.com/fortknoxguard/Research-Paper-repo/blob/main/background-purple.jpg') center / cover no-repeat fixed;
       background-attachment: fixed;
       display: flex;
       align-items: center;
@@ -81,4 +81,5 @@
   </script>
 </body>
 </html>
+
 
