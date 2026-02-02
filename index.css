@@ -25,22 +25,17 @@
 
   <!-- Override Material 3 tokens to match your blue theme -->
   <style>
-    :root {
-      /* Primary color from your design */
-      --md-sys-color-primary: #1e88e5;
-      --md-sys-color-on-primary: #ffffff;
-      --md-sys-color-primary-container: #bbdefb;
-      --md-sys-color-on-primary-container: #0d47a1;
-
-      /* Background / surface to blend with your gradient body */
-      --md-sys-color-surface: #ffffff;
-      --md-sys-color-on-surface: #333333;
-
-      /* Shape & other tweaks to feel closer to your current design */
-      --md-sys-shape-corner-medium: 12px;
-      --md-outlined-text-field-outline-width: 1.5px;
-      --md-outlined-text-field-focus-outline-width: 2px;
-    }
+    body {
+  font-family: 'Roboto', system-ui, sans-serif;
+  /* Replace or add these lines */
+  background-image: url('https://i.pinimg.com/736x/16/a9/17/16a91717984d7812f7b11194c0179f7d.jpg');
+  background-size: cover;          /* makes it fill the screen */
+  background-position: center;     /* centers the image */
+  background-repeat: no-repeat;    /* prevents tiling */
+  background-attachment: fixed;    /* keeps it fixed when scrolling (optional but nice) */
+  /* You can keep or remove this if you want tint */
+  /* background-color: rgba(0, 0, 0, 0.4); */ /* ← optional dark overlay */
+}
 
     body {
       /* Your gradient is already in index.css – we keep it */
@@ -129,3 +124,4 @@
 
 </body>
 </html>
+
