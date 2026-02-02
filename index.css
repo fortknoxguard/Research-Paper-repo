@@ -24,17 +24,29 @@
   </script>
 </head>
 <body>
+height: 100vh;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),   /* dark overlay for contrast */
+    url('background-purple.jpg') center / cover no-repeat fixed;   /* ←←← Your image goes here */
+  
+  background-attachment: fixed;   /* makes it stay in place when scrolling (optional) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
 
-  <div class="login-container">
-    <div class="logo-section">
-      <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg" 
-           alt="ICCT Colleges Foundation Inc. Logo" 
-           class="logo">
-      <div class="icctory-text">ICCTory</div>
-    </div>
-
-    <div class="login-form">
-      <h2>Log in</h2>
+/* Optional: Make the login card even more transparent/glass-like to let the background shine through */
+.login-container {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.12);   /* more transparent */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
 
       <form action="login.php" method="post">
         <md-outlined-text-field 
@@ -70,3 +82,4 @@
 
 </body>
 </html>
+
