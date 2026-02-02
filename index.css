@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ICCTory Login</title>
 
-  <!-- Your custom styles (kept exactly as you provided) -->
+  <!-- Link to your updated index.css -->
   <link rel="stylesheet" href="index.css">
 
-  <!-- Roboto – Material's default font (optional but recommended) -->
+  <!-- Roboto font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 
-  <!-- Material Symbols (for <md-icon>) – lightweight & matches Material 3 -->
+  <!-- Material Symbols for icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 
-  <!-- Import map for @material/web (official quick-start recommendation) -->
+  <!-- Import map for Material Web -->
   <script type="importmap">
   {
     "imports": {
@@ -22,65 +22,6 @@
     }
   }
   </script>
-
-  <!-- Override Material 3 tokens to match your blue theme -->
-  <style>
-    :root {
-      /* Primary color from your design */
-      --md-sys-color-primary: #1e88e5;
-      --md-sys-color-on-primary: #ffffff;
-      --md-sys-color-primary-container: #bbdefb;
-      --md-sys-color-on-primary-container: #0d47a1;
-
-      /* Background / surface to blend with your gradient body */
-      --md-sys-color-surface: #ffffff;
-      --md-sys-color-on-surface: #333333;
-
-      /* Shape & other tweaks to feel closer to your current design */
-      --md-sys-shape-corner-medium: 12px;
-      --md-outlined-text-field-outline-width: 1.5px;
-      --md-outlined-text-field-focus-outline-width: 2px;
-    }
-
-    body {
-      /* Your gradient is already in index.css – we keep it */
-      font-family: "Segoe UI", Roboto, Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    /* Make Material fields match your input-group spacing & style */
-    md-outlined-text-field {
-      width: 100%;
-      margin-bottom: 20px;
-      --md-outlined-field-outline-color: #ccc;
-      --md-outlined-field-focus-outline-color: #1e88e5;
-      --md-outlined-field-hover-outline-color: #aaa;
-      font-size: 15px;
-    }
-
-    /* Button styling to match your .login-button */
-    md-filled-button {
-      width: 100%;
-      --md-filled-button-container-color: #1e88e5;
-      --md-filled-button-hover-container-color: #1565c0;
-      --md-filled-button-label-text-color: #ffffff;
-      --md-filled-button-container-shape: 8px;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      height: auto;
-      margin-top: 10px;
-    }
-
-    /* Icon inside field */
-    md-icon {
-      color: #777;
-    }
-
-    /* Optional: make label behave like placeholder when empty */
-    md-outlined-text-field::part(label) {
-      transition: all 0.2s;
-    }
-  </style>
 </head>
 <body>
 
@@ -120,7 +61,7 @@
     </div>
   </div>
 
-  <!-- Load only the components we use -->
+  <!-- Load Material Web components -->
   <script type="module">
     import '@material/web/textfield/outlined-text-field.js';
     import '@material/web/button/filled-button.js';
