@@ -4,17 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ICCTory Login</title>
-
-  <!-- Link to your updated index.css -->
   <link rel="stylesheet" href="index.css">
-
-  <!-- Roboto font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-
-  <!-- Material Symbols for icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-
-  <!-- Import map for Material Web -->
   <script type="importmap">
   {
     "imports": {
@@ -22,64 +14,70 @@
     }
   }
   </script>
+
+  <!-- ADD BACKGROUND HERE -->
+  <style>
+    body {
+      height: 100vh;
+      background: 
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
+        url('https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/background-purple.jpg') center / cover no-repeat fixed;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+
+    .login-container {
+      width: 380px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
-height: 100vh;
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),   /* dark overlay for contrast */
-    url('background-purple.jpg') center / cover no-repeat fixed;   /* ←←← Your image goes here */
-  
-  background-attachment: fixed;   /* makes it stay in place when scrolling (optional) */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-}
 
-/* Optional: Make the login card even more transparent/glass-like to let the background shine through */
-.login-container {
-  width: 380px;
-  background: rgba(255, 255, 255, 0.12);   /* more transparent */
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-}
-
+  <div class="login-container">
+    <div class="logo-section">
+      <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg"
+           alt="ICCT Colleges Foundation Inc. Logo"
+           class="logo">
+      <div class="icctory-text">ICCTory</div>
+    </div>
+    <div class="login-form">
+      <h2>Log in</h2>
       <form action="login.php" method="post">
-        <md-outlined-text-field 
-          name="username" 
-          label="Username" 
+        <md-outlined-text-field
+          name="username"
+          label="Username"
           required
           autocomplete="username">
           <md-icon slot="leading-icon">person</md-icon>
         </md-outlined-text-field>
-
-        <md-outlined-text-field 
-          type="password" 
-          name="password" 
-          label="Password" 
+        <md-outlined-text-field
+          type="password"
+          name="password"
+          label="Password"
           required
           autocomplete="current-password">
           <md-icon slot="leading-icon">lock</md-icon>
         </md-outlined-text-field>
-
         <md-filled-button type="submit">Log In</md-filled-button>
       </form>
-
       <a href="signup.html" class="signup-link">No account yet? Sign up here.</a>
     </div>
   </div>
 
-  <!-- Load Material Web components -->
   <script type="module">
     import '@material/web/textfield/outlined-text-field.js';
     import '@material/web/button/filled-button.js';
     import '@material/web/icon/icon.js';
   </script>
-
 </body>
 </html>
-
