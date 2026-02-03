@@ -112,7 +112,6 @@
         .signup-container {
             width: 100%;
             max-width: 420px;
-            /* Transparent glass effect */
             background: rgba(255, 255, 255, 0.18);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -150,15 +149,29 @@
             color: var(--md-sys-color-on-surface);
         }
 
-        /* Purple labels */
+        /* Purple labels + Ubuntu font fix for input text, label, supporting text */
         md-outlined-text-field {
             width: 100%;
             margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+
             --md-outlined-text-field-label-text-color: #7c4dff;
             --md-outlined-text-field-label-text-color-focused: #7c4dff;
             --md-outlined-text-field-focus-outline-color: #7c4dff;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
+
+            /* ────────────────────────────────────────────────
+               This is the important part — forces Ubuntu font
+               ──────────────────────────────────────────────── */
+            --md-outlined-field-input-text-font: 'Ubuntu', sans-serif;
+            --md-outlined-field-label-text-font:   'Ubuntu', sans-serif;
+            --md-outlined-field-supporting-text-font: 'Ubuntu', sans-serif;
+        }
+
+        /* Safety net in case the token doesn't fully propagate */
+        md-outlined-text-field,
+        md-outlined-text-field * {
+            font-family: 'Ubuntu', sans-serif !important;
         }
 
         md-outlined-text-field[supporting-text] {
@@ -170,6 +183,7 @@
             --md-filled-button-container-shape: 28px;
             height: 48px;
             font-size: 1rem;
+            font-family: 'Ubuntu', sans-serif;
         }
     </style>
 </head>
