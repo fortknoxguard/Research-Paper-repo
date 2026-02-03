@@ -137,20 +137,20 @@
         .icctory-text {
             font-size: 2.5rem;
             font-weight: 500;
-            color: white;
+            color: white;                     /* ← changed to white */
             margin-top: 8px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.7);  /* stronger shadow for contrast */
         }
 
         h2 {
             font-size: 1.5rem;
             margin: 0 0 24px;
-            color: white;
             text-align: center;
-            color: var(--md-sys-color-on-surface);
+            color: white;                     /* ← changed to white */
+            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
         }
 
-        /* Purple labels + Ubuntu font fix for input text, label, supporting text */
+        /* Purple labels + Ubuntu font fix */
         md-outlined-text-field {
             width: 100%;
             margin-bottom: 16px;
@@ -161,15 +161,11 @@
             --md-outlined-text-field-label-text-color-focused: #7c4dff;
             --md-outlined-text-field-focus-outline-color: #7c4dff;
 
-            /* ────────────────────────────────────────────────
-               This is the important part — forces Ubuntu font
-               ──────────────────────────────────────────────── */
             --md-outlined-field-input-text-font: 'Ubuntu', sans-serif;
             --md-outlined-field-label-text-font:   'Ubuntu', sans-serif;
             --md-outlined-field-supporting-text-font: 'Ubuntu', sans-serif;
         }
 
-        /* Safety net in case the token doesn't fully propagate */
         md-outlined-text-field,
         md-outlined-text-field * {
             font-family: 'Ubuntu', sans-serif !important;
@@ -236,5 +232,3 @@
     </div>
 </body>
 </html>
-
-
