@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCTory – Sign Up</title>
+    <title>ICCTory – Login</title>
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Ubuntu (same as signup) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-    <!-- Material Web -->
+    <!-- Material Web (v1 for consistency with your signup) -->
     <script type="importmap">
     {
       "imports": {
@@ -25,80 +25,13 @@
         import '@material/web/all.js';
     </script>
 
-    <!-- Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: window.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
-            authDomain: window.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "user-login-ad4e6.firebaseapp.com",
-            projectId: window.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "user-login-ad4e6",
-            storageBucket: window.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "user-login-ad4e6.firebasestorage.app",
-            messagingSenderId: window.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "815541711200",
-            appId: window.NEXT_PUBLIC_FIREBASE_APP_ID || "1:815541711200:web:c6a5a58a91df3321986e05",
-            measurementId: window.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-WEFZLHB7SC"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.querySelector("form");
-            const firstnameField = document.querySelector('#firstname');
-            const lastnameField  = document.querySelector('#lastname');
-            const usernameField  = document.querySelector('#username');
-            const passwordField  = document.querySelector('#password');
-
-            form.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const firstname = firstnameField.value.trim();
-                const lastname  = lastnameField.value.trim();
-                const username  = usernameField.value.trim();
-                const password  = passwordField.value;
-
-                if (!firstname || !lastname || !username || !password) {
-                    alert("Please fill all fields.");
-                    return;
-                }
-
-                const email = `${username}@icctory.example.com`;
-                const displayName = `${firstname} ${lastname}`;
-
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-                    await updateProfile(user, { displayName });
-                    await setDoc(doc(db, "users", user.uid), {
-                        uid: user.uid,
-                        firstname, lastname, username, email,
-                        createdAt: new Date().toISOString()
-                    });
-                    alert(`Welcome, ${displayName}!`);
-                    window.location.href = "/dashboard.html";
-                } catch (error) {
-                    let msg = "Sign up failed.";
-                    if (error.code === "auth/email-already-in-use") msg = "Username already taken.";
-                    if (error.code === "auth/weak-password") msg = "Password too weak (min 6 chars).";
-                    alert(msg + "\n" + error.message);
-                }
-            });
-        });
-    </script>
-
     <style>
         :root {
             --primary: #7c4dff;
             --primary-dark: #5e35b1;
-            --text-light: #ffffff;
-            --text-light-soft: rgba(255,255,255,0.92);
-            --glow: 0 0 20px rgba(124, 77, 255, 0.4);
-        }
-
-        * {
-            box-sizing: border-box;
+            --text: #ffffff;
+            --text-soft: rgba(255,255,255,0.90);
+            --glow: 0 0 24px rgba(124, 77, 255, 0.45);
         }
 
         body {
@@ -107,86 +40,86 @@
             min-height: 100dvh;
             display: grid;
             place-items: center;
-            background-image: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.55)),
-                              url('https://i.pinimg.com/736x/4c/f3/92/4cf392d02ca0f37d52a25bb6d9859f54.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-light);
+            background: linear-gradient(to bottom, rgba(40,20,80,0.42), rgba(10,5,40,0.62)),
+                        url('https://i.pinimg.com/736x/16/a9/17/16a91717984d7812f7b11194c0179f7d.jpg') center/cover no-repeat fixed;
+            color: var(--text);
         }
 
-        .signup-container {
+        .login-container {
             width: 100%;
             max-width: 440px;
-            background: rgba(30, 20, 60, 0.26);
-            backdrop-filter: blur(16px) saturate(140%);
-            -webkit-backdrop-filter: blur(16px) saturate(140%);
-            border-radius: 32px;
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: var(--glow), 0 16px 60px rgba(0,0,0,0.5);
-            padding: 48px 36px 40px;
-            animation: fadeIn 1s ease-out;
+            background: rgba(35, 25, 70, 0.28);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border-radius: 36px;
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: var(--glow), 0 20px 70px rgba(0,0,0,0.55);
+            padding: 52px 40px 44px;
+            animation: appear 1.1s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(40px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .logo-section {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 44px;
         }
 
         .logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 24px;
+            width: 110px;
+            height: 110px;
+            border-radius: 28px;
             object-fit: cover;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.15);
-            transition: transform 0.4s ease;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.18);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
 
         .logo:hover {
-            transform: scale(1.08) rotate(4deg);
+            transform: scale(1.1) rotate(6deg);
+            box-shadow: 0 16px 50px rgba(124,77,255,0.4), inset 0 0 0 1px rgba(255,255,255,0.25);
         }
 
         .icctory-text {
-            font-size: 3.2rem;
+            font-size: 3.6rem;
             font-weight: 700;
-            letter-spacing: -1px;
-            color: var(--text-light);
-            margin: 16px 0 0;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.7), 0 0 20px var(--primary);
+            letter-spacing: -1.5px;
+            color: var(--text);
+            margin: 20px 0 0;
+            text-shadow: 0 6px 24px rgba(0,0,0,0.8), 0 0 30px rgba(124,77,255,0.5);
         }
 
         h2 {
-            font-size: 1.85rem;
+            font-size: 2rem;
             font-weight: 500;
-            margin: 0 0 12px;
-            color: var(--text-light);
-            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            margin: 0 0 8px;
+            color: var(--text);
+            text-shadow: 0 3px 15px rgba(0,0,0,0.7);
         }
 
         .subtitle {
-            font-size: 1rem;
-            opacity: 0.85;
+            font-size: 1.05rem;
+            opacity: 0.88;
             text-align: center;
-            margin: -8px 0 32px;
-            color: var(--text-light-soft);
+            margin: -4px 0 36px;
+            color: var(--text-soft);
         }
 
         md-outlined-text-field {
-            --md-outlined-text-field-container-shape: 16px;
-            --md-outlined-text-field-focus-outline-width: 2px;
+            --md-outlined-text-field-container-shape: 20px;
+            --md-outlined-text-field-focus-outline-width: 2.5px;
             --md-outlined-text-field-focus-outline-color: var(--primary);
-            --md-outlined-text-field-outline-color: rgba(255,255,255,0.38);
-            --md-outlined-text-field-hover-outline-color: rgba(255,255,255,0.55);
-            --md-outlined-field-input-text-font: 'Ubuntu', sans-serif;
-            --md-outlined-field-label-text-font:   'Ubuntu', sans-serif;
-            --md-outlined-field-supporting-text-font: 'Ubuntu', sans-serif;
-            background: rgba(255,255,255,0.06);
-            margin-bottom: 20px;
+            --md-outlined-text-field-outline-color: rgba(255,255,255,0.42);
+            --md-outlined-text-field-hover-outline-color: rgba(255,255,255,0.65);
+            background: rgba(255,255,255,0.07);
+            margin-bottom: 22px;
+            transition: transform 0.25s ease;
+        }
+
+        md-outlined-text-field:focus-within {
+            transform: translateY(-2px);
         }
 
         md-outlined-text-field,
@@ -195,47 +128,79 @@
         }
 
         md-outlined-text-field[supporting-text] {
-            --md-outlined-text-field-supporting-text-color: rgba(255,255,255,0.7);
+            --md-outlined-text-field-supporting-text-color: rgba(255,255,255,0.78);
         }
 
         md-filled-button {
             --md-filled-button-container-color: var(--primary);
-            --md-filled-button-container-shape: 28px;
             --md-filled-button-hover-container-color: var(--primary-dark);
-            height: 56px;
-            font-size: 1.05rem;
+            --md-filled-button-container-shape: 32px;
+            height: 58px;
+            font-size: 1.1rem;
             font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            letter-spacing: 0.6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(124,77,255,0.35);
         }
 
         md-filled-button:hover {
-            transform: scale(1.04);
-            box-shadow: 0 8px 30px rgba(124,77,255,0.45);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 12px 40px rgba(124,77,255,0.55);
+        }
+
+        .signup-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <div class="signup-container">
+    <div class="login-container">
         <div class="logo-section">
-            <img src="img/icct.jpeg" alt="ICCT Colleges Foundation Inc. Logo" class="logo">
+            <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg"
+                 alt="ICCT Colleges Foundation Inc. Logo"
+                 class="logo">
             <div class="icctory-text">ICCTory</div>
         </div>
 
-        <h2>Create Account</h2>
-        <div class="subtitle">Join the community today</div>
+        <h2>Welcome back</h2>
+        <div class="subtitle">Log in to continue your journey</div>
 
         <form>
-            <md-outlined-text-field id="firstname" label="First name"   required type="text"></md-outlined-text-field>
-            <md-outlined-text-field id="lastname"  label="Last name"    required type="text"></md-outlined-text-field>
-            <md-outlined-text-field id="username"  label="Username"     required type="text" supporting-text="Used for login"></md-outlined-text-field>
-            <md-outlined-text-field id="password"  label="Password"     required type="password" minlength="6" supporting-text="At least 6 characters"></md-outlined-text-field>
+            <md-outlined-text-field
+                id="username"
+                label="Username"
+                required
+                type="text">
+                <md-icon slot="leading-icon">person</md-icon>
+            </md-outlined-text-field>
 
-            <md-filled-button type="submit" style="margin-top: 24px; width: 100%;">
-                Create Account
+            <md-outlined-text-field
+                id="password"
+                label="Password"
+                required
+                type="password"
+                minlength="6">
+                <md-icon slot="leading-icon">lock</md-icon>
+            </md-outlined-text-field>
+
+            <md-filled-button type="submit" style="margin-top: 28px; width: 100%;">
+                Log In
             </md-filled-button>
         </form>
+
+        <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
     </div>
 
 </body>
