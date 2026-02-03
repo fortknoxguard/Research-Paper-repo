@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICCTory Sign Up</title>
 
-    <!-- Material Icons (needed for many components) -->
+    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-    <!-- Material Web CSS + JS via esm.run CDN (Material 3) -->
+    <!-- Material Web (Material 3) via CDN -->
     <script type="importmap">
     {
       "imports": {
@@ -16,14 +16,12 @@
       }
     }
     </script>
-
     <script type="module">
-        import '@material/web/all.js';  // loads all components (or import only what you need)
+        import '@material/web/all.js';
     </script>
 
-    <!-- Your existing Firebase script – enhanced a bit -->
+    <!-- Firebase -->
     <script type="module">
-        // Firebase imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -42,7 +40,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Form handling
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.querySelector("form");
             const firstnameField = document.querySelector('#firstname');
@@ -63,7 +60,7 @@
                     return;
                 }
 
-                const email = `${username}@icctory.example.com`; // ← change domain or add real email field
+                const email = `${username}@icctory.example.com`;
                 const displayName = `${firstname} ${lastname}`;
 
                 try {
@@ -82,7 +79,7 @@
                     });
 
                     alert(`Sign up successful! Welcome, ${displayName}`);
-                    window.location.href = "/dashboard.html"; // ← your post-signup page
+                    window.location.href = "/dashboard.html";
                 } catch (error) {
                     console.error("Signup error:", error);
                     let message = "Sign up failed. Please try again.";
@@ -94,7 +91,7 @@
         });
     </script>
 
-    <!-- Basic centering + card styling (override Material defaults if needed) -->
+    <!-- Styles with glass effect -->
     <style>
         body {
             font-family: 'Roboto', system-ui, sans-serif;
@@ -107,51 +104,69 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
         .signup-container {
             width: 100%;
             max-width: 420px;
-            background: var(--md-sys-color-surface, white);
+            /* Glassmorphism core */
+            background: rgba(255, 255, 255, 0.18);           /* semi-transparent white */
+            backdrop-filter: blur(12px);                     /* blur behind the container */
+            -webkit-backdrop-filter: blur(12px);             /* Safari support */
             border-radius: 28px;
-            box-shadow: var(--md-sys-elevation-level3);
+            border: 1px solid rgba(255, 255, 255, 0.25);    /* subtle glass border */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);     /* deeper shadow for depth */
             overflow: hidden;
             padding: 32px 24px;
         }
+
         .logo-section {
             text-align: center;
             margin-bottom: 32px;
         }
+
         .logo {
             width: 80px;
             height: 80px;
             border-radius: 16px;
             object-fit: cover;
         }
+
         .icctory-text {
             font-size: 2.5rem;
             font-weight: 500;
-            color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-primary, #6750a4); /* fallback to Material primary */
             margin-top: 8px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4); /* better readability on blur */
         }
+
         h2 {
             font-size: 1.5rem;
             margin: 0 0 24px;
             text-align: center;
-            color: var(--md-sys-color-on-surface);
+            color: var(--md-sys-color-on-surface, #1c1b1f);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
+
         md-outlined-text-field {
             width: 100%;
             margin-bottom: 16px;
+            --md-outlined-text-field-container-shape: 12px;
+            --md-outlined-text-field-outline-color: rgba(255, 255, 255, 0.6);
+            --md-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
+            background: rgba(255, 255, 255, 0.08); /* slight tint inside fields for contrast */
+            border-radius: 12px;
         }
+
         md-filled-button {
             width: 100%;
             --md-filled-button-container-shape: 28px;
             height: 48px;
             font-size: 1rem;
+            --md-filled-button-container-color: var(--md-sys-color-primary);
         }
     </style>
 </head>
 <body>
-
     <div class="signup-container">
         <div class="logo-section">
             <img src="img/icct.jpeg" alt="ICCT Colleges Foundation Inc. Logo" class="logo">
@@ -161,32 +176,32 @@
         <h2>Create Account</h2>
 
         <form>
-            <md-outlined-text-field 
-                id="firstname" 
-                label="First name" 
-                required 
+            <md-outlined-text-field
+                id="firstname"
+                label="First name"
+                required
                 type="text">
             </md-outlined-text-field>
 
-            <md-outlined-text-field 
-                id="lastname" 
-                label="Last name" 
-                required 
+            <md-outlined-text-field
+                id="lastname"
+                label="Last name"
+                required
                 type="text">
             </md-outlined-text-field>
 
-            <md-outlined-text-field 
-                id="username" 
-                label="Username" 
-                required 
+            <md-outlined-text-field
+                id="username"
+                label="Username"
+                required
                 type="text"
                 supporting-text="Used for login">
             </md-outlined-text-field>
 
-            <md-outlined-text-field 
-                id="password" 
-                label="Password" 
-                required 
+            <md-outlined-text-field
+                id="password"
+                label="Password"
+                required
                 type="password"
                 minlength="6"
                 supporting-text="At least 6 characters">
@@ -197,8 +212,5 @@
             </md-filled-button>
         </form>
     </div>
-
 </body>
 </html>
-
-
