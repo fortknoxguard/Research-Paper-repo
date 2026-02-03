@@ -1,6 +1,3 @@
-import { auth, db } from './firebase.js';  // adjust path
-// then use createUserWithEmailAndPassword(auth, email, password), etc.
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +6,75 @@ import { auth, db } from './firebase.js';  // adjust path
     <title>ICCTory Sign Up</title>
     <link rel="stylesheet" href="des/signup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Firebase SDK v10+ modular (latest as of 2026) -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        // Use env vars injected by Vercel (see step below)
+        const firebaseConfig = {
+            apiKey: window.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
+            authDomain: window.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "user-login-ad4e6.firebaseapp.com",
+            projectId: window.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "user-login-ad4e6",
+            storageBucket: window.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "user-login-ad4e6.firebasestorage.app",
+            messagingSenderId: window.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "815541711200",
+            appId: window.NEXT_PUBLIC_FIREBASE_APP_ID || "1:815541711200:web:c6a5a58a91df3321986e05",
+            measurementId: window.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-WEFZLHB7SC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Wait for DOM to load
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector("form");
+            const firstname = document.querySelector('input[name="firstname"]');
+            const lastname  = document.querySelector('input[name="lastname"]');
+            const username  = document.querySelector('input[name="username"]');
+            const password  = document.querySelector('input[name="password"]');
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                // Create email from username (common pattern; change if you add real email field)
+                const email = `${username.value.trim()}@icctory.example.com`; // ← customize domain or add email input
+                const displayName = `${firstname.value.trim()} ${lastname.value.trim()}`;
+
+                try {
+                    // Create user in Firebase Auth
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password.value);
+                    const user = userCredential.user;
+
+                    // Optional: set display name
+                    await updateProfile(user, { displayName });
+
+                    // Save user profile to Firestore
+                    await setDoc(doc(db, "users", user.uid), {
+                        uid: user.uid,
+                        firstname: firstname.value.trim(),
+                        lastname: lastname.value.trim(),
+                        username: username.value.trim(),
+                        email: email,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    alert("Sign up successful! Welcome, " + displayName);
+                    window.location.href = "/dashboard.html"; // ← change to your after-signup page
+
+                } catch (error) {
+                    console.error("Signup error:", error);
+                    let message = "Sign up failed. Please try again.";
+                    if (error.code === "auth/email-already-in-use") message = "This username/email is already taken.";
+                    if (error.code === "auth/weak-password") message = "Password should be at least 6 characters.";
+                    alert(message + "\n" + error.message);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="signup-container">
@@ -16,10 +82,9 @@ import { auth, db } from './firebase.js';  // adjust path
             <img src="img/icct.jpeg" alt="ICCT Colleges Foundation Inc. Logo" class="logo">
             <div class="icctory-text">ICCTory</div>
         </div>
-
         <div class="signup-form">
             <h2>Use Email account</h2>
-            <form action="config/login_register.php" method="post">
+            <form> <!-- Removed action & method – we handle with JS now -->
                 <div class="input-group">
                     <input type="text" name="firstname" placeholder="Firstname" required>
                     <i class="fas fa-user"></i>
@@ -28,12 +93,12 @@ import { auth, db } from './firebase.js';  // adjust path
                     <input type="text" name="lastname" placeholder="Lastname" required>
                     <i class="fas fa-user"></i>
                 </div>
-                 <div class="input-group">
+                <div class="input-group">
                     <input type="text" name="username" placeholder="Username" required>
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="input-group">
-                    <input type="password" name="password" placeholder="Create Password" required>
+                    <input type="password" name="password" placeholder="Create Password" required minlength="6">
                     <i class="fas fa-lock"></i>
                 </div>
                 <button class="signup-button" type="submit">Sign Up</button>
@@ -41,5 +106,4 @@ import { auth, db } from './firebase.js';  // adjust path
         </div>
     </div>
 </body>
-
 </html>
