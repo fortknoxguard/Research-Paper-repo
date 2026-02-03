@@ -1,0 +1,103 @@
+/* des/signup.css */
+
+/* =============================================
+   Global / Body
+   ============================================= */
+body {
+    font-family: 'Ubuntu', 'Roboto', system-ui, sans-serif;
+    margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    background-image: url('https://i.pinimg.com/736x/16/a9/17/16a91717984d7812f7b11194c0179f7d.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* =============================================
+   Glass Card Container
+   ============================================= */
+.signup-container {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    padding: 32px 24px;
+}
+
+/* =============================================
+   Logo & Title
+   ============================================= */
+.logo-section {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.icctory-text {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--md-sys-color-primary, #6750a4);
+    margin-top: 8px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin: 0 0 24px;
+    text-align: center;
+    color: var(--md-sys-color-on-surface, #1c1b1f);
+}
+
+/* =============================================
+   Material Web Text Fields
+   ============================================= */
+md-outlined-text-field {
+    width: 100%;
+    margin-bottom: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+
+    /* Purple labels & focus */
+    --md-outlined-text-field-label-text-color: #7c4dff;
+    --md-outlined-text-field-label-text-color-focused: #7c4dff;
+    --md-outlined-text-field-focus-outline-color: #7c4dff;
+
+    /* Force Ubuntu font everywhere inside the field */
+    --md-outlined-field-input-text-font: 'Ubuntu', sans-serif;
+    --md-outlined-field-label-text-font:   'Ubuntu', sans-serif;
+    --md-outlined-field-supporting-text-font: 'Ubuntu', sans-serif;
+}
+
+/* Extra insurance for typed text & supporting text */
+md-outlined-text-field,
+md-outlined-text-field * {
+    font-family: 'Ubuntu', sans-serif !important;
+}
+
+md-outlined-text-field[supporting-text] {
+    --md-outlined-text-field-supporting-text-color: #9f7eff;
+}
+
+/* =============================================
+   Button
+   ============================================= */
+md-filled-button {
+    width: 100%;
+    --md-filled-button-container-shape: 28px;
+    height: 48px;
+    font-size: 1rem;
+    font-family: 'Ubuntu', sans-serif;
+}
