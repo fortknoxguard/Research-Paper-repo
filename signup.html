@@ -4,17 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICCTory Sign Up</title>
-    <link rel="stylesheet" href="des/signup.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Firebase SDK v10+ modular (latest as of 2026) -->
+    <!-- Material Icons (needed for many components) -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <!-- Material Web CSS + JS via esm.run CDN (Material 3) -->
+    <script type="importmap">
+    {
+      "imports": {
+        "@material/web/": "https://esm.run/@material/web@1/"
+      }
+    }
+    </script>
+
     <script type="module">
-        // Import Firebase modules
+        import '@material/web/all.js';  // loads all components (or import only what you need)
+    </script>
+
+    <!-- Your existing Firebase script – enhanced a bit -->
+    <script type="module">
+        // Firebase imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-        // Use env vars injected by Vercel (see step below)
         const firebaseConfig = {
             apiKey: window.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
             authDomain: window.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "user-login-ad4e6.firebaseapp.com",
@@ -29,81 +42,161 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Wait for DOM to load
+        // Form handling
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.querySelector("form");
-            const firstname = document.querySelector('input[name="firstname"]');
-            const lastname  = document.querySelector('input[name="lastname"]');
-            const username  = document.querySelector('input[name="username"]');
-            const password  = document.querySelector('input[name="password"]');
+            const firstnameField = document.querySelector('#firstname');
+            const lastnameField  = document.querySelector('#lastname');
+            const usernameField  = document.querySelector('#username');
+            const passwordField  = document.querySelector('#password');
 
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
 
-                // Create email from username (common pattern; change if you add real email field)
-                const email = `${username.value.trim()}@icctory.example.com`; // ← customize domain or add email input
-                const displayName = `${firstname.value.trim()} ${lastname.value.trim()}`;
+                const firstname = firstnameField.value.trim();
+                const lastname  = lastnameField.value.trim();
+                const username  = usernameField.value.trim();
+                const password  = passwordField.value;
+
+                if (!firstname || !lastname || !username || !password) {
+                    alert("Please fill all fields.");
+                    return;
+                }
+
+                const email = `${username}@icctory.example.com`; // ← change domain or add real email field
+                const displayName = `${firstname} ${lastname}`;
 
                 try {
-                    // Create user in Firebase Auth
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password.value);
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     const user = userCredential.user;
 
-                    // Optional: set display name
                     await updateProfile(user, { displayName });
 
-                    // Save user profile to Firestore
                     await setDoc(doc(db, "users", user.uid), {
                         uid: user.uid,
-                        firstname: firstname.value.trim(),
-                        lastname: lastname.value.trim(),
-                        username: username.value.trim(),
-                        email: email,
+                        firstname,
+                        lastname,
+                        username,
+                        email,
                         createdAt: new Date().toISOString()
                     });
 
-                    alert("Sign up successful! Welcome, " + displayName);
-                    window.location.href = "/dashboard.html"; // ← change to your after-signup page
-
+                    alert(`Sign up successful! Welcome, ${displayName}`);
+                    window.location.href = "/dashboard.html"; // ← your post-signup page
                 } catch (error) {
                     console.error("Signup error:", error);
                     let message = "Sign up failed. Please try again.";
-                    if (error.code === "auth/email-already-in-use") message = "This username/email is already taken.";
-                    if (error.code === "auth/weak-password") message = "Password should be at least 6 characters.";
+                    if (error.code === "auth/email-already-in-use") message = "This username is already taken.";
+                    if (error.code === "auth/weak-password") message = "Password must be at least 6 characters.";
                     alert(message + "\n" + error.message);
                 }
             });
         });
     </script>
+
+    <!-- Basic centering + card styling (override Material defaults if needed) -->
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: var(--md-sys-color-background, #f8f9fa);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .signup-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--md-sys-color-surface, white);
+            border-radius: 28px;
+            box-shadow: var(--md-sys-elevation-level3);
+            overflow: hidden;
+            padding: 32px 24px;
+        }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+        .icctory-text {
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: var(--md-sys-color-primary);
+            margin-top: 8px;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin: 0 0 24px;
+            text-align: center;
+            color: var(--md-sys-color-on-surface);
+        }
+        md-outlined-text-field {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        md-filled-button {
+            width: 100%;
+            --md-filled-button-container-shape: 28px;
+            height: 48px;
+            font-size: 1rem;
+        }
+    </style>
 </head>
 <body>
+
     <div class="signup-container">
         <div class="logo-section">
             <img src="img/icct.jpeg" alt="ICCT Colleges Foundation Inc. Logo" class="logo">
             <div class="icctory-text">ICCTory</div>
         </div>
-        <div class="signup-form">
-            <h2>Use Email account</h2>
-            <form> <!-- Removed action & method – we handle with JS now -->
-                <div class="input-group">
-                    <input type="text" name="firstname" placeholder="Firstname" required>
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="text" name="lastname" placeholder="Lastname" required>
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="text" name="username" placeholder="Username" required>
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="password" placeholder="Create Password" required minlength="6">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <button class="signup-button" type="submit">Sign Up</button>
-            </form>
-        </div>
+
+        <h2>Create Account</h2>
+
+        <form>
+            <md-outlined-text-field 
+                id="firstname" 
+                label="First name" 
+                required 
+                type="text">
+            </md-outlined-text-field>
+
+            <md-outlined-text-field 
+                id="lastname" 
+                label="Last name" 
+                required 
+                type="text">
+            </md-outlined-text-field>
+
+            <md-outlined-text-field 
+                id="username" 
+                label="Username" 
+                required 
+                type="text"
+                supporting-text="Used for login">
+            </md-outlined-text-field>
+
+            <md-outlined-text-field 
+                id="password" 
+                label="Password" 
+                required 
+                type="password"
+                minlength="6"
+                supporting-text="At least 6 characters">
+            </md-outlined-text-field>
+
+            <md-filled-button type="submit" style="margin-top: 16px;">
+                Sign Up
+            </md-filled-button>
+        </form>
     </div>
+
 </body>
 </html>
