@@ -8,7 +8,7 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-    <!-- Material Web (Material 3) via CDN -->
+    <!-- Material Web (Material 3) -->
     <script type="importmap">
     {
       "imports": {
@@ -91,7 +91,6 @@
         });
     </script>
 
-    <!-- Styles with glass effect -->
     <style>
         body {
             font-family: 'Roboto', system-ui, sans-serif;
@@ -108,13 +107,9 @@
         .signup-container {
             width: 100%;
             max-width: 420px;
-            /* Glassmorphism core */
-            background: rgba(255, 255, 255, 0.18);           /* semi-transparent white */
-            backdrop-filter: blur(12px);                     /* blur behind the container */
-            -webkit-backdrop-filter: blur(12px);             /* Safari support */
+            background: var(--md-sys-color-surface, white);
             border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.25);    /* subtle glass border */
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);     /* deeper shadow for depth */
+            box-shadow: var(--md-sys-elevation-level3);
             overflow: hidden;
             padding: 32px 24px;
         }
@@ -134,27 +129,29 @@
         .icctory-text {
             font-size: 2.5rem;
             font-weight: 500;
-            color: var(--md-sys-color-primary, #6750a4); /* fallback to Material primary */
+            color: var(--md-sys-color-primary);
             margin-top: 8px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4); /* better readability on blur */
         }
 
         h2 {
             font-size: 1.5rem;
             margin: 0 0 24px;
             text-align: center;
-            color: var(--md-sys-color-on-surface, #1c1b1f);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            color: var(--md-sys-color-on-surface);
         }
 
+        /* Purple labels for the input fields */
         md-outlined-text-field {
             width: 100%;
             margin-bottom: 16px;
-            --md-outlined-text-field-container-shape: 12px;
-            --md-outlined-text-field-outline-color: rgba(255, 255, 255, 0.6);
-            --md-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
-            background: rgba(255, 255, 255, 0.08); /* slight tint inside fields for contrast */
-            border-radius: 12px;
+            --md-outlined-text-field-label-text-color: #7c4dff;           /* purple label (inactive) */
+            --md-outlined-text-field-label-text-color-focused: #7c4dff;  /* purple when focused */
+            --md-outlined-text-field-focus-outline-color: #7c4dff;       /* purple outline when focused */
+        }
+
+        /* Optional: make supporting text (e.g. "Used for login") also purple-ish */
+        md-outlined-text-field[supporting-text] {
+            --md-outlined-text-field-supporting-text-color: #9f7eff;
         }
 
         md-filled-button {
@@ -162,7 +159,6 @@
             --md-filled-button-container-shape: 28px;
             height: 48px;
             font-size: 1rem;
-            --md-filled-button-container-color: var(--md-sys-color-primary);
         }
     </style>
 </head>
