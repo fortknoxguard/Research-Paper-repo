@@ -33,17 +33,11 @@
       min-height: 100dvh;
       display: grid;
       place-items: center;
-
-      /* === NEW BACKGROUND === */
       background-image: url('https://i.pinimg.com/736x/16/a9/17/16a91717984d7812f7b11194c0179f7d.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
-
-      /* Optional: slight dark overlay if text readability is an issue */
-      /* background-color: rgba(0, 0, 0, 0.25); */
-      /* background-blend-mode: multiply; */
     }
 
     .login-container {
@@ -51,19 +45,47 @@
       width: 90%;
       padding: 2.5rem 2rem;
       border-radius: 28px;
-      background: rgba(255, 255, 255, 0.88);   /* semi-transparent white for contrast */
-      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-      backdrop-filter: blur(12px);             /* glass/matte effect – looks premium */
-      -webkit-backdrop-filter: blur(12px);     /* Safari support */
-      border: 1px solid rgba(255,255,255,0.3);
+
+      /* Glassmorphism core */
+      background: rgba(255, 255, 255, 0.15);      /* semi-transparent – adjust 0.12–0.25 */
+      backdrop-filter: blur(16px);                /* stronger blur = more frosted */
+      -webkit-backdrop-filter: blur(16px);        /* Safari/iOS */
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+
+      /* Extra depth */
+      overflow: hidden;
     }
 
+    /* Make all text inside readable on transparent bg */
+    .login-container,
+    .login-container * {
+      color: #ffffff;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Text fields – make them glass-like too */
     md-filled-text-field {
       width: 100%;
       --md-filled-text-field-container-shape: 12px;
       margin-bottom: 1.25rem;
+
+      --md-filled-text-field-container-color: rgba(255, 255, 255, 0.18);
+      --md-filled-text-field-focus-container-color: rgba(255, 255, 255, 0.28);
+      --md-filled-text-field-input-text-color: #ffffff;
+      --md-filled-text-field-label-text-color: rgba(255, 255, 255, 0.85);
+      --md-filled-text-field-supporting-text-color: rgba(255, 255, 255, 0.7);
+      --md-filled-text-field-outline-color: rgba(255, 255, 255, 0.4);
+      --md-filled-text-field-focus-outline-color: #ffffff;
+      --md-filled-text-field-hover-outline-color: rgba(255, 255, 255, 0.6);
     }
 
+    /* Icons inside fields */
+    md-icon {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    /* Button – solid so it stands out (change to glass if preferred) */
     md-filled-button {
       width: 100%;
       --md-filled-button-container-shape: 12px;
@@ -71,6 +93,12 @@
       margin-top: 1rem;
       height: 48px;
       font-size: 1rem;
+
+      --md-filled-button-container-color: var(--md-sys-color-primary);
+      --md-filled-button-label-text-color: white;
+      --md-filled-button-hover-container-color: #1565c0;
+      --md-filled-button-focus-container-color: #0d47a1;
+      text-shadow: none; /* button doesn't need shadow */
     }
 
     .logo-section {
@@ -86,27 +114,30 @@
     .icctory-text {
       font-size: 2.1rem;
       font-weight: 700;
-      color: var(--md-sys-color-primary);
+      color: #ffffff;
       margin-top: 0.8rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }
 
     h2 {
       text-align: center;
       margin: 0 0 2rem;
       font-weight: 500;
+      color: #ffffff;
     }
 
     .signup-link {
       display: block;
       text-align: center;
       margin-top: 1.5rem;
-      color: var(--md-sys-color-primary);
+      color: #bbdefb;
       text-decoration: none;
       font-weight: 500;
     }
 
     .signup-link:hover {
       text-decoration: underline;
+      color: #ffffff;
     }
   </style>
 </head>
@@ -150,4 +181,3 @@
   </script>
 </body>
 </html>
-
