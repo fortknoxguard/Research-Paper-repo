@@ -1,186 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ICCTory Login</title>
-  <!-- Google Fonts (Roboto) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-  <!-- Font Awesome (optional icons) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- Material Web import map -->
-  <script type="importmap">
-  {
-    "imports": {
-      "@material/web/": "https://esm.run/@material/web@2/"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory – Sign Up</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <!-- Material Web -->
+    <script type="importmap">
+    {
+      "imports": {
+        "@material/web/": "https://esm.run/@material/web@1/"
+      }
     }
-  }
-  </script>
+    </script>
+    <script type="module">
+        import '@material/web/all.js';
+    </script>
 
-  <style>
-    :root {
-      --md-sys-color-primary: #1e88e5;
-      --md-sys-color-on-primary: #ffffff;
-      --md-sys-color-primary-container: #bbdefb;
-      --md-sys-color-on-primary-container: #0d47a1;
-      --md-sys-color-background: #fef7ff;
-      --md-sys-color-on-background: #1d1b20;
-    }
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-    body {
-      font-family: 'Roboto', system-ui, sans-serif;
-      margin: 0;
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      background-image: url('https://i.pinimg.com/736x/4c/f3/92/4cf392d02ca0f37d52a25bb6d9859f54.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
+        const firebaseConfig = {
+            apiKey: window.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
+            authDomain: window.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "user-login-ad4e6.firebaseapp.com",
+            projectId: window.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "user-login-ad4e6",
+            storageBucket: window.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "user-login-ad4e6.firebasestorage.app",
+            messagingSenderId: window.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "815541711200",
+            appId: window.NEXT_PUBLIC_FIREBASE_APP_ID || "1:815541711200:web:c6a5a58a91df3321986e05",
+            measurementId: window.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-WEFZLHB7SC"
+        };
 
-    .login-container {
-      max-width: 420px;
-      width: 90%;
-      padding: 2.5rem 2rem;
-      border-radius: 28px;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-      /* Glassmorphism core */
-      background: rgba(255, 255, 255, 0.15);      /* semi-transparent – adjust 0.12–0.25 */
-      backdrop-filter: blur(16px);                /* stronger blur = more frosted */
-      -webkit-backdrop-filter: blur(16px);        /* Safari/iOS */
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector("form");
+            const firstnameField = document.querySelector('#firstname');
+            const lastnameField  = document.querySelector('#lastname');
+            const usernameField  = document.querySelector('#username');
+            const passwordField  = document.querySelector('#password');
 
-      /* Extra depth */
-      overflow: hidden;
-    }
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const firstname = firstnameField.value.trim();
+                const lastname  = lastnameField.value.trim();
+                const username  = usernameField.value.trim();
+                const password  = passwordField.value;
 
-    /* Make all text inside readable on transparent bg */
-    .login-container,
-    .login-container * {
-      color: #ffffff;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-    }
+                if (!firstname || !lastname || !username || !password) {
+                    alert("Please fill all fields.");
+                    return;
+                }
 
-    /* Text fields – make them glass-like too */
-    md-filled-text-field {
-      width: 100%;
-      --md-filled-text-field-container-shape: 12px;
-      margin-bottom: 1.25rem;
+                const email = `${username}@icctory.example.com`;
+                const displayName = `${firstname} ${lastname}`;
 
-      --md-filled-text-field-container-color: rgba(255, 255, 255, 0.18);
-      --md-filled-text-field-focus-container-color: rgba(255, 255, 255, 0.28);
-      --md-filled-text-field-input-text-color: #ffffff;
-      --md-filled-text-field-label-text-color: rgba(255, 255, 255, 0.85);
-      --md-filled-text-field-supporting-text-color: rgba(255, 255, 255, 0.7);
-      --md-filled-text-field-outline-color: rgba(255, 255, 255, 0.4);
-      --md-filled-text-field-focus-outline-color: #ffffff;
-      --md-filled-text-field-hover-outline-color: rgba(255, 255, 255, 0.6);
-    }
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    await updateProfile(user, { displayName });
+                    await setDoc(doc(db, "users", user.uid), {
+                        uid: user.uid,
+                        firstname, lastname, username, email,
+                        createdAt: new Date().toISOString()
+                    });
+                    alert(`Welcome, ${displayName}!`);
+                    window.location.href = "/dashboard.html";
+                } catch (error) {
+                    let msg = "Sign up failed.";
+                    if (error.code === "auth/email-already-in-use") msg = "Username already taken.";
+                    if (error.code === "auth/weak-password") msg = "Password too weak (min 6 chars).";
+                    alert(msg + "\n" + error.message);
+                }
+            });
+        });
+    </script>
 
-    /* Icons inside fields */
-    md-icon {
-      color: rgba(255, 255, 255, 0.8) !important;
-    }
+    <style>
+        :root {
+            --primary: #7c4dff;
+            --primary-dark: #5e35b1;
+            --text-light: #ffffff;
+            --text-light-soft: rgba(255,255,255,0.92);
+            --glow: 0 0 20px rgba(124, 77, 255, 0.4);
+        }
 
-    /* Button – solid so it stands out (change to glass if preferred) */
-    md-filled-button {
-      width: 100%;
-      --md-filled-button-container-shape: 12px;
-      --md-filled-button-label-text-weight: 500;
-      margin-top: 1rem;
-      height: 48px;
-      font-size: 1rem;
+        * {
+            box-sizing: border-box;
+        }
 
-      --md-filled-button-container-color: var(--md-sys-color-primary);
-      --md-filled-button-label-text-color: white;
-      --md-filled-button-hover-container-color: #1565c0;
-      --md-filled-button-focus-container-color: #0d47a1;
-      text-shadow: none; /* button doesn't need shadow */
-    }
+        body {
+            font-family: 'Ubuntu', system-ui, sans-serif;
+            margin: 0;
+            min-height: 100dvh;
+            display: grid;
+            place-items: center;
+            background-image: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.55)),
+                              url('https://i.pinimg.com/736x/4c/f3/92/4cf392d02ca0f37d52a25bb6d9859f54.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-light);
+        }
 
-    .logo-section {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+        .signup-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(30, 20, 60, 0.26);
+            backdrop-filter: blur(16px) saturate(140%);
+            -webkit-backdrop-filter: blur(16px) saturate(140%);
+            border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: var(--glow), 0 16px 60px rgba(0,0,0,0.5);
+            padding: 48px 36px 40px;
+            animation: fadeIn 1s ease-out;
+        }
 
-    .logo {
-      max-width: 140px;
-      height: auto;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
 
-    .icctory-text {
-      font-size: 2.1rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-top: 0.8rem;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-    h2 {
-      text-align: center;
-      margin: 0 0 2rem;
-      font-weight: 500;
-      color: #ffffff;
-    }
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 24px;
+            object-fit: cover;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.15);
+            transition: transform 0.4s ease;
+        }
 
-    .signup-link {
-      display: block;
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #bbdefb;
-      text-decoration: none;
-      font-weight: 500;
-    }
+        .logo:hover {
+            transform: scale(1.08) rotate(4deg);
+        }
 
-    .signup-link:hover {
-      text-decoration: underline;
-      color: #ffffff;
-    }
-  </style>
+        .icctory-text {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: var(--text-light);
+            margin: 16px 0 0;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.7), 0 0 20px var(--primary);
+        }
+
+        h2 {
+            font-size: 1.85rem;
+            font-weight: 500;
+            margin: 0 0 12px;
+            color: var(--text-light);
+            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            text-align: center;
+            margin: -8px 0 32px;
+            color: var(--text-light-soft);
+        }
+
+        md-outlined-text-field {
+            --md-outlined-text-field-container-shape: 16px;
+            --md-outlined-text-field-focus-outline-width: 2px;
+            --md-outlined-text-field-focus-outline-color: var(--primary);
+            --md-outlined-text-field-outline-color: rgba(255,255,255,0.38);
+            --md-outlined-text-field-hover-outline-color: rgba(255,255,255,0.55);
+            --md-outlined-field-input-text-font: 'Ubuntu', sans-serif;
+            --md-outlined-field-label-text-font:   'Ubuntu', sans-serif;
+            --md-outlined-field-supporting-text-font: 'Ubuntu', sans-serif;
+            background: rgba(255,255,255,0.06);
+            margin-bottom: 20px;
+        }
+
+        md-outlined-text-field,
+        md-outlined-text-field * {
+            font-family: 'Ubuntu', sans-serif !important;
+        }
+
+        md-outlined-text-field[supporting-text] {
+            --md-outlined-text-field-supporting-text-color: rgba(255,255,255,0.7);
+        }
+
+        md-filled-button {
+            --md-filled-button-container-color: var(--primary);
+            --md-filled-button-container-shape: 28px;
+            --md-filled-button-hover-container-color: var(--primary-dark);
+            height: 56px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        md-filled-button:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 30px rgba(124,77,255,0.45);
+        }
+    </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="logo-section">
-      <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg"
-           alt="ICCT Colleges Foundation Inc. Logo"
-           class="logo">
-      <div class="icctory-text">ICCTory</div>
-    </div>
-    <div class="login-form">
-      <h2>Log in</h2>
-      <form action="login.php" method="post">
-        <md-filled-text-field
-          name="username"
-          label="Username"
-          value=""
-          required>
-          <md-icon slot="leading-icon">person</md-icon>
-        </md-filled-text-field>
-        <md-filled-text-field
-          type="password"
-          name="password"
-          label="Password"
-          value=""
-          required>
-          <md-icon slot="leading-icon">lock</md-icon>
-        </md-filled-text-field>
-        <md-filled-button type="submit">Log In</md-filled-button>
-      </form>
-      <a href="signup.html" class="signup-link">No account yet? Sign up here.</a>
-    </div>
-  </div>
 
-  <!-- Material Web components -->
-  <script type="module">
-    import '@material/web/textfield/filled-text-field.js';
-    import '@material/web/button/filled-button.js';
-    import '@material/web/icon/icon.js';
-  </script>
+    <div class="signup-container">
+        <div class="logo-section">
+            <img src="img/icct.jpeg" alt="ICCT Colleges Foundation Inc. Logo" class="logo">
+            <div class="icctory-text">ICCTory</div>
+        </div>
+
+        <h2>Create Account</h2>
+        <div class="subtitle">Join the community today</div>
+
+        <form>
+            <md-outlined-text-field id="firstname" label="First name"   required type="text"></md-outlined-text-field>
+            <md-outlined-text-field id="lastname"  label="Last name"    required type="text"></md-outlined-text-field>
+            <md-outlined-text-field id="username"  label="Username"     required type="text" supporting-text="Used for login"></md-outlined-text-field>
+            <md-outlined-text-field id="password"  label="Password"     required type="password" minlength="6" supporting-text="At least 6 characters"></md-outlined-text-field>
+
+            <md-filled-button type="submit" style="margin-top: 24px; width: 100%;">
+                Create Account
+            </md-filled-button>
+        </form>
+    </div>
+
 </body>
 </html>
-
-
-
