@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory Sign Up</title>
+    <link rel="stylesheet" href="des/signup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="signup-container">
+        <div class="logo-section">
+            <img src="img/icct.jpeg" alt="ICCT Colleges Foundation Inc. Logo" class="logo">
+            <div class="icctory-text">ICCTory</div>
+        </div>
+
+        <div class="signup-form">
+            <h2>Use Email account</h2>
+            <form action="config/login_register.php" method="post">
+                <div class="input-group">
+                    <input type="text" name="firstname" placeholder="Firstname" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="lastname" placeholder="Lastname" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                 <div class="input-group">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Create Password" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button class="signup-button" type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
