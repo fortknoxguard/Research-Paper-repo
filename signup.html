@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICCTory Sign Up</title>
 
+    <!-- Google Fonts: Ubuntu -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
@@ -93,7 +98,7 @@
 
     <style>
         body {
-            font-family: 'Roboto', system-ui, sans-serif;
+            font-family: 'Ubuntu', 'Roboto', system-ui, sans-serif;
             margin: 0;
             min-height: 100dvh;
             display: grid;
@@ -107,9 +112,13 @@
         .signup-container {
             width: 100%;
             max-width: 420px;
-            background: var(--md-sys-color-surface, white);
+            /* Transparent glass effect */
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 28px;
-            box-shadow: var(--md-sys-elevation-level3);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             padding: 32px 24px;
         }
@@ -131,6 +140,7 @@
             font-weight: 500;
             color: var(--md-sys-color-primary);
             margin-top: 8px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
 
         h2 {
@@ -140,16 +150,17 @@
             color: var(--md-sys-color-on-surface);
         }
 
-        /* Purple labels for the input fields */
+        /* Purple labels */
         md-outlined-text-field {
             width: 100%;
             margin-bottom: 16px;
-            --md-outlined-text-field-label-text-color: #7c4dff;           /* purple label (inactive) */
-            --md-outlined-text-field-label-text-color-focused: #7c4dff;  /* purple when focused */
-            --md-outlined-text-field-focus-outline-color: #7c4dff;       /* purple outline when focused */
+            --md-outlined-text-field-label-text-color: #7c4dff;
+            --md-outlined-text-field-label-text-color-focused: #7c4dff;
+            --md-outlined-text-field-focus-outline-color: #7c4dff;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
         }
 
-        /* Optional: make supporting text (e.g. "Used for login") also purple-ish */
         md-outlined-text-field[supporting-text] {
             --md-outlined-text-field-supporting-text-color: #9f7eff;
         }
