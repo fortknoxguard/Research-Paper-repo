@@ -21,7 +21,6 @@
     <script type="module">
         import '@material/web/all.js';
     </script>
-
     <!-- Firebase SDK (add your config below) -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -33,12 +32,14 @@
         apiKey: "your-api-key",
         authDomain: "user-login-ad4e6.firebaseapp.com",
         projectId: "user-login-ad4e6",
-        // ... rest of config
+        storageBucket: "user-login-ad4e6.appspot.com",
+        messagingSenderId: "815541711200",
+        appId: "1:815541711200:web:c6a5a58a91df3321986e05",
+        measurementId: "G-WEFZLHB7SC"
       };
       firebase.initializeApp(firebaseConfig);
     </script>
     -->
-
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -174,7 +175,7 @@
         </div>
         <h2>Welcome back</h2>
         <div class="subtitle">Log in to continue your journey</div>
-        <form>
+        <form id="loginForm">
             <md-outlined-text-field
                 id="username"
                 label="Username"
@@ -197,32 +198,55 @@
         <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
     </div>
 
-    <!-- FIXED Supabase initialization (no more 'supabase' duplicate declaration) -->
+    <!-- FIXED Supabase initialization – no duplicate declaration -->
     <script>
-        // Replace with your real Supabase values
-        const SUPABASE_URL = 'https://your-project-ref.supabase.co';
-        const SUPABASE_ANON_KEY = 'your-anon-key-here';
+        // Replace these with your REAL values from Supabase dashboard → Settings → API
+        const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
-        // FIXED: Use window.mySupabase instead of redeclaring 'supabase'
+        // Use the global 'supabase' created by the CDN script
         window.mySupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
             auth: {
                 autoRefreshToken: false,
                 persistSession: false,
                 async getAccessToken() {
-                    const user = firebase.auth().currentUser;
-                    if (user) {
-                        return await user.getIdToken(false);
+                    // This will attach Firebase token when user is signed in
+                    if (typeof firebase !== 'undefined' && firebase.auth) {
+                        const user = firebase.auth().currentUser;
+                        if (user) {
+                            try {
+                                return await user.getIdToken(false);
+                            } catch (err) {
+                                console.warn('Could not get Firebase token:', err.message);
+                            }
+                        }
                     }
                     return null;
                 }
             }
         });
 
-        console.log('Supabase client initialized');
+        console.log('Supabase client initialized successfully');
 
-        // Test after page load
+        // Improved test: don't crash if no user is logged in
         setTimeout(async () => {
-            const { data: { user }, error } = await window.mySupabase.auth.getUser();
-            if (error) console.error('Supabase test error:', error.message);
-            else console.log('Supabase user test:', user ? user : 'No user yet');
+            try {
+                const { data: { user }, error } = await window.mySupabase.auth.getUser();
+                if (error) {
+                    if (error.message.includes('Auth session missing')) {
+                        console.log('No user signed in yet (normal)');
+                    } else {
+                        console.error('Supabase auth test error:', error.message);
+                    }
+                } else if (user) {
+                    console.log('Supabase sees user:', user.email || user.id);
+                } else {
+                    console.log('No user signed in yet');
+                }
+            } catch (err) {
+                console.warn('Supabase getUser failed:', err.message);
+            }
         }, 2000);
+    </script>
+</body>
+</html>
