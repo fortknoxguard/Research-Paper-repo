@@ -22,9 +22,24 @@
         import '@material/web/all.js';
     </script>
 
-    <!-- ════════════════════════════════════════════════════════════════
-         Supabase CDN – added here so it's available globally
-         ════════════════════════════════════════════════════════════════ -->
+    <!-- Firebase SDK (add your config below) -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <!-- ADD YOUR FIREBASE CONFIG HERE (from Firebase Console → Project Settings → SDK setup) -->
+    <!-- Example (uncomment and fill in): -->
+    <!--
+    <script>
+      const firebaseConfig = {
+        apiKey: "your-api-key",
+        authDomain: "user-login-ad4e6.firebaseapp.com",
+        projectId: "user-login-ad4e6",
+        // ... rest of config
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    -->
+
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -182,30 +197,32 @@
         <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════════════════
-         Supabase initialization + quick test (you can remove later)
-         ════════════════════════════════════════════════════════════════════════ -->
+    <!-- FIXED Supabase initialization (no more 'supabase' duplicate declaration) -->
     <script>
-        // Replace these with your real values from Supabase dashboard → Settings → API
-        const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';          // ← your URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk'; // ← your anon key
+        // Replace with your real Supabase values
+        const SUPABASE_URL = 'https://your-project-ref.supabase.co';
+        const SUPABASE_ANON_KEY = 'your-anon-key-here';
 
-        // Create the Supabase client
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        console.log("Supabase client loaded");
-
-        // Quick test - run once after page load
-        setTimeout(async () => {
-            const { data: { user }, error } = await supabase.auth.getUser();
-            if (error) {
-                console.error("Supabase auth error:", error.message);
-            } else if (user) {
-                console.log("Logged in user (via Supabase):", user.email);
-            } else {
-                console.log("No user currently signed in (normal if not logged in)");
+        // FIXED: Use window.mySupabase instead of redeclaring 'supabase'
+        window.mySupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false,
+                async getAccessToken() {
+                    const user = firebase.auth().currentUser;
+                    if (user) {
+                        return await user.getIdToken(false);
+                    }
+                    return null;
+                }
             }
-        }, 1500); // wait 1.5 seconds so page is fully loaded
-    </script>
-</body>
-</html>
+        });
+
+        console.log('Supabase client initialized');
+
+        // Test after page load
+        setTimeout(async () => {
+            const { data: { user }, error } = await window.mySupabase.auth.getUser();
+            if (error) console.error('Supabase test error:', error.message);
+            else console.log('Supabase user test:', user ? user : 'No user yet');
+        }, 2000);
