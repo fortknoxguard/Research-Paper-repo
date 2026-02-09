@@ -31,7 +31,7 @@ if (loginForm) {
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('username').value.trim(); // or change to 'email' id if you updated it
+    const email = document.getElementById('username').value.trim(); // ← change id to 'email' in HTML later for clarity
     const password = document.getElementById('password').value;
 
     if (!email.includes('@') || !email.includes('.')) {
@@ -44,7 +44,7 @@ if (loginForm) {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       console.log('Firebase login successful');
-      // The auth state listener below will show the test section
+      // Auth state listener will handle showing the test section
     } catch (error) {
       console.error('Login error:', error.code, error.message);
       let msg = error.message;
@@ -69,27 +69,29 @@ if (testInsertBtn) {
       const firebaseUser = firebase.auth().currentUser;
       if (!firebaseUser) throw new Error('No Firebase user logged in – please log in first');
 
+      console.log('Inserting with user UID:', firebaseUser.uid); // ← extra debug
+
       const { data, error } = await window.supabase
         .from('research_papers')
         .insert({
-          title: "Test Paper from ICCTory Login",
-          description: "Dummy insert after column fix - " + new Date().toISOString(),
-          author: "Ritcher",                     // lowercase – matches folded "Author"
-          user_id: firebaseUser.uid,             // lowercase – common convention
-          file_path: "test-folder/test-from-login.pdf",
-          file_name: "test-from-login.pdf",
-          file_size: 54321,
-          mime_type: "application/pdf"
+          "Title": "Test Paper from ICCTory Login Page",
+          "Description": "Dummy insert after fixing quoted column names - " + new Date().toISOString(),
+          "Author": "Ritcher",
+          "user_id": firebaseUser.uid,  // lowercase, no quotes needed
+          "file_path": "test-folder/test-from-login.pdf",
+          "file_name": "test-from-login.pdf",
+          "file_size": 54321
+          // If you add "mime_type" column later: "mime_type": "application/pdf"
         })
         .select();
 
       if (error) throw error;
 
       resultEl.textContent = 'SUCCESS! Inserted row:\n' + JSON.stringify(data, null, 2);
-      console.log('Inserted:', data);
+      console.log('Inserted successfully:', data);
     } catch (err) {
-      resultEl.textContent = 'FAILED:\n' + err.message;
-      console.error('Insert error:', err);
+      resultEl.textContent = 'FAILED:\n' + err.message + '\n\nCheck console for details.';
+      console.error('Insert error (full details):', err);
     }
   });
 }
@@ -100,7 +102,8 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     console.log('User signed in:', user.email, user.uid);
     if (testSection) testSection.style.display = 'block';
-    // Optional: redirect when ready → window.location.href = 'upload.html';
+    // Optional: redirect when your upload page is ready
+    // window.location.href = 'upload.html';
   } else {
     console.log('No user signed in');
     if (testSection) testSection.style.display = 'none';
