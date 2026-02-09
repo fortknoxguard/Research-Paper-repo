@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/mypending.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar-wrapper">
+            <div class="sidebar-dark-top">
+                <div class="logo-circle">
+                    <img src="../img/icct.jpeg" alt="ICCT Logo">
+                </div>
+                <h1 class="brand-name">ICCTory</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-link-wrapper">
+                    <i class="fa-solid fa-house"></i>
+                    <a href="../index.html" class="nav-item">Home</a>
+                </div>
+                
+                <div class="nav-link-wrapper">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <a href="../user/upload.html" class="nav-item">Upload</a>
+                </div>
+                
+                <div class="nav-link-wrapper active-link">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <a href="../user/mypending.html" class="nav-item">Your Requests</a>
+                </div>
+
+                <div class="nav-link-wrapper">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <a href="../user/research.html" class="nav-item">Research Papers</a>
+                </div>
+
+                <div class="nav-link-wrapper">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <a href="../user/about.html" class="nav-item">About</a>
+                </div>
+
+                <div class="nav-link-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <a href="../user/profile.html" class="nav-item">Profile</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h2 class="page-title">Requests</h2>
+                <div class="filter-bar">
+                    <a href="../user/mypending.html" class="filter-link">
+                        <button class="filter-btn active">Pending</button>
+                    </a>
+                    
+                    <a href="../user/myrejected.html" class="filter-link">
+                        <button class="filter-btn">Rejected</button>
+                    </a>
+                </div>
+            </header>
+
+            <div class="request-container" id="requestList">
+                </div>
+        </main>
+    </div>
+
+    <script>
+        const data = Array(10).fill({ user: 'User', title: 'Title', date: 'Date', status: 'Pending' });
+        const container = document.getElementById('requestList');
+        data.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'request-row';
+            row.innerHTML = `
+                <span class="cell">${item.user}</span>
+                <span class="cell">${item.title}</span>
+                <span class="cell">${item.date}</span>
+                <span class="cell status-text">${item.status}</span>`;
+            container.appendChild(row);
+        });
+    </script>
+</body>
+</html>
