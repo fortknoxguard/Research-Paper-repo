@@ -3,103 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCTory - Upload Research</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../css/upload.css">
+    <title>ICCTory - Profile</title>
+    <link rel="stylesheet" href="../css/research.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-top">
-                <div class="logo-circle">
-                    <img src="../img/icct.jpeg" alt="ICCT Logo">
-                </div>
-                <h1 class="brand-name">ICCTory</h1>
-            </div>
-            
-            <nav class="nav-menu">
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-house"></i> 
-                    <a href="../index.html" class="nav-item">Home</a>
-                </div>
-                <div class="nav-link-wrapper active-link">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <a href="upload.html" class="nav-item">Upload</a>
-                </div>
-                
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    <a href="mypending.html" class="nav-item">Your Requests</a>
-                </div>
-
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <a href="research.html" class="nav-item">Research Papers</a>
-                </div>
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <a href="about.html" class="nav-item">About</a>
-                </div>
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <a href="profile.html" class="nav-item">Profile</a>
-                </div>
-            </nav>
-
-        </aside>
-
-        <main class="content">
-            <div class="upload-header">
-                <h2 class="page-title">Upload your work</h2>
-                <div class="upload-icon-container">
-                    <div class="cloud-icon"><i class="fa-solid fa-arrow-up"></i></div>
-                </div>
-            </div>
-
-            <hr class="divider">
-
-            <form class="upload-form">
-                <div class="form-group">
-                    <label>Research Title</label>
-                    <input type="text" class="custom-input">
-                </div>
-                <div class="form-group">
-                    <label>Authors</label>
-                    <input type="text" class="custom-input">
-                </div>
-                <div class="form-group">
-                    <label>Department</label>
-                    <select class="custom-input">
-                        <option value="CS">Computer Studies</option>
-                        <option value="BA">Business & Accountancy</option>
-                        <option value="Engineering">Engineering</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>School Year</label>
-                    <select class="custom-input">
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
-                </div>
-
-                <div class="action-section">
-                    <button type="button" class="file-upload-btn">
-                        File Upload <span class="plus">+</span>
-                    </button>
-                    <div class="arrow-indicator">------></div>
-                    <div class="options-container">
-                        <button type="button" class="opt-btn"><i class="fa-brands fa-google-drive"></i> Drive</button>
-                        <button type="button" class="opt-btn">🔗 Link</button>
-                        <button type="button" class="opt-btn">📂 File</button>
-                    </div>
-                </div>
-
-                <button type="submit" class="confirm-btn">Confirm</button>
-            </form>
-        </main>
+<nav>
+    <div class="logo-area">
+        <img src="../img/icct.jpeg" alt="ICCT Logo" class="main-logo">
+        <div class="brand-name">ICCTory</div>
     </div>
+    <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../user/about.html">About</a>
+        <a href="../user/profile.html">Profile</a>
+    </div>
+</nav>
+
+<main class="main-content">
+    <section class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 class="user-display-name">[ User ]</h2>
+        </div>
+
+        <div class="info-table">
+            <div class="info-row">
+                <span class="label">Username</span>
+                <span class="value">[N/A]</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Firstname</span>
+                <span class="value">[N/A]</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Lastname</span>
+                <span class="value">[N/A]</span>
+            </div>
+        </div>
+        
+<button class="logout-btn-profile" onclick="confirm('Log out of ICCTory?')">Log Out</button>
+    </section>
+</main>
 
 </body>
 </html>
