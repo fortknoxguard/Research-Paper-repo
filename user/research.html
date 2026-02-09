@@ -3,103 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCTory - Upload Research</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../css/upload.css">
+    <title>ICCTory - Research Papers</title>
+    <link rel="stylesheet" href="../css/research.css">
 </head>
 <body>
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-top">
-                <div class="logo-circle">
-                    <img src="../img/icct.jpeg" alt="ICCT Logo">
-                </div>
-                <h1 class="brand-name">ICCTory</h1>
-            </div>
-            
-            <nav class="nav-menu">
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-house"></i> 
-                    <a href="../index.html" class="nav-item">Home</a>
-                </div>
-                <div class="nav-link-wrapper active-link">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <a href="upload.html" class="nav-item">Upload</a>
-                </div>
-                
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    <a href="mypending.html" class="nav-item">Your Requests</a>
-                </div>
-
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <a href="research.html" class="nav-item">Research Papers</a>
-                </div>
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <a href="about.html" class="nav-item">About</a>
-                </div>
-                <div class="nav-link-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <a href="profile.html" class="nav-item">Profile</a>
-                </div>
-            </nav>
-
-        </aside>
-
-        <main class="content">
-            <div class="upload-header">
-                <h2 class="page-title">Upload your work</h2>
-                <div class="upload-icon-container">
-                    <div class="cloud-icon"><i class="fa-solid fa-arrow-up"></i></div>
-                </div>
-            </div>
-
-            <hr class="divider">
-
-            <form class="upload-form">
-                <div class="form-group">
-                    <label>Research Title</label>
-                    <input type="text" class="custom-input">
-                </div>
-                <div class="form-group">
-                    <label>Authors</label>
-                    <input type="text" class="custom-input">
-                </div>
-                <div class="form-group">
-                    <label>Department</label>
-                    <select class="custom-input">
-                        <option value="CS">Computer Studies</option>
-                        <option value="BA">Business & Accountancy</option>
-                        <option value="Engineering">Engineering</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>School Year</label>
-                    <select class="custom-input">
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
-                </div>
-
-                <div class="action-section">
-                    <button type="button" class="file-upload-btn">
-                        File Upload <span class="plus">+</span>
-                    </button>
-                    <div class="arrow-indicator">------></div>
-                    <div class="options-container">
-                        <button type="button" class="opt-btn"><i class="fa-brands fa-google-drive"></i> Drive</button>
-                        <button type="button" class="opt-btn">🔗 Link</button>
-                        <button type="button" class="opt-btn">📂 File</button>
-                    </div>
-                </div>
-
-                <button type="submit" class="confirm-btn">Confirm</button>
-            </form>
-        </main>
+<nav>
+    <div class="logo-area">
+        <img src="../img/icct.jpeg" alt="ICCT Logo" class="main-logo">
+        <div class="brand-name">ICCTory</div>
     </div>
+    <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../user/about.html">About</a>
+        <a href="../user/profile.html">Profile</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Research Papers</h1>
+
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-bar" placeholder="Search by Title, Author, or Keywords...">
+    </div>
+
+    <div class="filter-group">
+        <div class="dropdown">
+            <button onclick="toggleDrop('schoolDrop')" class="dropbtn btn-school">
+                SCHOOL YEAR <span>▼</span>
+            </button>
+            <div id="schoolDrop" class="dropdown-content">
+                <a href="#" onclick="selectOption('2021')">2021</a>
+                <a href="#" onclick="selectOption('2022')">2022</a>
+                <a href="#" onclick="selectOption('2023')">2023</a>
+                <a href="#" onclick="selectOption('2024')">2024</a>
+                <a href="#" onclick="selectOption('2025')">2025</a>
+                <a href="#" onclick="selectOption('2026')">2026</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button onclick="toggleDrop('deptDrop')" class="dropbtn btn-dept">
+                DEPARTMENT <span>▼</span>
+            </button>
+            <div id="deptDrop" class="dropdown-content">
+                <a href="#" onclick="selectOption('AS')">Arts & Sciences</a>
+                <a href="#" onclick="selectOption('BA')">Business & Accountancy</a>
+                <a href="#" onclick="selectOption('CS')">Computer Studies</a>
+                <a href="#" onclick="selectOption('CA')">Criminology & Administration</a>
+                <a href="#" onclick="selectOption('Engineering')">Engineering</a>
+                <a href="#" onclick="selectOption('TE')">Teacher Education</a>
+                <a href="#" onclick="selectOption('MET')">Maritime Education & Training</a>
+                <a href="#" onclick="selectOption('ABM')">ABM</a>
+                <a href="#" onclick="selectOption('STEM')">STEM</a>
+                <a href="#" onclick="selectOption('HUMSS')">HUMSS</a>
+                <a href="#" onclick="selectOption('GAS')">GAS</a>
+                <a href="#" onclick="selectOption('ICT')">ICT</a>
+                <a href="#" onclick="selectOption('HE')">HE</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-count">About 267 result</div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">A case study on ....</div>
+            <div class="card-body">
+                <div class="placeholder-img">CANVA</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">TITLE</div>
+            <div class="card-body">
+                <div class="placeholder-img">CANVA</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">TITLE</div>
+            <div class="card-body">
+                <div class="placeholder-img">CANVA</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">TITLE</div>
+            <div class="card-body">
+                <div class="placeholder-img">CANVA</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle the dropdown menu visibility
+    function toggleDrop(id) {
+        // Close other dropdowns before opening new one
+        const allDrops = document.querySelectorAll('.dropdown-content');
+        allDrops.forEach(drop => {
+            if (drop.id !== id) drop.classList.remove('show');
+        });
+        
+        document.getElementById(id).classList.toggle("show");
+    }
+
+    // Example function for when an option is clicked
+    function selectOption(val) {
+        console.log("Selected: " + val);
+        // You can add logic here to filter your results
+    }
+
+    // Close dropdowns if the user clicks outside of them
+    window.onclick = function(event) {
+        if (!event.target.closest('.dropdown')) {
+            const dropdowns = document.getElementsByClassName("dropdown-content");
+            for (let i = 0; i < dropdowns.length; i++) {
+                dropdowns[i].classList.remove('show');
+            }
+        }
+    }
+</script>
 
 </body>
 </html>
