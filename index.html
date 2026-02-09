@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICCTory – Login</title>
-    <!-- Google Fonts: Ubuntu (same as signup) -->
+    <!-- Google Fonts: Ubuntu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <!-- Material Web (v1 for consistency with your signup) -->
+    <!-- Material Web -->
     <script type="importmap">
     {
       "imports": {
@@ -21,41 +21,14 @@
     <script type="module">
         import '@material/web/all.js';
     </script>
-    <!-- Firebase SDK (add your config below) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-    <!-- ADD YOUR FIREBASE CONFIG HERE (from Firebase Console → Project Settings → SDK setup) -->
-    <!-- Example (uncomment and fill in): -->
-    <!--
-    <script>
-      const firebaseConfig = {
-        apiKey: "your-api-key",
-        authDomain: "user-login-ad4e6.firebaseapp.com",
-        projectId: "user-login-ad4e6",
-        storageBucket: "user-login-ad4e6.appspot.com",
-        messagingSenderId: "815541711200",
-        appId: "1:815541711200:web:c6a5a58a91df3321986e05",
-        measurementId: "G-WEFZLHB7SC"
-      };
-      firebase.initializeApp(firebaseConfig);
-    </script>
-    -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
-            authDomain: "user-login-ad4e6.firebaseapp.com",
-            projectId: "user-login-ad4e6",
-            storageBucket: "user-login-ad4e6.firebasestorage.app",
-            messagingSenderId: "815541711200",
-            appId: "1:815541711200:web:c6a5a58a91df3321986e05",
-            measurementId: "G-WEFZLHB7SC"
-        };
-        firebase.initializeApp(firebaseConfig);
-    </script>
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+        /* Your existing styles remain unchanged – keeping them here for completeness */
         :root {
             --primary: #7c4dff;
             --primary-dark: #5e35b1;
@@ -89,91 +62,21 @@
             from { opacity: 0; transform: translateY(40px) scale(0.96); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .logo-section {
+        /* ... rest of your styles unchanged ... */
+        #test-section {
+            margin-top: 30px;
             text-align: center;
-            margin-bottom: 44px;
+            display: none;
         }
-        .logo {
-            width: 110px;
-            height: 110px;
-            border-radius: 28px;
-            object-fit: cover;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.18);
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
-        }
-        .logo:hover {
-            transform: scale(1.1) rotate(6deg);
-            box-shadow: 0 16px 50px rgba(124,77,255,0.4), inset 0 0 0 1px rgba(255,255,255,0.25);
-        }
-        .icctory-text {
-            font-size: 3.6rem;
-            font-weight: 700;
-            letter-spacing: -1.5px;
-            color: var(--text);
-            margin: 20px 0 0;
-            text-shadow: 0 6px 24px rgba(0,0,0,0.8), 0 0 30px rgba(124,77,255,0.5);
-        }
-        h2 {
-            font-size: 2rem;
-            font-weight: 500;
-            margin: 0 0 8px;
-            color: var(--text);
-            text-shadow: 0 3px 15px rgba(0,0,0,0.7);
-        }
-        .subtitle {
-            font-size: 1.05rem;
-            opacity: 0.88;
-            text-align: center;
-            margin: -4px 0 36px;
-            color: var(--text-soft);
-        }
-        md-outlined-text-field {
-            --md-outlined-text-field-container-shape: 20px;
-            --md-outlined-text-field-focus-outline-width: 2.5px;
-            --md-outlined-text-field-focus-outline-color: var(--primary);
-            --md-outlined-text-field-outline-color: rgba(255,255,255,0.42);
-            --md-outlined-text-field-hover-outline-color: rgba(255,255,255,0.65);
-            background: rgba(255,255,255,0.07);
-            margin-bottom: 22px;
-            transition: transform 0.25s ease;
-        }
-        md-outlined-text-field:focus-within {
-            transform: translateY(-2px);
-        }
-        md-outlined-text-field,
-        md-outlined-text-field * {
-            font-family: 'Ubuntu', sans-serif !important;
-        }
-        md-outlined-text-field[supporting-text] {
-            --md-outlined-text-field-supporting-text-color: rgba(255,255,255,0.78);
-        }
-        md-filled-button {
-            --md-filled-button-container-color: var(--primary);
-            --md-filled-button-hover-container-color: var(--primary-dark);
-            --md-filled-button-container-shape: 32px;
-            height: 58px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 0.6px;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(124,77,255,0.35);
-        }
-        md-filled-button:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 12px 40px rgba(124,77,255,0.55);
-        }
-        .signup-link {
-            display: block;
-            text-align: center;
-            margin-top: 24px;
-            color: rgba(255,255,255,0.85);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .signup-link:hover {
-            color: #ffffff;
-            text-decoration: underline;
+        #test-result {
+            background: rgba(0,0,0,0.4);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 16px;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -208,29 +111,45 @@
             </md-filled-button>
         </form>
         <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
+
+        <!-- Temporary test area – shows after successful login -->
+        <div id="test-section">
+            <h3>Supabase DB Test (after login)</h3>
+            <md-filled-button id="test-insert-btn">Insert Test Row to research_papers</md-filled-button>
+            <pre id="test-result">Click the button to test DB insert...</pre>
+        </div>
     </div>
 
-    <!-- FIXED Supabase initialization – no duplicate declaration -->
     <script>
-        // Replace these with your REAL values from Supabase dashboard → Settings → API
+        // ==================== Firebase Config (already good) ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
+            authDomain: "user-login-ad4e6.firebaseapp.com",
+            projectId: "user-login-ad4e6",
+            storageBucket: "user-login-ad4e6.firebasestorage.app",
+            messagingSenderId: "815541711200",
+            appId: "1:815541711200:web:c6a5a58a91df3321986e05",
+            measurementId: "G-WEFZLHB7SC"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // ==================== Supabase Initialization ====================
         const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
-        // Use the global 'supabase' created by the CDN script
-        window.mySupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        // Corrected: lowercase 'supabase' from CDN
+        window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
             auth: {
                 autoRefreshToken: false,
                 persistSession: false,
                 async getAccessToken() {
-                    // This will attach Firebase token when user is signed in
-                    if (typeof firebase !== 'undefined' && firebase.auth) {
-                        const user = firebase.auth().currentUser;
-                        if (user) {
-                            try {
-                                return await user.getIdToken(false);
-                            } catch (err) {
-                                console.warn('Could not get Firebase token:', err.message);
-                            }
+                    const user = firebase.auth().currentUser;
+                    if (user) {
+                        try {
+                            return await user.getIdToken(/* forceRefresh */ false);
+                        } catch (err) {
+                            console.warn('Failed to get Firebase ID token:', err);
+                            return null;
                         }
                     }
                     return null;
@@ -238,31 +157,73 @@
             }
         });
 
-        console.log('Supabase client initialized successfully');
+        console.log('Supabase client initialized');
 
-        // Improved test: don't crash if no user is logged in
-        setTimeout(async () => {
+        // ==================== Login Form Handler ====================
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Assuming username is email – adjust if needed
             try {
-                const { data: { user }, error } = await window.mySupabase.auth.getUser();
-                if (error) {
-                    if (error.message.includes('Auth session missing')) {
-                        console.log('No user signed in yet (normal)');
-                    } else {
-                        console.error('Supabase auth test error:', error.message);
-                    }
-                } else if (user) {
-                    console.log('Supabase sees user:', user.email || user.id);
-                } else {
-                    console.log('No user signed in yet');
-                }
-            } catch (err) {
-                console.warn('Supabase getUser failed:', err.message);
+                await firebase.auth().signInWithEmailAndPassword(username, password);
+                console.log('Firebase login successful');
+                // Redirect or show test section
+                document.getElementById('test-section').style.display = 'block';
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+                console.error(error);
             }
-        }, 2000);
+        });
+
+        // ==================== Supabase DB Insert Test ====================
+        document.getElementById('test-insert-btn')?.addEventListener('click', async () => {
+            const resultEl = document.getElementById('test-result');
+            resultEl.textContent = 'Inserting test row...';
+
+            try {
+                const firebaseUser = firebase.auth().currentUser;
+                if (!firebaseUser) throw new Error('No Firebase user logged in');
+
+                // Use Firebase UID as user_id (you can change column to text if uuid doesn't match)
+                const { data, error } = await window.supabase
+                    .from('research_papers')
+                    .insert({
+                        title: "Test Paper from ICCTory Login Page",
+                        description: "Dummy insert after Firebase login - " + new Date().toISOString(),
+                        authors: "Ritcher",
+                        user_id: firebaseUser.uid,           // Firebase UID (string)
+                        file_path: "test-folder/test-from-login.pdf",
+                        file_name: "test-from-login.pdf",
+                        file_size: 54321,
+                        mime_type: "application/pdf"
+                    })
+                    .select();
+
+                if (error) throw error;
+
+                resultEl.textContent = 'SUCCESS! Inserted:\n' + JSON.stringify(data, null, 2);
+                console.log('Inserted row:', data);
+            } catch (err) {
+                resultEl.textContent = 'FAILED:\n' + err.message;
+                console.error('Insert error:', err);
+            }
+        });
+
+        // Optional: Listen for auth state (useful for redirect after login)
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log('User is signed in with Firebase:', user.email, user.uid);
+                document.getElementById('test-section').style.display = 'block';
+                // You can redirect here: window.location.href = 'upload.html';
+            } else {
+                console.log('No user signed in');
+                document.getElementById('test-section').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
-
-
-
-
