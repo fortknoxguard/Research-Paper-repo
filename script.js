@@ -92,9 +92,9 @@ if (testInsertBtn) {
       const { data, error } = await window.supabase
         .from('research_papers')
         .insert({
-          "Title": "Test Paper – " + new Date().toISOString(),
-          "Description": "This is a test insert from the login page after successful Firebase auth",
-          "Author": "Ritcher",
+          "title": "Test Paper – " + new Date().toISOString(),
+          "description": "This is a test insert from the login page after successful Firebase auth",
+          "author": "Ritcher",
           "user_id": firebaseUser.uid,  // Firebase UID as string
           "file_path": "test-folder/test-from-login.pdf",
           "file_name": "test-from-login.pdf",
