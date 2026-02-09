@@ -1,67 +1,108 @@
-// script.js  or  components/AuthButtons.jsx  (must have "use client" at top if component)
+// script.js
 
-"use client";
+// ==================== Supabase Initialization ====================
+const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
-import { auth, db } from "@/firebase";          // adjust path
-import { 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut,
-  onAuthStateChanged 
-} from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-
-export default function AuthExample() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      console.log("Current user:", currentUser);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const signInWithGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      console.log("Signed in:", result.user);
-
-      // Optional: create/save user profile in Firestore
-      const userRef = doc(db, "users", result.user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          uid: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-          createdAt: new Date(),
-        });
+window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    async getAccessToken() {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        try {
+          return await user.getIdToken(false);
+        } catch (err) {
+          console.warn('Failed to get Firebase ID token:', err);
+          return null;
+        }
       }
-    } catch (error) {
-      console.error("Auth error:", error);
+      return null;
     }
-  };
+  }
+});
 
-  const handleSignOut = async () => {
-    await signOut(auth);
-  };
+console.log('Supabase client initialized in script.js');
 
-  return (
-    <div>
-      {user ? (
-        <>
-          <p>Welcome, {user.displayName}</p>
-          <button onClick={handleSignOut}>Sign Out</button>
-        </>
-      ) : (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
-      )}
-    </div>
-  );
+// ==================== Login Form Handler ====================
+const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('username').value.trim(); // or change to 'email' id if you updated it
+    const password = document.getElementById('password').value;
+
+    if (!email.includes('@') || !email.includes('.')) {
+      alert('Please enter a valid email address (e.g., name@example.com)');
+      return;
+    }
+
+    console.log('Attempting login with:', email);
+
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      console.log('Firebase login successful');
+      // The auth state listener below will show the test section
+    } catch (error) {
+      console.error('Login error:', error.code, error.message);
+      let msg = error.message;
+      if (error.code === 'auth/invalid-email') {
+        msg = 'Invalid email format – use the full email you signed up with.';
+      } else if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        msg = 'Email or password incorrect.';
+      }
+      alert('Login failed: ' + msg);
+    }
+  });
 }
+
+// ==================== Test Insert Button Handler ====================
+const testInsertBtn = document.getElementById('test-insert-btn');
+if (testInsertBtn) {
+  testInsertBtn.addEventListener('click', async () => {
+    const resultEl = document.getElementById('test-result');
+    resultEl.textContent = 'Inserting test row...';
+
+    try {
+      const firebaseUser = firebase.auth().currentUser;
+      if (!firebaseUser) throw new Error('No Firebase user logged in – please log in first');
+
+      const { data, error } = await window.supabase
+        .from('research_papers')
+        .insert({
+          title: "Test Paper from ICCTory Login",
+          description: "Dummy insert after column fix - " + new Date().toISOString(),
+          author: "Ritcher",                     // lowercase – matches folded "Author"
+          user_id: firebaseUser.uid,             // lowercase – common convention
+          file_path: "test-folder/test-from-login.pdf",
+          file_name: "test-from-login.pdf",
+          file_size: 54321,
+          mime_type: "application/pdf"
+        })
+        .select();
+
+      if (error) throw error;
+
+      resultEl.textContent = 'SUCCESS! Inserted row:\n' + JSON.stringify(data, null, 2);
+      console.log('Inserted:', data);
+    } catch (err) {
+      resultEl.textContent = 'FAILED:\n' + err.message;
+      console.error('Insert error:', err);
+    }
+  });
+}
+
+// ==================== Firebase Auth State Listener ====================
+firebase.auth().onAuthStateChanged((user) => {
+  const testSection = document.getElementById('test-section');
+  if (user) {
+    console.log('User signed in:', user.email, user.uid);
+    if (testSection) testSection.style.display = 'block';
+    // Optional: redirect when ready → window.location.href = 'upload.html';
+  } else {
+    console.log('No user signed in');
+    if (testSection) testSection.style.display = 'none';
+  }
+});
