@@ -74,9 +74,9 @@ if (testInsertBtn) {
       const { data, error } = await window.supabase
         .from('research_papers')
         .insert({
-          "Title": "Test Paper from ICCTory Login Page",
-          "Description": "Dummy insert after fixing quoted column names - " + new Date().toISOString(),
-          "Author": "Ritcher",
+          "title": "Test Paper from ICCTory Login Page",
+          "description": "Dummy insert after fixing quoted column names - " + new Date().toISOString(),
+          "author": "Ritcher",
           "user_id": firebaseUser.uid,  // lowercase, no quotes needed
           "file_path": "test-folder/test-from-login.pdf",
           "file_name": "test-from-login.pdf",
