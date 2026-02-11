@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCTORY Sign Up</title>
+    <title>ICCTORY Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/login.css">
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (modular version - recommended) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: window.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
@@ -26,13 +25,11 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
 
-        window.firebaseAuth = auth;           // for Supabase to access if needed
-        window.firebaseDb = db;
+        window.firebaseAuth = auth;  // expose for Supabase token forwarding
     </script>
 
-    <!-- Supabase CDN -->
+    <!-- Supabase client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -45,34 +42,26 @@
         </div>
         <div class="divider"></div>
         <div class="right-side">
-            <h2>Sign up</h2>
-            <form id="signup-form">
-                <div class="input-group">
-                    <input type="text" id="firstname" placeholder="First Name" required>
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="lastname" placeholder="Last Name" required>
-                    <i class="fa-solid fa-user"></i>
-                </div>
+            <h2>Log in</h2>
+            <form id="login-form">
                 <div class="input-group">
                     <input type="text" id="username" placeholder="Username" required>
-                    <i class="fa-solid fa-at"></i>
+                    <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" placeholder="Create Password" required minlength="6">
+                    <input type="password" id="password" placeholder="Password" required>
                     <i class="fa-solid fa-lock"></i>
                 </div>
-                <button type="submit" class="signup-btn">SIGN UP</button>
+                <button type="submit" class="signup-btn">LOG IN</button>
             </form>
             <p class="footer-text">
-                Already have an account? <a href="login.html">Back to Login.</a>
+                Don't have an account? <a href="signup.html">Register here.</a>
             </p>
         </div>
     </div>
 
     <script>
-        // ── Supabase Setup ───────────────────────────────────────
+        // ── Supabase Client (with Firebase token forwarding) ────────────────────────
         const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
@@ -84,10 +73,10 @@
                     if (window.firebaseAuth?.currentUser) {
                         try {
                             const token = await window.firebaseAuth.currentUser.getIdToken(false);
-                            console.log('Firebase token attached to Supabase request');
+                            console.log('Firebase ID token attached to Supabase');
                             return token;
                         } catch (err) {
-                            console.error('Failed to get Firebase token:', err);
+                            console.error('Failed to get Firebase token for Supabase:', err);
                         }
                     }
                     return null;
@@ -95,65 +84,45 @@
             }
         });
 
-        // ── Form Handler ─────────────────────────────────────────
+        // ── Login Handler ───────────────────────────────────────────────────────────
         document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("signup-form");
-            const firstnameField = document.getElementById("firstname");
-            const lastnameField  = document.getElementById("lastname");
-            const usernameField  = document.getElementById("username");
-            const passwordField  = document.getElementById("password");
+            const form     = document.getElementById("login-form");
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
 
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
 
-                const firstname = firstnameField.value.trim();
-                const lastname  = lastnameField.value.trim();
-                const username  = usernameField.value.trim();
-                const password  = passwordField.value;
+                const uname = username.value.trim();
+                const pass  = password.value;
 
-                if (!firstname || !lastname || !username || !password) {
-                    alert("Please fill in all fields.");
+                if (!uname || !pass) {
+                    alert("Please enter username and password.");
                     return;
                 }
 
-                const email = `${username}@icctory.example.com`;
-                const displayName = `${firstname} ${lastname}`;
+                const email = `${uname}@icctory.example.com`;
 
                 try {
-                    // 1. Create Firebase user
-                    const userCredential = await createUserWithEmailAndPassword(
+                    const userCredential = await signInWithEmailAndPassword(
                         window.firebaseAuth,
                         email,
-                        password
+                        pass
                     );
+
                     const user = userCredential.user;
 
-                    // 2. Set display name
-                    await updateProfile(user, { displayName });
+                    alert(`Welcome back, ${user.displayName || uname}!`);
 
-                    // 3. Save extra profile to Firestore
-                    await setDoc(doc(window.firebaseDb, "users", user.uid), {
-                        uid: user.uid,
-                        firstname,
-                        lastname,
-                        username,
-                        email,
-                        createdAt: new Date().toISOString()
-                    });
-
-                    alert(`Welcome to ICCTORY, ${displayName}! Account created successfully.`);
-
-                    // Optional: redirect
-                    window.location.href = "dashboard.html";   // ← change if needed
+                    // Redirect to dashboard (change path if needed)
+                    window.location.href = "dashboard.html";
 
                 } catch (error) {
-                    let msg = "Sign up failed. Please try again.";
-                    if (error.code === "auth/email-already-in-use") {
-                        msg = "This username is already taken.";
-                    } else if (error.code === "auth/weak-password") {
-                        msg = "Password is too weak (minimum 6 characters).";
-                    } else if (error.code === "auth/invalid-email") {
-                        msg = "Invalid email format.";
+                    let msg = "Login failed.";
+                    if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+                        msg = "Invalid username or password.";
+                    } else if (error.code === "auth/too-many-requests") {
+                        msg = "Too many failed attempts. Try again later.";
                     }
                     alert(msg + "\n" + error.message);
                     console.error(error);
