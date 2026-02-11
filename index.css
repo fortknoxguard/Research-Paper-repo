@@ -1,3 +1,7 @@
+/* ==============================================
+   ICCTORY Login Page - Glassmorphism Split Card
+   ============================================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 * {
@@ -12,7 +16,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(rgba(15, 4, 29, 0.8), rgba(26, 6, 51, 0.8)), 
+    background: linear-gradient(rgba(15, 4, 29, 0.8), rgba(26, 6, 51, 0.8)),
                 url('../img/bg pic.jpg') no-repeat center center fixed;
     background-size: cover;
     overflow: hidden;
@@ -23,9 +27,9 @@ body {
     flex-direction: row;
     align-items: center;
     width: 90%;
-    max-width: 820px; 
+    max-width: 820px;
     padding: 50px 40px;
-    background: rgba(45, 20, 80, 0.35); 
+    background: rgba(45, 20, 80, 0.35);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -46,7 +50,7 @@ body {
 .logo-container img {
     width: 120px;
     height: 120px;
-    border-radius: 50%; 
+    border-radius: 50%;
     object-fit: cover;
     border: 3px solid rgba(255, 255, 255, 0.5);
     margin-bottom: 20px;
@@ -85,11 +89,11 @@ body {
     width: 100%;
     background: linear-gradient(90deg, rgba(203, 164, 238, 0.4) 0%, rgba(158, 110, 201, 0.2) 100%);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 15px 55px 15px 25px; 
+    padding: 15px 55px 15px 25px;
     border-radius: 20px;
     outline: none;
     transition: 0.3s;
-    color: #ffffff !important; 
+    color: #ffffff !important;
 }
 
 .input-group input::placeholder {
@@ -98,7 +102,7 @@ body {
 
 .input-group i {
     position: absolute;
-    right: 20px; 
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     color: #ffffff;
@@ -141,20 +145,30 @@ body {
     color: #cba4ee;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .login-card {
         flex-direction: column;
         padding: 40px 25px;
     }
+
     .divider {
         display: none;
     }
+
     .left-side {
         margin-bottom: 30px;
     }
 }
 
+/* Animation */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
