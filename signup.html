@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTORY Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/signup.css">
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: window.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
+            authDomain: window.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "user-login-ad4e6.firebaseapp.com",
+            projectId: window.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "user-login-ad4e6",
+            storageBucket: window.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "user-login-ad4e6.firebasestorage.app",
+            messagingSenderId: window.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "815541711200",
+            appId: window.NEXT_PUBLIC_FIREBASE_APP_ID || "1:815541711200:web:c6a5a58a91df3321986e05",
+            measurementId: window.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-WEFZLHB7SC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.firebaseAuth = auth;           // for Supabase to access if needed
+        window.firebaseDb = db;
+    </script>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="login-card">
+        <div class="left-side">
+            <div class="logo-container">
+                <img src="img/icct.jpeg" alt="ICCT Logo">
+            </div>
+            <h1 class="brand-title">ICCTORY</h1>
+        </div>
+        <div class="divider"></div>
+        <div class="right-side">
+            <h2>Sign up</h2>
+            <form id="signup-form">
+                <div class="input-group">
+                    <input type="text" id="firstname" placeholder="First Name" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="lastname" placeholder="Last Name" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <i class="fa-solid fa-at"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Create Password" required minlength="6">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <button type="submit" class="signup-btn">SIGN UP</button>
+            </form>
+            <p class="footer-text">
+                Already have an account? <a href="login.html">Back to Login.</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ── Supabase Setup ───────────────────────────────────────
+        const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
+
+        window.mySupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false,
+                async getAccessToken() {
+                    if (window.firebaseAuth?.currentUser) {
+                        try {
+                            const token = await window.firebaseAuth.currentUser.getIdToken(false);
+                            console.log('Firebase token attached to Supabase request');
+                            return token;
+                        } catch (err) {
+                            console.error('Failed to get Firebase token:', err);
+                        }
+                    }
+                    return null;
+                }
+            }
+        });
+
+        // ── Form Handler ─────────────────────────────────────────
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("signup-form");
+            const firstnameField = document.getElementById("firstname");
+            const lastnameField  = document.getElementById("lastname");
+            const usernameField  = document.getElementById("username");
+            const passwordField  = document.getElementById("password");
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const firstname = firstnameField.value.trim();
+                const lastname  = lastnameField.value.trim();
+                const username  = usernameField.value.trim();
+                const password  = passwordField.value;
+
+                if (!firstname || !lastname || !username || !password) {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+
+                const email = `${username}@icctory.example.com`;
+                const displayName = `${firstname} ${lastname}`;
+
+                try {
+                    // 1. Create Firebase user
+                    const userCredential = await createUserWithEmailAndPassword(
+                        window.firebaseAuth,
+                        email,
+                        password
+                    );
+                    const user = userCredential.user;
+
+                    // 2. Set display name
+                    await updateProfile(user, { displayName });
+
+                    // 3. Save extra profile to Firestore
+                    await setDoc(doc(window.firebaseDb, "users", user.uid), {
+                        uid: user.uid,
+                        firstname,
+                        lastname,
+                        username,
+                        email,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    alert(`Welcome to ICCTORY, ${displayName}! Account created successfully.`);
+
+                    // Optional: redirect
+                    window.location.href = "dashboard.html";   // ← change if needed
+
+                } catch (error) {
+                    let msg = "Sign up failed. Please try again.";
+                    if (error.code === "auth/email-already-in-use") {
+                        msg = "This username is already taken.";
+                    } else if (error.code === "auth/weak-password") {
+                        msg = "Password is too weak (minimum 6 characters).";
+                    } else if (error.code === "auth/invalid-email") {
+                        msg = "Invalid email format.";
+                    }
+                    alert(msg + "\n" + error.message);
+                    console.error(error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
