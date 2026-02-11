@@ -1,280 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ICCTORY Login</title>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Material Web import map (kept for compatibility if script.js still uses md- components) -->
-  <script type="importmap">
-  {
-    "imports": {
-      "@material/web/": "https://esm.run/@material/web@2/"
-    }
-  }
-  </script>
-
-  <!-- Firebase SDK (kept exactly as yours) -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-
-  <!-- Supabase CDN (kept exactly as yours) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100dvh;
-      background-image: url('https://ru.pinterest.com/pin/605312006213517210/');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .login-card {
-      display: flex;
-      width: 100%;
-      max-width: 900px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-      overflow: hidden;
-    }
-
-    .left-side {
-      flex: 1;
-      background: linear-gradient(135deg, rgba(30, 136, 229, 0.7), rgba(13, 71, 161, 0.8));
-      padding: 60px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-    }
-
-    .logo-container img {
-      width: 140px;
-      height: auto;
-      margin-bottom: 25px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-
-    .brand-title {
-      font-size: 3.2rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
-
-    .divider {
-      width: 2px;
-      background: rgba(255,255,255,0.3);
-      align-self: stretch;
-    }
-
-    .right-side {
-      flex: 1.3;
-      padding: 60px 50px;
-      background: rgba(255, 255, 255, 0.08);
-      color: white;
-    }
-
-    .right-side h2 {
-      font-size: 2.1rem;
-      font-weight: 600;
-      margin-bottom: 40px;
-      text-align: center;
-      color: #ffffff;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 28px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 14px 18px 14px 50px;
-      border: 1px solid rgba(255,255,255,0.35);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.15);
-      color: white;
-      font-size: 1rem;
-      transition: all 0.3s;
-    }
-
-    .input-group input:focus {
-      outline: none;
-      border-color: #4fc3f7;
-      box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.25);
-      background: rgba(255,255,255,0.22);
-    }
-
-    .input-group input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-
-    .input-group i {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255,255,255,0.8);
-      font-size: 1.2rem;
-    }
-
-    .signup-btn {
-      width: 100%;
-      padding: 14px;
-      background: #1e88e5;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-    }
-
-    .signup-btn:hover {
-      background: #1565c0;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(30, 136, 229, 0.4);
-    }
-
-    .footer-text {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.85);
-    }
-
-    .footer-text a {
-      color: #bbdefb;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .footer-text a:hover {
-      text-decoration: underline;
-      color: white;
-    }
-
-    /* Keep your test section styling */
-    #test-section {
-      margin-top: 2.5rem;
-      padding: 1.5rem;
-      background: rgba(255,255,255,0.1);
-      border-radius: 12px;
-      text-align: center;
-      display: none;
-    }
-
-    #test-insert-btn {
-      margin-bottom: 1rem;
-      background: #4caf50;
-    }
-
-    #test-result {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(0,0,0,0.3);
-      border-radius: 8px;
-      white-space: pre-wrap;
-      font-size: 0.9rem;
-      max-height: 220px;
-      overflow-y: auto;
-      color: #e0e0e0;
-    }
-
-    @media (max-width: 768px) {
-      .login-card {
-        flex-direction: column;
-      }
-      .divider {
-        display: none;
-      }
-      .left-side {
-        padding: 50px 30px;
-      }
-      .right-side {
-        padding: 40px 30px;
-      }
-    }
-  </style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTORY Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/login.css"> </head>
 <body>
 
-  <div class="login-card">
-    <div class="left-side">
-      <div class="logo-container">
-        <!-- Updated to a more official-looking ICCT logo if possible; fallback to your original -->
-        <img src="https://t.ctcdn.com.br/rPY6z7TjAZv0oThd7b94my2HtHY=/640x360/smart/i803253.jpeg" 
-             alt="ICCT Colleges Foundation Inc. Logo">
-      </div>
-      <h1 class="brand-title">ICCTORY</h1>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="right-side">
-      <h2>Log in</h2>
-      <form id="loginForm">
-        <div class="input-group">
-          <input type="email" id="email" placeholder="Email Address" required autocomplete="email">
-          <i class="fa-solid fa-user"></i>
+    <div class="login-card">
+        <div class="left-side">
+            <div class="logo-container">
+                <img src="img/icct.jpeg" alt="ICCT Logo">
+            </div>
+            <h1 class="brand-title">ICCTORY</h1>
         </div>
-        <div class="input-group">
-          <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
-          <i class="fa-solid fa-lock"></i>
+
+        <div class="divider"></div>
+
+        <div class="right-side">
+            <h2>Log in</h2>
+
+            <form>
+                <div class="input-group">
+                    <input type="email" placeholder="Email Address" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" placeholder="Password" required>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <button type="submit" class="signup-btn">LOG IN</button>
+            </form>
+
+            <p class="footer-text">
+                Don't have an account? <a href="signup.html">Register here.</a>
+            </p>
         </div>
-        <button type="submit" class="signup-btn">LOG IN</button>
-      </form>
-
-      <p class="footer-text">
-        Don't have an account? <a href="signup.html">Register here.</a>
-      </p>
-
-      <!-- Your test section remains here – shown after successful login via script.js -->
-      <div id="test-section">
-        <h3>Supabase DB Test</h3>
-        <button id="test-insert-btn" class="signup-btn">Insert Test Row to research_papers</button>
-        <pre id="test-result">Click the button to test insert...</pre>
-      </div>
     </div>
-  </div>
-
-  <!-- Material Web components (kept in case script.js still references them) -->
-  <script type="module">
-    import '@material/web/textfield/outlined-text-field.js';
-    import '@material/web/button/filled-button.js';
-    import '@material/web/icon/icon.js';
-  </script>
-
-  <!-- Your main logic file (Firebase auth + Supabase) -->
-  <script src="script.js"></script>
 
 </body>
 </html>
