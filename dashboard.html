@@ -100,132 +100,108 @@
     </div>
 
     <script type="module">
-        // ── Firebase ───────────────────────────────────────────────────────────────
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import {
-            getAuth,
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+// ── Firebase ───────────────────────────────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
-            authDomain: "user-login-ad4e6.firebaseapp.com",
-            projectId: "user-login-ad4e6",
-            storageBucket: "user-login-ad4e6.firebasestorage.app",
-            messagingSenderId: "815541711200",
-            appId: "1:815541711200:web:c6a5a58a91df3321986e05",
-            measurementId: "G-WEFZLHB7SC"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
+    authDomain: "user-login-ad4e6.firebaseapp.com",
+    projectId: "user-login-ad4e6",
+    storageBucket: "user-login-ad4e6.firebasestorage.app",
+    messagingSenderId: "815541711200",
+    appId: "1:815541711200:web:c6a5a58a91df3321986e05",
+    measurementId: "G-WEFZLHB7SC"
+};
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-        // ── Supabase ───────────────────────────────────────────────────────────────
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+// ── Supabase ───────────────────────────────────────────────────────────────
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-        const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
+const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                autoRefreshToken: false,
-                persistSession: false,
-                async getAccessToken() {
-                    if (auth.currentUser) {
-                        try {
-                            const token = await auth.currentUser.getIdToken(false);
-                            console.log('Firebase token attached');
-                            return token;
-                        } catch (err) {
-                            console.error('Failed to get Firebase token:', err);
-                            return null;
-                        }
-                    }
-                    return null;
-                }
-            }
-        });
+// DBA FIX: Removed the getAccessToken logic. We will use 'anon' mode.
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ── Dashboard Logic ────────────────────────────────────────────────────────
-        document.addEventListener("DOMContentLoaded", () => {
-            const welcomeMsg = document.getElementById("welcome-msg");
-            const uploadForm = document.getElementById("upload-form");
-            const status = document.getElementById("upload-status");
-            const logoutLink = document.getElementById("logout-link");
+// ── Dashboard Logic ────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+    const welcomeMsg = document.getElementById("welcome-msg");
+    const uploadForm = document.getElementById("upload-form");
+    const status = document.getElementById("upload-status");
+    const logoutLink = document.getElementById("logout-link");
 
-            // Protect page + show user info
-            onAuthStateChanged(auth, (user) => {
-                if (!user) {
-                    window.location.href = "index.html"; // or your login page
-                    return;
-                }
-                const username = user.email?.split('@')[0] || "User";
-                welcomeMsg.textContent = `Welcome back, ${username}!`;
-            });
+    // Protect page + show user info
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "login.html"; 
+            return;
+        }
+        const username = user.email?.split('@')[0] || "User";
+        welcomeMsg.textContent = `Welcome back, ${username}!`;
+    });
 
-            // Logout
-            logoutLink.addEventListener("click", async (e) => {
-                e.preventDefault();
-                await signOut(auth);
-                window.location.href = "index.html";
-            });
+    // Logout
+    logoutLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await signOut(auth);
+        window.location.href = "login.html";
+    });
 
-            // Upload handler
-            uploadForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const fileInput = document.getElementById("paper-file");
-                const file = fileInput.files[0];
+    // Upload handler
+    uploadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById("paper-file");
+        const file = fileInput.files[0];
 
-                if (!file) {
-                    status.textContent = "Please select a PDF file.";
-                    status.className = "error";
-                    return;
-                }
+        if (!file || file.type !== "application/pdf") {
+            status.textContent = "Please select a valid PDF file.";
+            status.className = "error";
+            return;
+        }
 
-                if (file.type !== "application/pdf") {
-                    status.textContent = "Only PDF files are allowed.";
-                    status.className = "error";
-                    return;
-                }
+        status.textContent = "Uploading to private storage...";
+        status.className = "";
 
-                status.textContent = "Uploading...";
-                status.className = "";
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error("Not authenticated");
 
-                try {
-                    const user = auth.currentUser;
-                    if (!user) throw new Error("Not authenticated");
+            // Organize by Firebase UID so you know who uploaded what
+            const fileName = `${Date.now()}-${file.name}`;
+            const filePath = `${user.uid}/${fileName}`; 
 
-                    // Make filename unique (timestamp + original name)
-                    const timestamp = Date.now();
-                    const fileExt = file.name.split('.').pop();
-                    const fileName = `${timestamp}.${fileExt}`;
-                    const filePath = `${user.uid}/${fileName}`; // folder per user
+            // IMPORTANT: Ensure your bucket name matches exactly 'research papers'
+            const { data, error } = await supabase.storage
+                .from('research papers')
+                .upload(filePath, file);
 
-                    // Upload to bucket 'research-papers' (create this bucket first!)
-                    const { data, error } = await supabase.storage
-                        .from('research papers')
-                        .upload(filePath, file, {
-                            cacheControl: '3600',
-                            upsert: false
-                        });
+            if (error) throw error;
 
-                    if (error) throw error;
+            // PRIVATE VIEW TEST: Generate a temporary link to prove it worked
+            const { data: viewData, error: viewError } = await supabase.storage
+                .from('research papers')
+                .createSignedUrl(filePath, 60);
 
-                    status.textContent = "Upload successful! 🎉 Your paper is now stored.";
-                    status.className = "success";
-                    fileInput.value = ""; // clear input
+            if (viewError) throw viewError;
 
-                    // Optional: later save metadata to a 'papers' table
-                    // await supabase.from('papers').insert({ title: "...", file_path: filePath, user_id: user.uid, ... })
+            status.innerHTML = `Success! 🎉 <a href="${viewData.signedUrl}" target="_blank" style="color: yellow;">View Private PDF</a>`;
+            status.className = "success";
+            fileInput.value = ""; 
 
-                } catch (err) {
-                    console.error("Upload failed:", err);
-                    status.textContent = "Upload failed: " + (err.message || "Unknown error");
-                    status.className = "error";
-                }
-            });
-        });
+        } catch (err) {
+            console.error("Upload failed:", err);
+            status.textContent = "Upload failed: " + (err.message || "Check your RLS Policies");
+            status.className = "error";
+        }
+    });
+});
     </script>
 </body>
 </html>
