@@ -1,17 +1,17 @@
+async function uploadResearch(file) {
+  
+  const userId = firebase.auth().currentUser?.uid || 'anonymous';
+  const fileName = `${userId}/${Date.now()}-${file.name}`;
 
-CREATE POLICY "Enable bucket visibility" 
-ON storage.buckets FOR SELECT 
-USING (true);
+  const { data, error } = await window.supabase.storage
+    .from('research paper') 
+    .upload(fileName, file);
 
-CREATE POLICY "Allow Public PDF Uploads" 
-ON storage.objects FOR INSERT 
-TO anon 
-WITH CHECK (
-  bucket_id = 'research-files' AND 
-  lower(storage.extension(name)) = 'pdf'
-);
-
-CREATE POLICY "Allow Public Viewing" 
-ON storage.objects FOR SELECT 
-TO anon 
-USING (bucket_id = 'research-files');
+  if (error) {
+    console.error("Upload Error:", error.message);
+    alert("Upload failed: " + error.message);
+  } else {
+    console.log("Upload Success:", data);
+    alert("Research PDF uploaded successfully!");
+  }
+}
