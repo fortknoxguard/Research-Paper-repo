@@ -204,7 +204,7 @@
 
                     // Upload to bucket 'research-papers' (create this bucket first!)
                     const { data, error } = await supabase.storage
-                        .from('research-papers')
+                        .from('research papers')
                         .upload(filePath, file, {
                             cacheControl: '3600',
                             upsert: false
