@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ICCTory - Upload Research</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-  <link rel="stylesheet" href="upload.css" />   <!-- assuming upload.css is in root -->
+  <link rel="stylesheet" href="upload.css" />
 
   <style>
     #progress-box {
@@ -49,7 +49,7 @@
     <aside class="sidebar">
       <div class="sidebar-banner">
         <div class="logo-circle">
-          <img src="icct.jpeg" alt="ICCT Logo" class="logo-img" />   <!-- fixed path -->
+          <img src="icct.jpeg" alt="ICCT Logo" class="logo-img" />
         </div>
         <h1 class="brand-title">ICCTory</h1>
       </div>
@@ -87,16 +87,16 @@
       <form class="upload-form">
         <div class="form-group">
           <label>Research Title</label>
-          <input type="text" class="custom-input" placeholder="Enter the full title of your research..." required />
+          <input type="text" class="custom-input" name="title" placeholder="Enter the full title of your research..." required />
         </div>
         <div class="form-group">
           <label>Authors</label>
-          <input type="text" class="custom-input" placeholder="e.g. Juan Dela Cruz, Maria Clara" required />
+          <input type="text" class="custom-input" name="authors" placeholder="e.g. Juan Dela Cruz, Maria Clara" required />
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Department</label>
-            <select class="custom-input">
+            <select class="custom-input" name="department">
               <option value="AS">Arts & Sciences</option>
               <option value="BA">Business & Accountancy</option>
               <option value="CS">Computer Studies</option>
@@ -114,7 +114,7 @@
           </div>
           <div class="form-group">
             <label>School Year</label>
-            <select class="custom-input">
+            <select class="custom-input" name="school_year">
               <option value="2021">2021</option>
               <option value="2022">2022</option>
               <option value="2023">2023</option>
@@ -126,7 +126,7 @@
         </div>
 
         <div class="action-section">
-          <input type="file" id="real-file" hidden accept=".pdf,.doc,.docx" />
+          <input type="file" id="real-file" name="research_file" hidden accept=".pdf,.doc,.docx" style="display:none;" />
           <button type="button" class="file-upload-btn" id="custom-button">
             Choose File <span class="plus">+</span>
           </button>
@@ -154,9 +154,38 @@
     </main>
   </div>
 
-  <!-- Scripts – assuming firebase.js and upload.js are also in the root -->
+  <!-- Scripts – flat root structure -->
   <script type="module" src="firebase.js"></script>
   <script type="module" src="upload.js"></script>
 
+  <!-- TEMPORARY DEBUG – remove after testing -->
+  <script>
+    console.log("Inline debug: page loaded successfully");
+    document.addEventListener("DOMContentLoaded", () => {
+      const fileBtn = document.getElementById("custom-button");
+      const fileInput = document.getElementById("real-file");
+      const statusText = document.getElementById("custom-text");
+
+      console.log("custom-button found?", fileBtn ? "YES" : "NO");
+      console.log("real-file input found?", fileInput ? "YES" : "NO");
+
+      if (fileBtn && fileInput) {
+        fileBtn.addEventListener("click", () => {
+          console.log("Choose File button clicked!");
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files[0];
+          console.log("File selected:", file ? file.name : "none");
+          if (statusText) {
+            statusText.textContent = file ? file.name : "No file chosen, yet.";
+          }
+        });
+      } else {
+        console.error("Button or file input missing – cannot attach listeners");
+      }
+    });
+  </script>
 </body>
 </html>
