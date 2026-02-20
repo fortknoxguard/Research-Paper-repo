@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Protect page + show user info
     onAuthStateChanged(auth, (user) => {
         if (!user) {
-            window.location.href = "login.html"; 
+            window.location.href = "index.html"; 
             return;
         }
         const username = user.email?.split('@')[0] || "User";
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutLink.addEventListener("click", async (e) => {
         e.preventDefault();
         await signOut(auth);
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     });
 
     // Upload handler
