@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@300;400;600;700;800&display=swap');
+
+:root {
+    --login-glass: rgba(45, 20, 80, 0.35);
+    --login-violet: #b184e1;
+    --login-violet-hover: #cba4ee;
+    --input-gradient: linear-gradient(90deg, rgba(203, 164, 238, 0.4) 0%, rgba(158, 110, 201, 0.2) 100%);
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(rgba(15, 4, 29, 0.9), rgba(26, 6, 51, 0.9)), 
+                url('../img/bg pic.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--white);
+    overflow: hidden; 
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+.sidebar {
+    width: 260px;
+    min-width: 260px; 
+    height: 100vh;
+    background: rgba(20, 10, 40, 0.6); 
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.sidebar-banner {
+    background: var(--login-glass);
+    padding: 40px 15px;
+    height: 280px; 
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.logo-circle {
+    width: 130px; 
+    height: 130px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.logo-img { 
+    width: 110%; height: 110%; object-fit: cover; 
+}
+
+.brand-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(to right, #ffffff, var(--login-violet));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.nav-menu { padding: 0 15px; flex-grow: 1; }
+
+.nav-item {
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s ease;
+}
+
+.nav-item.active, .nav-item:hover {
+    background: var(--input-gradient);
+    color: var(--white);
+    transform: translateX(5px);
+}
+
+.content {
+    flex: 1;
+    padding: 60px;
+    overflow-y: auto; 
+}
+
+.upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 25px;
+}
+
+.page-title { 
+    font-size: 2.5rem; 
+    font-weight: 800; 
+}
+
+.cloud-icon {
+    font-size: 2rem;
+    color: var(--login-violet);
+    background: var(--login-glass);
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.divider { 
+    border: none; 
+    border-top: 1px solid rgba(255, 255, 255, 0.1); 
+    margin-bottom: 40px; 
+}
+
+.upload-form { 
+    max-width: 1000px; 
+}
+
+.form-group { 
+    margin-bottom: 30px; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.form-row { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+}
+
+label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--login-violet);
+    margin-bottom: 12px;
+}
+
+.custom-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px;
+    border-radius: 14px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.custom-input:focus {
+    border-color: var(--login-violet);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+select.custom-input option {
+    background-color: #1a0633; 
+    color: white;
+}
+
+
+.action-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+    gap: 20px; 
+    margin-top: 20px;
+    padding: 25px 0;
+    width: 100%;
+}
+
+.file-upload-btn, .confirm-btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    background: var(--login-violet); 
+    flex-shrink: 0;
+}
+
+.file-upload-btn:hover, .confirm-btn:hover {
+    transform: translateY(-3px);
+    background: var(--login-violet-hover);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+#custom-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}
+
+.arrow-indicator {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1.2rem;
+    margin: 0 10px;
+}
