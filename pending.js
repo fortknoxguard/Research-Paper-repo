@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/fi
 import { collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 onAuthStateChanged(auth, (user) => {
-  if (!user) { window.location.href = "../login.html"; return; }
+  if (!user) { window.location.href = "index.html"; return; }
   loadPending();
 });
 
