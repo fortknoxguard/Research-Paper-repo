@@ -1,12 +1,14 @@
 // js/upload.js
 // Complete upload logic with Supabase Storage + Database + file chooser
+// Using Firebase for authentication check (Option A)
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { auth } from "./firebase.js";  // ← make sure this import matches your firebase.js file name/path
 
 // ── Supabase Configuration ────────────────────────────────────────────────
 const SUPABASE_URL    = "https://tgciqknubmwinyykuuve.supabase.co";
 const SUPABASE_KEY    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk";
-const BUCKET_NAME     = "research papers";      // ← Rename to "research-papers" if possible
+const BUCKET_NAME     = "research papers";      // ← strongly recommend renaming to "research-papers" in Supabase
 const UPLOAD_FOLDER   = "pending";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressPct = document.getElementById("progress-pct");
   const messageEl   = document.getElementById("upload-message");
 
-  // Safety check: make sure all critical elements exist
+  // Safety check
   if (!realFile || !customBtn || !customText || !form || !confirmBtn) {
     console.error("One or more upload UI elements are missing. Check IDs in HTML.");
     return;
@@ -46,11 +48,12 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Check authentication (Supabase auth)
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    // Check Firebase authentication
+    const user = auth.currentUser;
+
+    if (!user) {
       showMessage("You must be logged in to upload.", "error");
-      window.location.href = "index.html"; // or your login page
+      window.location.href = "index.html";
       return;
     }
 
@@ -78,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Prepare file path
       const fileExt  = file.name.split('.').pop().toLowerCase();
       const fileName = `${Date.now()}-${crypto.randomUUID()}.${fileExt}`;
-      const filePath = `${UPLOAD_FOLDER}/${user.id}/${fileName}`;
+      const filePath = `${UPLOAD_FOLDER}/${user.uid}/${fileName}`;
 
       // Upload file to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
@@ -96,6 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .from(BUCKET_NAME)
         .getPublicUrl(filePath);
 
+      if (!urlData?.publicUrl) {
+        throw new Error("Failed to generate public URL");
+      }
+
       const fileURL = urlData.publicUrl;
 
       // Save metadata to 'research' table
@@ -108,14 +115,13 @@ document.addEventListener("DOMContentLoaded", () => {
           school_year: schoolYear,
           file_url: fileURL,
           file_name: file.name,
-          uploaded_by: user.user_metadata?.full_name || user.email || "Unknown",
-          user_id: user.id,
+          uploaded_by: user.displayName || user.email || "Unknown",
+          user_id: user.uid,
           status: "pending",
           created_at: new Date().toISOString()
         });
 
       if (dbError) {
-        // Cleanup: remove file if DB insert fails
         await supabase.storage.from(BUCKET_NAME).remove([filePath]);
         throw dbError;
       }
