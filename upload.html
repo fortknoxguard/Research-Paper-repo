@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ICCTory - Upload Research</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="upload.css" />
+    <style>
+      #progress-box {
+        display: none;
+        margin-top: 14px;
+        width: 100%;
+      }
+      #progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 6px;
+        color: #555;
+      }
+      #progress-track {
+        background: #e0e0e0;
+        border-radius: 999px;
+        height: 12px;
+        overflow: hidden;
+      }
+      #progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #6c63ff, #a78bfa);
+        border-radius: 999px;
+      }
+      #upload-message {
+        display: none;
+        margin-top: 14px;
+        font-size: 13px;
+        font-weight: 500;
+        text-align: center;
+        padding: 10px 14px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <aside class="sidebar">
+        <div class="sidebar-banner">
+          <div class="logo-circle">
+            <img src="../img/icct.jpeg" alt="ICCT Logo" class="logo-img" />
+          </div>
+          <h1 class="brand-title">ICCTory</h1>
+        </div>
+        <nav class="nav-menu">
+          <a href="../index.html" class="nav-item">
+            <i class="fa-solid fa-house"></i> Home
+          </a>
+          <a href="upload.html" class="nav-item active">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+          </a>
+          <a href="publish.html" class="nav-item">
+            <i class="fa-solid fa-clipboard-list"></i> Your Requests
+          </a>
+          <a href="research.html" class="nav-item">
+            <i class="fa-solid fa-file-lines"></i> Research Papers
+          </a>
+          <a href="about.html" class="nav-item">
+            <i class="fa-solid fa-circle-info"></i> About
+          </a>
+          <a href="profile.html" class="nav-item">
+            <i class="fa-solid fa-user"></i> Profile
+          </a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <div class="upload-header">
+          <h2 class="page-title">Upload your work</h2>
+          <div class="upload-icon-container">
+            <div class="cloud-icon"><i class="fa-solid fa-arrow-up"></i></div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <form class="upload-form">
+          <div class="form-group">
+            <label>Research Title</label>
+            <input
+              type="text"
+              class="custom-input"
+              placeholder="Enter the full title of your research..."
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Authors</label>
+            <input
+              type="text"
+              class="custom-input"
+              placeholder="e.g. Juan Dela Cruz, Maria Clara"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Department</label>
+              <select class="custom-input">
+                <option value="AS">Arts & Sciences</option>
+                <option value="BA">Business & Accountancy</option>
+                <option value="CS">Computer Studies</option>
+                <option value="CA">Criminology & Administration</option>
+                <option value="Engineering">Engineering</option>
+                <option value="TE">Teacher Education</option>
+                <option value="MET">Maritime Education & Training</option>
+                <option value="ABM">ABM</option>
+                <option value="STEM">STEM</option>
+                <option value="HUMSS">HUMSS</option>
+                <option value="GAS">GAS</option>
+                <option value="ICT">ICT</option>
+                <option value="HE">HE</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>School Year</label>
+              <select class="custom-input">
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="action-section">
+            <input type="file" id="real-file" hidden accept=".pdf,.doc,.docx" />
+            <button type="button" class="file-upload-btn" id="custom-button">
+              Choose File <span class="plus">+</span>
+            </button>
+            <span id="custom-text">No file chosen, yet.</span>
+            <div class="arrow-indicator">
+              <i class="fa-solid fa-right-long"></i>
+            </div>
+            <button type="submit" class="confirm-btn">Confirm & Submit</button>
+          </div>
+
+          <!-- Progress bar -->
+          <div id="progress-box">
+            <div id="progress-label">
+              <span>Uploading file...</span>
+              <span id="progress-pct">0%</span>
+            </div>
+            <div id="progress-track">
+              <div id="progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Message -->
+          <p id="upload-message"></p>
+        </form>
+      </main>
+    </div>
+
+    <!-- ✅ Both in js/ folder, called from user/ so path is ../js/ -->
+    <script type="module" src="../js/firebase.js"></script>
+    <script type="module" src="../js/upload.js"></script>
+  </body>
+</html>
