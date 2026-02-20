@@ -1,7 +1,3 @@
-// script.js
-
-// ==================== Firebase Initialization ====================
-// ← Put YOUR real Firebase config here (from Firebase Console → Project Settings → SDK setup)
 const firebaseConfig = {
   apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
   authDomain: "user-login-ad4e6.firebaseapp.com",
@@ -15,7 +11,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 console.log('Firebase initialized');
 
-// ==================== Supabase Initialization ====================
 const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
@@ -43,13 +38,12 @@ window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 console.log('Supabase client initialized');
 
-// ==================== Login Form Handler ====================
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('email').value.trim(); // ← matches id="email" in HTML
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
     if (!email || !email.includes('@') || !email.includes('.')) {
@@ -62,7 +56,6 @@ if (loginForm) {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       console.log('Firebase login successful');
-      // The onAuthStateChanged listener will show the test section
     } catch (error) {
       console.error('Login error:', error.code, error.message);
       let msg = error.message;
@@ -76,44 +69,6 @@ if (loginForm) {
   });
 }
 
-// ==================== Test Insert Button Handler ====================
-const testInsertBtn = document.getElementById('test-insert-btn');
-if (testInsertBtn) {
-  testInsertBtn.addEventListener('click', async () => {
-    const resultEl = document.getElementById('test-result');
-    resultEl.textContent = 'Inserting test row...';
-
-    try {
-      const firebaseUser = firebase.auth().currentUser;
-      if (!firebaseUser) throw new Error('No user logged in. Please log in first.');
-
-      console.log('Inserting as user:', firebaseUser.uid);
-
-      const { data, error } = await window.supabase
-        .from('research_papers')
-        .insert({
-          "Title": "Test Paper – " + new Date().toISOString(),
-          "Description": "This is a test insert from the login page after successful Firebase auth",
-          "Author": "Ritcher",
-          "user_id": firebaseUser.uid,  // Firebase UID as string
-          "file_path": "test-folder/test-from-login.pdf",
-          "file_name": "test-from-login.pdf",
-          "file_size": 54321
-        })
-        .select();
-
-      if (error) throw error;
-
-      resultEl.textContent = 'SUCCESS!\nInserted row:\n' + JSON.stringify(data, null, 2);
-      console.log('Insert success:', data);
-    } catch (err) {
-      resultEl.textContent = 'FAILED: ' + err.message;
-      console.error('Insert failed:', err);
-    }
-  });
-}
-
-// ==================== Auth State Listener ====================
 firebase.auth().onAuthStateChanged((user) => {
   const testSection = document.getElementById('test-section');
   if (user) {
