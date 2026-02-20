@@ -1,11 +1,7 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// 1. Use the full CDN URLs for the browser
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
   authDomain: "user-login-ad4e6.firebaseapp.com",
@@ -16,6 +12,8 @@ const firebaseConfig = {
   measurementId: "G-WEFZLHB7SC"
 };
 
-// Initialize Firebase
+// 2. Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+// 3. Initialize and EXPORT Auth so upload.js can use it
+export const auth = getAuth(app);
