@@ -1,207 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCTORY Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css"> <!-- Reuse your existing CSS if possible -->
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-            color: white;
-            text-align: center;
-        }
-        h1 { margin-bottom: 10px; font-size: 2.2rem; }
-        h2 { margin: 30px 0 20px; font-size: 1.5rem; }
-        .input-group {
-            position: relative;
-            margin: 20px 0;
-        }
-        input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        input[type="file"]::file-selector-button {
-            background: #764ba2;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 15px;
-        }
-        button:hover { background: #764ba2; transform: translateY(-2px); }
-        #upload-status {
-            margin-top: 20px;
-            font-weight: 500;
-            min-height: 1.5em;
-        }
-        .success { color: #90ee90; }
-        .error   { color: #ff6b6b; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICCTory | Research Repository</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/index.css" />
 </head>
 <body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-banner">
+        <div class="logo-circle">
+          <img src="img/icct.jpeg" alt="ICCT Logo" class="logo-img" />
+        </div>
+        <h1 class="brand-title">ICCTORY</h1>
+      </div>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-item active">
+          <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="upload.html" class="nav-item">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+        </a>
+        <a href="publish.html" class="nav-item">
+          <i class="fa-solid fa-clipboard-list"></i> Your Requests
+        </a>
+        <a href="research.html" class="nav-item">
+          <i class="fa-solid fa-file-lines"></i> Research Papers
+        </a>
+        <a href="about.html" class="nav-item">
+          <i class="fa-solid fa-circle-info"></i> About
+        </a>
+        <a href="profile.html" class="nav-item">
+          <i class="fa-solid fa-user"></i> Profile
+        </a>
+      </nav>
+    </aside>
 
-    <div class="dashboard-card">
-        <h1>ICCTORY Dashboard</h1>
-        <p id="welcome-msg">Loading...</p>
+    <main class="main-content">
+      <div class="hero-wrapper">
+        <h2 class="hero-text">
+          A Centralized Repository of Verified Research Papers from ICCT students.
+        </h2>
+        <h1 id="user-greeting">Loading...</h1>
+        <br><br><br>
+        <div class="search-section">
+          <a href="research.html" class="pill-button search-btn"
+             style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 12px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Browse Research Papers
+          </a>
+        </div>
+        <div class="stats-pill">
+          <div class="stat-item">
+            <i class="fa-solid fa-file-circle-check"></i>
+            <span>Total Papers: <strong>327</strong></span>
+          </div>
+          <div class="stat-item">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Departments: <strong>14</strong></span>
+          </div>
+          <div class="stat-item">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>School year: <strong>2021 - 2026</strong></span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-        <h2>Upload Research Paper (PDF)</h2>
-        <form id="upload-form">
-            <div class="input-group">
-                <input type="file" id="paper-file" accept=".pdf" required>
-            </div>
-            <button type="submit">Upload PDF</button>
-        </form>
+  <script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-        <p id="upload-status"></p>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
+      authDomain: "user-login-ad4e6.firebaseapp.com",
+      projectId: "user-login-ad4e6",
+      storageBucket: "user-login-ad4e6.firebasestorage.app",
+      messagingSenderId: "815541711200",
+      appId: "1:815541711200:web:c6a5a58a91df3321986e05",
+      measurementId: "G-WEFZLHB7SC"
+    };
 
-        <p style="margin-top: 40px; font-size: 0.9rem;">
-            <a href="#" id="logout-link" style="color: #ffdd57; text-decoration: underline;">Log out</a>
-        </p>
-    </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    <script type="module">
-// ── Firebase ───────────────────────────────────────────────────────────────
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    // Dashboard home logic
+    document.addEventListener("DOMContentLoaded", () => {
+      const greeting = document.getElementById("user-greeting");
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
-    authDomain: "user-login-ad4e6.firebaseapp.com",
-    projectId: "user-login-ad4e6",
-    storageBucket: "user-login-ad4e6.firebasestorage.app",
-    messagingSenderId: "815541711200",
-    appId: "1:815541711200:web:c6a5a58a91df3321986e05",
-    measurementId: "G-WEFZLHB7SC"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// ── Supabase ───────────────────────────────────────────────────────────────
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
-
-// DBA FIX: Removed the getAccessToken logic. We will use 'anon' mode.
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// ── Dashboard Logic ────────────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-    const welcomeMsg = document.getElementById("welcome-msg");
-    const uploadForm = document.getElementById("upload-form");
-    const status = document.getElementById("upload-status");
-    const logoutLink = document.getElementById("logout-link");
-
-    // Protect page + show user info
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            window.location.href = "index.html"; 
-            return;
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // Logged in → personalized greeting
+          const username = user.email?.split('@')[0] || "Student";
+          greeting.textContent = `Welcome back, ${username}!`;
+        } else {
+          // Not logged in → redirect or generic message
+          // greeting.textContent = "Please log in to access the dashboard";
+          window.location.href = "index.html";  // or your login page
         }
-        const username = user.email?.split('@')[0] || "User";
-        welcomeMsg.textContent = `Welcome back, ${username}!`;
+      });
     });
+  </script>
 
-    // Logout
-    logoutLink.addEventListener("click", async (e) => {
-        e.preventDefault();
-        await signOut(auth);
-        window.location.href = "index.html";
-    });
+  <!-- Keep these if they contain shared/global logic (optional) -->
+  <!-- <script type="module" src="js/firebase.js"></script> -->
+  <!-- <script type="module" src="js/index.js"></script>     -->
+  <!-- <script type="module" src="./js/authGuard.js"></script> -->
 
-    // Upload handler
-    uploadForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const fileInput = document.getElementById("paper-file");
-        const file = fileInput.files[0];
-
-        if (!file || file.type !== "application/pdf") {
-            status.textContent = "Please select a valid PDF file.";
-            status.className = "error";
-            return;
-        }
-
-        status.textContent = "Uploading to private storage...";
-        status.className = "";
-
-        try {
-            const user = auth.currentUser;
-            if (!user) throw new Error("Not authenticated");
-
-            // Organize by Firebase UID so you know who uploaded what
-            const fileName = `${Date.now()}-${file.name}`;
-            const filePath = `${user.uid}/${fileName}`; 
-
-            // IMPORTANT: Ensure your bucket name matches exactly 'research papers'
-            const { data, error } = await supabase.storage
-                .from('research papers')
-                .upload(filePath, file);
-
-            if (error) throw error;
-
-            // PRIVATE VIEW TEST: Generate a temporary link to prove it worked
-            const { data: viewData, error: viewError } = await supabase.storage
-                .from('research papers')
-                .createSignedUrl(filePath, 60);
-
-            if (viewError) throw viewError;
-
-            status.innerHTML = `Success! 🎉 <a href="${viewData.signedUrl}" target="_blank" style="color: yellow;">View Private PDF</a>`;
-            status.className = "success";
-            fileInput.value = ""; 
-
-        } catch (err) {
-            console.error("Upload failed:", err);
-            status.textContent = "Upload failed: " + (err.message || "Check your RLS Policies");
-            status.className = "error";
-        }
-    });
-});
-    </script>
 </body>
 </html>
