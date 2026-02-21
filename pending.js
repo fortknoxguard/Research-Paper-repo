@@ -10,6 +10,21 @@ auth.onAuthStateChanged(async (user) => {
         window.location.href = "login.html"; 
         return; 
     }
+
+    // NEW: Check if user is an admin in the user_roles table
+    const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.uid)
+        .single();
+
+    if (roleError || !roleData || roleData.role !== 'admin') {
+        alert("Access Denied: Admin privileges required.");
+        window.location.href = "home.html"; // Send non-admins back to home
+        return;
+    }
+
+    // If they ARE an admin, proceed to load the data
     loadPending();
 });
 
@@ -56,7 +71,6 @@ async function loadPending() {
         container.appendChild(row);
     });
 
-    // FIX: Switched to lowercase 'approved' and 'rejected' to match your SQL check constraint
     container.querySelectorAll(".accept-btn").forEach(btn => {
         btn.onclick = () => updateStatus(btn.dataset.id, 'approved');
     });
@@ -67,7 +81,6 @@ async function loadPending() {
 }
 
 async function updateStatus(id, newStatus) {
-    // Ensure ID is passed as a number
     const numericId = parseInt(id);
 
     const { error } = await supabase
