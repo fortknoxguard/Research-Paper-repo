@@ -13,19 +13,17 @@ auth.onAuthStateChanged(async (user) => {
         return; 
     }
 
-
-
-    
-    const { data: roleData } = await supabase
+    // Role Check Logic: Handles the 406 error by treating roleData as an array
+    const { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
-        .eq('user_id', user.uid)
-        .single();
+        .eq('user_id', user.uid);
 
-    if (roleData) {
-        userRole = roleData.role;
+    if (roleData && roleData.length > 0) {
+        userRole = roleData[0].role; // Get the role from the first object in the array
+    } else {
+        userRole = 'student'; // Fallback if no role is assigned in DB
     }
-
 
     loadPending();
 });
@@ -34,7 +32,6 @@ async function loadPending() {
     const container = document.getElementById("pendingList");
     if (!container) return;
 
-    // Get current logged in user from Firebase
     const currentUser = auth.currentUser;
     if (!currentUser) return;
 
@@ -43,10 +40,9 @@ async function loadPending() {
         .select('*')
         .eq('status', 'pending');
 
-    // NEW: If NOT admin, only show their own papers
+    // Filter: Admins see everything, Students see only their own
     if (userRole !== 'admin') {
-        // Assuming your table has a column for the user's ID
-        // Change 'user_id' to match your actual column name (e.g., 'Author_ID')
+        // NOTE: Ensure your table has a 'user_id' column matching the Firebase UID
         query = query.eq('user_id', currentUser.uid);
     }
 
@@ -60,7 +56,7 @@ async function loadPending() {
     container.innerHTML = "";
 
     if (!data || data.length === 0) {
-        container.innerHTML = `<p class="empty-msg">You have no pending papers at the moment.</p>`;
+        container.innerHTML = `<p class="empty-msg">No pending papers found.</p>`;
         return;
     }
 
@@ -80,11 +76,11 @@ async function loadPending() {
                 <button class="action-btn reject-btn" data-id="${paper.id}">Reject</button>
             `;
         } else {
-            actionHTML = `<span class="badge-view-only">Waiting for Admin</span>`;
+            actionHTML = `<span class="badge-view-only">Under Review</span>`;
         }
 
         row.innerHTML = `
-            <span class="col-user">${paper.Author || "You"}</span>
+            <span class="col-user">${paper.Author || "Student"}</span>
             <span class="col-title" style="cursor:pointer; color:#00abff;" onclick="window.open('${paper.file_path}', '_blank')">
                 ${paper.Title || "Untitled"}
             </span>
@@ -95,6 +91,7 @@ async function loadPending() {
         container.appendChild(row);
     });
 
+    // Re-attach listeners for Admins
     if (userRole === 'admin') {
         container.querySelectorAll(".accept-btn").forEach(btn => {
             btn.onclick = () => updateStatus(btn.dataset.id, 'approved');
@@ -105,13 +102,8 @@ async function loadPending() {
     }
 }
 
-
-
-
 async function updateStatus(id, newStatus) {
     if (userRole !== 'admin') return; 
-
-    
 
     const { error } = await supabase
         .from('research_papers')
