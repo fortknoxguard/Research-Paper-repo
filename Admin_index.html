@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/admin_index.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-banner">
+                <div class="logo-circle">
+                    <img src="img/icct.jpeg" alt="ICCT Logo" class="logo-img">
+                </div>
+                <h1 class="brand-title">ICCTory</h1>
+                <span class="admin-badge">ADMIN PANEL</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="admin_index.html" class="nav-item active">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="adminpage/admin_publish.html" class="nav-item">
+                    <i class="fa-solid fa-clipboard-list"></i> Requests
+                </a>
+                <a href="adminpage/admin_research.html" class="nav-item">
+                    <i class="fa-solid fa-file-lines"></i> Research Papers
+                </a>
+                <a href="adminpage/admin_about.html" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i> About
+                </a>
+                <a href="adminpage/admin_profile.html" class="nav-item">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content home-center">
+            <div class="hero-section">
+                <h2 class="hero-text">
+                    A Centralized Repository of Verified Research Papers from ICCT students.
+                </h2>
+
+                <button class="browse-btn" onclick="location.href='adminpage/admin_research.html'">
+                    <i class="fa-solid fa-magnifying-glass big-search-icon"></i>
+                    <span>Browse All Papers</span>
+                </button>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">327</span>
+                        <span class="stat-label">Total Papers</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">14</span>
+                        <span class="stat-label">Departments</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">2021-2026</span>
+                        <span class="stat-label">School Year Range</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
