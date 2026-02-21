@@ -19,7 +19,7 @@
 body {
     height: 100vh;
     background: linear-gradient(rgba(15, 4, 29, 0.9), rgba(26, 6, 51, 0.9)), 
-                url('../img/bg pic.jpg') no-repeat center center fixed;
+                url('bg%20pic.jpg') no-repeat center center fixed;
     background-size: cover;
     color: var(--white);
     overflow: hidden;
