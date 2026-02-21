@@ -1,6 +1,6 @@
-// 1. Use the full CDN URLs for the browser
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"; // Added this
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEOvNlFakVu0cvztoL-PhQI54kgc2q0C8",
@@ -12,8 +12,9 @@ const firebaseConfig = {
   measurementId: "G-WEFZLHB7SC"
 };
 
-// 2. Initialize Firebase
-const app = initializeApp(firebaseConfig);
 
-// 3. Initialize and EXPORT Auth so upload.js can use it
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+
+export const db = getFirestore(app);
