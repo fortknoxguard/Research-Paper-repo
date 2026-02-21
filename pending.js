@@ -18,13 +18,13 @@ auth.onAuthStateChanged(async (user) => {
         .eq('user_id', user.uid)
         .single();
 
+    // FIXED: Redirect to publish.html (dashboard) instead of the non-existent home.html
     if (roleError || !roleData || roleData.role !== 'admin') {
         alert("Access Denied: Admin privileges required.");
-        window.location.href = "home.html"; // Send non-admins back to home
+        window.location.href = "publish.html"; 
         return;
     }
 
-    // If they ARE an admin, proceed to load the data
     loadPending();
 });
 
@@ -82,7 +82,6 @@ async function loadPending() {
 
 async function updateStatus(id, newStatus) {
     const numericId = parseInt(id);
-
     const { error } = await supabase
         .from('research_papers')
         .update({ status: newStatus })
