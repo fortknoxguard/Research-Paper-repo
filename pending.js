@@ -38,7 +38,6 @@ async function loadPending() {
         const row = document.createElement("div");
         row.className = "request-row";
 
-        // FIX: Handle "Invalid Date" for older rows with NULL created_at
         const dateRaw = paper.created_at;
         const displayDate = (dateRaw && !isNaN(Date.parse(dateRaw))) 
             ? new Date(dateRaw).toLocaleDateString() 
@@ -57,21 +56,24 @@ async function loadPending() {
         container.appendChild(row);
     });
 
-    // FIX: Change to Capitalized strings to satisfy database constraints
+    // FIX: Switched to lowercase 'approved' and 'rejected' to match your SQL check constraint
     container.querySelectorAll(".accept-btn").forEach(btn => {
-        btn.onclick = () => updateStatus(btn.dataset.id, 'Published');
+        btn.onclick = () => updateStatus(btn.dataset.id, 'approved');
     });
     
     container.querySelectorAll(".reject-btn").forEach(btn => {
-        btn.onclick = () => updateStatus(btn.dataset.id, 'Rejected');
+        btn.onclick = () => updateStatus(btn.dataset.id, 'rejected');
     });
 }
 
 async function updateStatus(id, newStatus) {
+    // Ensure ID is passed as a number
+    const numericId = parseInt(id);
+
     const { error } = await supabase
         .from('research_papers')
         .update({ status: newStatus })
-        .eq('id', id);
+        .eq('id', numericId);
 
     if (error) {
         console.error("Full Error Object:", error);
