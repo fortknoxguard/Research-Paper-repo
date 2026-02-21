@@ -5,15 +5,19 @@ const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk";
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
-auth.onAuthStateChanged((user) => {
-    if (!user) { window.location.href = "login.html"; return; }
+auth.onAuthStateChanged(async (user) => {
+    if (!user) { 
+        window.location.href = "login.html"; 
+        return; 
+    }
     loadPending();
 });
 
 async function loadPending() {
     const container = document.getElementById("pendingList");
-    
-    // Fetch from Supabase Table 'research_papers'
+    if (!container) return;
+
+    // Fetch from Supabase instead of Firestore
     const { data, error } = await supabase
         .from('research_papers')
         .select('*')
@@ -34,8 +38,9 @@ async function loadPending() {
     data.forEach((paper) => {
         const row = document.createElement("div");
         row.className = "request-row";
+        // Matching your table columns: Title, Author, created_at
         row.innerHTML = `
-            <span class="col-user">${paper.Author || "—"}</span>
+            <span class="col-user">${paper.Author || "Unknown"}</span>
             <span class="col-title">${paper.Title}</span>
             <span class="col-date">${new Date(paper.created_at).toLocaleDateString()}</span>
             <span class="col-status"><span class="badge badge-pending">Pending</span></span>
@@ -47,9 +52,13 @@ async function loadPending() {
         container.appendChild(row);
     });
 
-    // Button Logic
+    // Attach listeners to the new buttons
     container.querySelectorAll(".accept-btn").forEach(btn => {
         btn.onclick = () => updateStatus(btn.dataset.id, 'published');
+    });
+    
+    container.querySelectorAll(".reject-btn").forEach(btn => {
+        btn.onclick = () => updateStatus(btn.dataset.id, 'rejected');
     });
 }
 
@@ -59,6 +68,6 @@ async function updateStatus(id, newStatus) {
         .update({ status: newStatus })
         .eq('id', id);
 
-    if (error) alert("Error: " + error.message);
-    else loadPending(); // Refresh list
+    if (error) alert("Update failed: " + error.message);
+    else loadPending(); // Refresh the list automatically
 }
