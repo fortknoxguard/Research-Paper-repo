@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory - Admin Research Papers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="admin_research.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-banner">
+                <div class="logo-circle">
+                    <img src="../img/icct.jpeg" alt="ICCT Logo" class="logo-img">
+                </div>
+                <h1 class="brand-title">ICCTory</h1>
+                <span class="admin-badge">ADMIN PANEL</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="../admin_index.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="admin_publish.html" class="nav-item">
+                    <i class="fa-solid fa-clipboard-list"></i> Requests
+                </a>
+                <a href="admin_research.html" class="nav-item active">
+                    <i class="fa-solid fa-file-lines"></i> Research Papers
+                </a>
+                <a href="admin_about.html" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i> About
+                </a>
+                <a href="admin_profile.html" class="nav-item">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="research-header">
+                <h2 class="page-title">Research Papers</h2>
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" class="search-bar" onkeyup="filterPapers()" placeholder="Search title within selected filters...">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="dropdown">
+                    <button onclick="toggleDrop('schoolDrop')" class="dropbtn">
+                        <span id="yearLabel">ALL YEARS</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div id="schoolDrop" class="dropdown-content">
+                        <a onclick="setFilter('year', 'ALL YEARS')">All Years</a>
+                        <a href="javascript:void(0)" onclick="setFilter('year', '2023')">2021</a>
+                        <a href="javascript:void(0)" onclick="setFilter('year', '2023')">2022</a>
+                        <a href="javascript:void(0)" onclick="setFilter('year', '2023')">2023</a>
+                        <a href="javascript:void(0)" onclick="setFilter('year', '2024')">2024</a>
+                        <a href="javascript:void(0)" onclick="setFilter('year', '2025')">2025</a>
+                        <a href="javascript:void(0)" onclick="setFilter('year', '2026')">2026</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button onclick="toggleDrop('deptDrop')" class="dropbtn">
+                        <span id="deptLabel">ALL DEPARTMENTS</span> <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div id="deptDrop" class="dropdown-content">
+                        <a href="javascript:void(0)" onclick="setFilter('dept', 'ALL DEPARTMENTS')">All Departments</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'AS')">Arts & Sciences</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'BA')">Business & Accountancy</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'CS')">Computer Studies</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'CA')">Criminology & Administration</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'Engineering')">Engineering</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'TE')">Teacher Education</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'MET')">Maritime Education & Training</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'ABM')">ABM</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'STEM')">STEM</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'HUMSS')">HUMSS</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'GAS')">GAS</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'ICT')">ICT</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'HE')">HE</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-count" id="resultsCount">Total Managed Papers: 2</div>
+            <hr class="divider">
+
+            <div class="research-grid" id="researchGrid">
+                <button class="paper-card" data-year="2024" data-dept="CS" onclick="viewPaper('Smart Campus IoT')">
+                    <div class="paper-preview">
+                        <img src="../img/research1.jpg" alt="Preview" class="preview-img">
+                        <i class="fa-solid fa-file-pdf pdf-icon-overlay"></i>
+                    </div>
+                    <div class="paper-info">
+                        <h3 class="paper-title">Smart Campus IoT System</h3>
+                        <p class="paper-meta">By: ICCT Tech Group</p>
+                        <div class="paper-tags">
+                            <span class="tag">CS</span> 
+                            <span class="tag">2024</span>
+                        </div>
+                    </div>
+                </button>
+
+                <button class="paper-card" data-year="2025" data-dept="Engineering" onclick="viewPaper('Eco-Grid Project')">
+                    <div class="paper-preview">
+                        <img src="../img/research2.jpg" alt="Preview" class="preview-img">
+                        <i class="fa-solid fa-file-pdf pdf-icon-overlay"></i>
+                    </div>
+                    <div class="paper-info">
+                        <h3 class="paper-title">Eco-Friendly Power Grid</h3>
+                        <p class="paper-meta">By: Eng Group 01</p>
+                        <div class="paper-tags">
+                            <span class="tag">Engineering</span> 
+                            <span class="tag">2025</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <div id="noResults" style="display: none; text-align: center; margin-top: 50px; color: rgba(255,255,255,0.2);">
+                <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                <p>No matching research papers found.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentYear = "ALL YEARS";
+        let currentDept = "ALL DEPARTMENTS";
+
+        function setFilter(type, value) {
+            if(type === 'year') {
+                currentYear = value;
+                document.getElementById('yearLabel').innerText = value;
+            } else {
+                currentDept = value;
+                document.getElementById('deptLabel').innerText = value;
+            }
+            filterPapers();
+        }
+
+        function filterPapers() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.paper-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const title = card.querySelector('.paper-title').innerText.toLowerCase();
+                const year = card.getAttribute('data-year');
+                const dept = card.getAttribute('data-dept');
+
+                const matchesSearch = title.includes(searchText);
+                const matchesYear = (currentYear === "ALL YEARS" || year === currentYear);
+                const matchesDept = (currentDept === "ALL DEPARTMENTS" || dept === currentDept);
+
+                if (matchesSearch && matchesYear && matchesDept) {
+                    card.style.display = "block";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            document.getElementById('resultsCount').innerText = `Total Managed Papers: ${visibleCount}`;
+            document.getElementById('noResults').style.display = visibleCount === 0 ? "block" : "none";
+        }
+
+        function toggleDrop(id) {
+            document.querySelectorAll('.dropdown-content').forEach(d => { if(d.id !== id) d.classList.remove('show'); });
+            document.getElementById(id).classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
+            }
+        }
+
+        function viewPaper(title) { console.log("Managing: " + title); }
+    </script>
+</body>
+</html>
