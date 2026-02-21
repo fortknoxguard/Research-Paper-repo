@@ -1,26 +1,48 @@
 // js/profile.js
-import { auth } from "../js/firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { auth } from "./firebase.js"; 
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+// Combined Auth Listener
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    const fullName    = user.displayName || "User";
-    const email       = user.email || "";
-    const nameParts   = fullName.trim().split(" ");
-    const firstName   = nameParts[0] || "";
-    const lastName    = nameParts.slice(1).join(" ") || "";
+    const fullName = user.displayName || "User";
+    const email = user.email || "";
+    const nameParts = fullName.trim().split(" ");
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
 
-    // Display name & email
-    document.querySelector(".user-display-name").textContent = fullName;
-    document.querySelectorAll(".info-box")[0].textContent    = email;
-    document.querySelectorAll(".info-box")[1].textContent    = firstName;
-    document.querySelectorAll(".info-box")[2].textContent    = lastName;
+    // Update UI
+    const displayNameElem = document.querySelector(".user-display-name");
+    const infoBoxes = document.querySelectorAll(".info-box");
+
+    if (displayNameElem) displayNameElem.textContent = fullName;
+    if (infoBoxes.length >= 3) {
+      infoBoxes[0].textContent = email;
+      infoBoxes[1].textContent = firstName;
+      infoBoxes[2].textContent = lastName;
+    }
   } else {
-    window.location.href = "../login.html";
+    // FIXED: Since index.html is your login page, redirect there.
+    // Use ../index.html if profile.html is inside a subfolder.
+    window.location.href = "../index.html"; 
   }
 });
 
-// Avatar preview
+// Logout Function
+window.confirmLogout = async () => {
+  if (confirm("Are you sure you want to log out?")) {
+    try {
+      await signOut(auth);
+      // FIXED: Redirect back to your login (index.html)
+      window.location.replace("../index.html");
+    } catch (error) {
+      console.error("Logout Error:", error);
+      alert("Error logging out. Check console.");
+    }
+  }
+};
+
+// Avatar preview logic
 const avatarInput = document.getElementById("avatarInput");
 if (avatarInput) {
   avatarInput.addEventListener("change", (e) => {
@@ -30,37 +52,12 @@ if (avatarInput) {
     reader.onload = (ev) => {
       const img = document.getElementById("profileImg");
       const icon = document.getElementById("defaultIcon");
-      img.src = ev.target.result;
-      img.style.display = "block";
-      icon.style.display = "none";
+      if (img && icon) {
+        img.src = ev.target.result;
+        img.style.display = "block";
+        icon.style.display = "none";
+      }
     };
     reader.readAsDataURL(file);
   });
 }
-
-// Logout
-window.confirmLogout = async () => {
-  await signOut(auth);
-  window.location.replace("../login.html");
-};
-
-// List of public pages (no login required)
-const publicPages = [
-  "index.html",
-  "register.html"
-];
-
-// Get current page
-const currentPage = window.location.pathname;
-
-// Check auth state
-onAuthStateChanged(auth, (user) => {
-
-  // If NOT logged in and page is protected
-  if (!user && !publicPages.some(page => currentPage.endsWith(page))) {
-    
-    // Redirect to login
-    window.location.replace("index.html");
-  }
-
-});
