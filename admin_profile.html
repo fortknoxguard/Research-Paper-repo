@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory - Admin Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin_profile.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-banner">
+                <div class="logo-circle">
+                    <img src="../img/icct.jpeg" alt="ICCT Logo" class="logo-img">
+                </div>
+                <h1 class="brand-title">ICCTory</h1>
+                <span class="admin-badge">ADMIN PANEL</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="../admin_index.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="admin_publish.html" class="nav-item">
+                    <i class="fa-solid fa-clipboard-list"></i> Requests
+                </a>
+                <a href="admin_research.html" class="nav-item">
+                    <i class="fa-solid fa-file-lines"></i> Research Papers
+                </a>
+                <a href="admin_about.html" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i> About
+                </a>
+                <a href="admin_profile.html" class="nav-item active">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="profile-wrapper">
+                <h2 class="page-title">Profile Settings</h2>
+                <p class="subtitle">Update your personal information and account credentials</p>
+
+                <div class="glass-card">
+                    <form id="profileForm">
+                        <div class="profile-header">
+                            <div class="avatar-wrapper">
+                                <div class="profile-avatar" id="imagePreview">
+                                    <i class="fas fa-user-shield" id="defaultIcon"></i>
+                                </div>
+                                <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
+                                <button type="button" class="edit-avatar-btn" onclick="document.getElementById('fileInput').click()">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            </div>
+                            <h2 class="user-display-name" id="displayName">Admin User</h2>
+                            <span class="user-role-badge">System Administrator</span>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Username</label>
+                                <input type="text" id="username" class="info-input" value="admin_icct2024">
+                            </div>
+                            <div class="info-item">
+                                <label>First Name</label>
+                                <input type="text" id="firstName" class="info-input" value="ICCTory">
+                            </div>
+                            <div class="info-item">
+                                <label>Last Name</label>
+                                <input type="text" id="lastName" class="info-input" value="Admin">
+                            </div>
+                            <div class="info-item">
+                                <label>Account Status</label>
+                                <div class="info-box" style="color: #4ade80; font-weight: 600;">Active</div>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions">
+                            <button type="button" class="save-btn" onclick="saveProfile()">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                            </button>
+                            <button type="button" class="logout-btn-profile" onclick="confirmLogout()">
+                                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('imagePreview');
+                const icon = document.getElementById('defaultIcon');
+                
+                output.style.backgroundImage = `url('${reader.result}')`;
+                output.style.backgroundSize = 'cover';
+                output.style.backgroundPosition = 'center';
+                if (icon) icon.style.display = 'none';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function saveProfile() {
+            const user = document.getElementById('username').value;
+            const fname = document.getElementById('firstName').value;
+            const lname = document.getElementById('lastName').value;
+            document.getElementById('displayName').innerText = fname + " " + lname;
+            
+            alert("Profile successfully updated!\nNew Username: " + user);
+        }
+        function confirmLogout() {
+            if(confirm('Log out of ICCTory?')) {
+                window.location.href = "../login.html";
+            }
+        }
+    </script>
+</body>
+</html>
