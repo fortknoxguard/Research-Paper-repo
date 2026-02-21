@@ -1,6 +1,5 @@
 // js/profile.js
 import { auth } from "./firebase.js"; 
-// We need the database to check the role
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -27,21 +26,28 @@ onAuthStateChanged(auth, async (user) => {
       infoBoxes[2].textContent = lastName;
     }
 
-    // 2. Update Role Badge (Admin check)
-    const { data: roleData } = await supabase
+    // 2. Update Role Badge (FIXED: Removed .single() to prevent 406 error)
+    const { data: roleData, error } = await supabase
         .from('user_roles')
         .select('role')
-        .eq('user_id', user.uid)
-        .single();
+        .eq('user_id', user.uid);
 
     const roleBadge = document.querySelector(".user-role-badge");
-    if (roleBadge && roleData) {
-        roleBadge.textContent = roleData.role === 'admin' ? "Administrator" : "Verified Student";
-        if (roleData.role === 'admin') roleBadge.style.background = "#ff4757"; // Make admin badge red
+    
+    if (roleBadge) {
+        // If row exists, use the role; otherwise, default to student
+        const actualRole = (roleData && roleData.length > 0) ? roleData[0].role : 'student';
+        
+        if (actualRole === 'admin') {
+            roleBadge.textContent = "Administrator";
+            roleBadge.style.background = "#ff4757"; // Admin Red
+        } else {
+            roleBadge.textContent = "Verified Student";
+            roleBadge.style.background = "#2ed573"; // Student Green (optional)
+        }
     }
 
   } else {
-    // Redirect to login (root index.html)
     window.location.href = "../index.html"; 
   }
 });
@@ -51,7 +57,6 @@ window.confirmLogout = async () => {
   if (confirm("Are you sure you want to log out?")) {
     try {
       await signOut(auth);
-      // FIXED: Must go UP one level to find index.html (Login)
       window.location.replace("../index.html");
     } catch (error) {
       console.error("Logout Error:", error);
