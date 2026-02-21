@@ -34,10 +34,23 @@ async function loadPending() {
     const container = document.getElementById("pendingList");
     if (!container) return;
 
-    const { data, error } = await supabase
+    // Get current logged in user from Firebase
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
+    let query = supabase
         .from('research_papers')
         .select('*')
         .eq('status', 'pending');
+
+    // NEW: If NOT admin, only show their own papers
+    if (userRole !== 'admin') {
+        // Assuming your table has a column for the user's ID
+        // Change 'user_id' to match your actual column name (e.g., 'Author_ID')
+        query = query.eq('user_id', currentUser.uid);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         console.error("Supabase Error:", error.message);
@@ -47,7 +60,7 @@ async function loadPending() {
     container.innerHTML = "";
 
     if (!data || data.length === 0) {
-        container.innerHTML = `<p class="empty-msg">No pending papers at the moment.</p>`;
+        container.innerHTML = `<p class="empty-msg">You have no pending papers at the moment.</p>`;
         return;
     }
 
@@ -60,23 +73,18 @@ async function loadPending() {
             ? new Date(dateRaw).toLocaleDateString() 
             : "Awaiting Sync";
 
-
-
-        
         let actionHTML = '';
         if (userRole === 'admin') {
-
             actionHTML = `
                 <button class="action-btn accept-btn" data-id="${paper.id}">Accept</button>
                 <button class="action-btn reject-btn" data-id="${paper.id}">Reject</button>
             `;
         } else {
-
-            actionHTML = `<span class="badge-view-only">Under Review</span>`;
+            actionHTML = `<span class="badge-view-only">Waiting for Admin</span>`;
         }
 
         row.innerHTML = `
-            <span class="col-user">${paper.Author || "Unknown"}</span>
+            <span class="col-user">${paper.Author || "You"}</span>
             <span class="col-title" style="cursor:pointer; color:#00abff;" onclick="window.open('${paper.file_path}', '_blank')">
                 ${paper.Title || "Untitled"}
             </span>
@@ -86,7 +94,6 @@ async function loadPending() {
         `;
         container.appendChild(row);
     });
-
 
     if (userRole === 'admin') {
         container.querySelectorAll(".accept-btn").forEach(btn => {
