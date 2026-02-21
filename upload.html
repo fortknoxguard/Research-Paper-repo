@@ -158,6 +158,59 @@
   <script type="module" src="firebase.js"></script>
   <script type="module" src="upload.js"></script>
 
+  <script>
+
+    console.log("Inline debug: page loaded successfully");
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const fileBtn = document.getElementById("custom-button");
+
+      const fileInput = document.getElementById("real-file");
+
+      const statusText = document.getElementById("custom-text");
+
+
+
+      console.log("custom-button found?", fileBtn ? "YES" : "NO");
+
+      console.log("real-file input found?", fileInput ? "YES" : "NO");
+
+
+
+      if (fileBtn && fileInput) {
+
+        fileBtn.addEventListener("click", () => {
+
+          console.log("Choose File button clicked!");
+
+          fileInput.click();
+
+        });
+
+
+
+        fileInput.addEventListener("change", () => {
+
+          const file = fileInput.files[0];
+
+          console.log("File selected:", file ? file.name : "none");
+
+          if (statusText) {
+
+            statusText.textContent = file ? file.name : "No file chosen, yet.";
+
+          }
+
+        });
+
+      } else {
+
+        console.error("Button or file input missing – cannot attach listeners");
+
+      }
+
+    });
   </script>
 </body>
 </html>
