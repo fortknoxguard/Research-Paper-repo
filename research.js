@@ -7,62 +7,58 @@ const supabase = createClient(SUPABASE_URL, ANON_KEY);
 let selectedYear = "ALL";
 let selectedDept = "ALL";
 
-// Initial load
 window.onload = fetchApprovedPapers;
 
 async function fetchApprovedPapers() {
     const { data, error } = await supabase
         .from('research_papers')
         .select('*')
-        .eq('status', 'approved');
+        .eq('status', 'approved'); // Fetches your approved tests
 
     if (error) {
         console.error("Supabase Error:", error.message);
         return;
     }
-
     renderPapers(data);
 }
 
 function renderPapers(papers) {
-    const container = document.querySelector(".papers-grid");
+    const container = document.getElementById("researchGrid");
     if (!container) return;
-
     container.innerHTML = "";
 
     papers.forEach(paper => {
         const card = document.createElement("div");
         card.className = "paper-card";
-        // Important: Set these for the filter function to read
-        card.setAttribute("data-year", paper.Year || "");
-        card.setAttribute("data-dept", paper.Department || "");
+        card.setAttribute("data-year", paper.year || paper.Year || ""); 
+        card.setAttribute("data-dept", paper.department || paper.Department || "");
 
         card.innerHTML = `
-            <div class="paper-thumbnail">
-                <img src="../img/sample-preview-1.jpg" alt="Thumbnail" onerror="this.src='../img/icct.jpeg'">
-                <span class="file-type-icon"><i class="fa-solid fa-file-pdf"></i></span>
+            <div class="paper-preview">
+                <img src="../img/icct.jpeg" alt="Thumbnail" class="preview-img">
+                <i class="fa-solid fa-file-pdf pdf-overlay-icon"></i>
             </div>
             <div class="paper-info">
-                <h3 class="paper-title">${paper.Title || "Untitled"}</h3>
-                <p class="paper-meta">Authors: ${paper.Author || "Unknown"}</p>
+                <h3 class="paper-title">${paper.title || paper.Title}</h3>
+                <p class="paper-meta">Authors: ${paper.author || paper.Author}</p>
                 <div class="paper-tags">
-                    <span class="tag-dept">${paper.Department || "N/A"}</span>
-                    <span class="tag-year">${paper.Year || "N/A"}</span>
+                    <span class="tag">${paper.department || paper.Department}</span>
+                    <span class="tag">${paper.year || paper.Year}</span>
                 </div>
             </div>
         `;
-        card.onclick = () => window.open(paper.File_URL, '_blank');
+        // Opens the PDF link from Supabase
+        card.onclick = () => window.open(paper.file_url || paper.File_URL, '_blank');
         container.appendChild(card);
     });
 
-    filterPapers(); // Run filter to update count
+    filterPapers();
 }
 
-// Global functions for HTML access
+// Global functions for HTML
 window.toggleDrop = (id) => {
-    const allDrops = document.querySelectorAll('.dropdown-content');
-    allDrops.forEach(drop => {
-        if (drop.id !== id) drop.classList.remove('show');
+    document.querySelectorAll('.dropdown-content').forEach(d => {
+        if (d.id !== id) d.classList.remove('show');
     });
     document.getElementById(id).classList.toggle("show");
 };
@@ -70,11 +66,10 @@ window.toggleDrop = (id) => {
 window.setFilter = (type, value) => {
     if (type === 'year') {
         selectedYear = value;
-        document.getElementById('yearLabel').innerText = (value === 'ALL') ? "ALL YEARS" : value;
-    } else if (type === 'dept') {
+        document.getElementById('yearLabel').innerText = value === 'ALL' ? "ALL YEARS" : value;
+    } else {
         selectedDept = value;
-        const labels = { 'ALL': 'ALL DEPARTMENTS', 'AS': 'ARTS & SCIENCES', 'BA': 'BUSINESS & ACCOUNTANCY', 'CS': 'COMPUTER STUDIES', 'CA': 'CRIMINOLOGY & ADMINISTRATION', 'Engineering': 'ENGINEERING', 'TE': 'TEACHER EDUCATION', 'MET': 'MARITIME EDUCATION & TRAINING', 'ABM': 'ABM', 'STEM': 'STEM', 'HUMSS': 'HUMSS', 'GAS': 'GAS', 'ICT': 'ICT', 'HE': 'HE' };
-        document.getElementById('deptLabel').innerText = labels[value] || value;
+        document.getElementById('deptLabel').innerText = value === 'ALL' ? "ALL DEPARTMENTS" : value;
     }
     document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
     filterPapers();
@@ -87,28 +82,22 @@ window.filterPapers = () => {
 
     cards.forEach(card => {
         const title = card.querySelector('.paper-title').innerText.toLowerCase();
-        const meta = card.querySelector('.paper-meta').innerText.toLowerCase();
+        const author = card.querySelector('.paper-meta').innerText.toLowerCase();
         const cardYear = card.getAttribute('data-year');
         const cardDept = card.getAttribute('data-dept');
 
-        const matchesSearch = title.includes(searchInput) || meta.includes(searchInput);
+        const matchesSearch = title.includes(searchInput) || author.includes(searchInput);
         const matchesYear = (selectedYear === "ALL" || cardYear === selectedYear);
         const matchesDept = (selectedDept === "ALL" || cardDept === selectedDept);
 
-        card.style.display = (matchesSearch && matchesYear && matchesDept) ? "block" : "none";
-        if (card.style.display === "block") visibleCount++;
+        const isVisible = matchesSearch && matchesYear && matchesDept;
+        card.style.display = isVisible ? "block" : "none";
+        if (isVisible) visibleCount++;
     });
 
     document.getElementById('resultsCount').innerText = `Total Research Papers: ${visibleCount}`;
-    const noResults = document.getElementById('noResults');
-    if (noResults) noResults.style.display = (visibleCount === 0) ? "block" : "none";
+    document.getElementById('noResults').style.display = visibleCount === 0 ? "block" : "none";
 };
 
-// Search listener
-document.getElementById('searchInput')?.addEventListener('input', window.filterPapers);
-
-window.onclick = (event) => {
-    if (!event.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
-    }
-};
+// Search event listener
+document.getElementById('searchInput').addEventListener('input', window.filterPapers);
