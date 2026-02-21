@@ -1,12 +1,15 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+// 1. IMPORT THE LIBRARIES CORRECTLY
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { auth } from "./firebase.js"; // This gets the login info from your other file
 
 const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk"; 
 const BUCKET_NAME = "research papers"; 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-console.log(supabase);
+// 2. INITIALIZE CLIENT (Notice we use 'createClient' directly now)
+const supabase = createClient(SUPABASE_URL, ANON_KEY);
+
+console.log("Supabase initialized:", supabase);
 
 document.addEventListener("DOMContentLoaded", () => {
     const realFile = document.getElementById("real-file");
@@ -22,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        
+        // Use the auth object we imported from firebase.js
         const user = auth.currentUser;
 
         if (!user) {
@@ -42,18 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmBtn.textContent = "Uploading...";
 
         try {
-            // 1. Pathing (Organized by UID folder)
             const fileName = `${Date.now()}-${file.name}`;
             const filePath = `${user.uid}/${fileName}`;
 
-            // 2. Upload to Storage
+            // Upload to Storage
             const { error: uploadError } = await supabase.storage
                 .from(BUCKET_NAME)
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            // 3. Insert to Table (FIXED NAMES)
+            // Insert to Table
             const { error: dbError } = await supabase.from("research_papers").insert({
                 "Title": title,
                 "Author": authors,
@@ -69,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             form.reset();
             customText.textContent = "No file chosen";
         } catch (err) {
-            console.error(err);
+            console.error("Upload failed:", err);
             alert("Error: " + err.message);
         } finally {
             confirmBtn.disabled = false;
