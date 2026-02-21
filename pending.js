@@ -17,7 +17,6 @@ async function loadPending() {
     const container = document.getElementById("pendingList");
     if (!container) return;
 
-    // Fetch from Supabase instead of Firestore
     const { data, error } = await supabase
         .from('research_papers')
         .select('*')
@@ -38,11 +37,17 @@ async function loadPending() {
     data.forEach((paper) => {
         const row = document.createElement("div");
         row.className = "request-row";
-        // Matching your table columns: Title, Author, created_at
+
+        // FIX: Handle "Invalid Date" for older rows with NULL created_at
+        const dateRaw = paper.created_at;
+        const displayDate = (dateRaw && !isNaN(Date.parse(dateRaw))) 
+            ? new Date(dateRaw).toLocaleDateString() 
+            : "Awaiting Sync";
+
         row.innerHTML = `
             <span class="col-user">${paper.Author || "Unknown"}</span>
-            <span class="col-title">${paper.Title}</span>
-            <span class="col-date">${new Date(paper.created_at).toLocaleDateString()}</span>
+            <span class="col-title">${paper.Title || "Untitled"}</span>
+            <span class="col-date">${displayDate}</span>
             <span class="col-status"><span class="badge badge-pending">Pending</span></span>
             <span class="col-actions">
                 <button class="action-btn accept-btn" data-id="${paper.id}">Accept</button>
@@ -52,13 +57,13 @@ async function loadPending() {
         container.appendChild(row);
     });
 
-    // Attach listeners to the new buttons
+    // FIX: Change to Capitalized strings to satisfy database constraints
     container.querySelectorAll(".accept-btn").forEach(btn => {
-        btn.onclick = () => updateStatus(btn.dataset.id, 'published');
+        btn.onclick = () => updateStatus(btn.dataset.id, 'Published');
     });
     
     container.querySelectorAll(".reject-btn").forEach(btn => {
-        btn.onclick = () => updateStatus(btn.dataset.id, 'rejected');
+        btn.onclick = () => updateStatus(btn.dataset.id, 'Rejected');
     });
 }
 
@@ -68,6 +73,11 @@ async function updateStatus(id, newStatus) {
         .update({ status: newStatus })
         .eq('id', id);
 
-    if (error) alert("Update failed: " + error.message);
-    else loadPending(); // Refresh the list automatically
+    if (error) {
+        console.error("Full Error Object:", error);
+        alert("Update failed: " + error.message);
+    } else {
+        alert(`Paper successfully ${newStatus}!`);
+        loadPending(); 
+    }
 }
