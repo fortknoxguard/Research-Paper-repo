@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ICCTory - Research Papers</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="research.css" />
   </head>
   <body>
@@ -21,24 +18,12 @@
         </div>
 
         <nav class="nav-menu">
-          <a href="../index.html" class="nav-item">
-            <i class="fa-solid fa-house"></i> Home
-          </a>
-          <a href="upload.html" class="nav-item">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Upload
-          </a>
-          <a href="publish.html" class="nav-item">
-            <i class="fa-solid fa-clipboard-list"></i> Your Requests
-          </a>
-          <a href="research.html" class="nav-item active">
-            <i class="fa-solid fa-file-lines"></i> Research Papers
-          </a>
-          <a href="about.html" class="nav-item">
-            <i class="fa-solid fa-circle-info"></i> About
-          </a>
-          <a href="profile.html" class="nav-item">
-            <i class="fa-solid fa-user"></i> Profile
-          </a>
+          <a href="publish.html" class="nav-item"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="upload.html" class="nav-item"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</a>
+          <a href="publish.html" class="nav-item"><i class="fa-solid fa-clipboard-list"></i> Your Requests</a>
+          <a href="research.html" class="nav-item active"><i class="fa-solid fa-file-lines"></i> Research Papers</a>
+          <a href="about.html" class="nav-item"><i class="fa-solid fa-circle-info"></i> About</a>
+          <a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
         </nav>
       </aside>
 
@@ -48,181 +33,50 @@
             <h2 class="page-title">Research Papers</h2>
             <div class="search-container">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input
-                type="text"
-                id="searchInput"
-                class="search-bar"
-                onkeyup="filterPapers()"
-                placeholder="Search by Title, Author, or Keywords..."
-              />
+              <input type="text" id="searchInput" class="search-bar" placeholder="Search by Title, Author, or Keywords..." />
             </div>
           </header>
 
           <div class="filter-group">
             <div class="dropdown">
-              <button onclick="toggleDrop('schoolDrop')" class="dropbtn">
+              <button onclick="window.toggleDrop('schoolDrop')" class="dropbtn">
                 <span id="yearLabel">ALL YEARS</span>
                 <i class="fa-solid fa-chevron-down"></i>
               </button>
               <div id="schoolDrop" class="dropdown-content">
-                <a href="javascript:void(0)" onclick="setFilter('year', 'ALL')"
-                  >All Years</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('year', '2023')"
-                  >2021</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('year', '2023')"
-                  >2022</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('year', '2023')"
-                  >2023</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('year', '2024')"
-                  >2024</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('year', '2025')"
-                  >2025</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('year', '2026')"
-                  >2026</a
-                >
+                <a href="javascript:void(0)" onclick="window.setFilter('year', 'ALL')">All Years</a>
+                <a href="javascript:void(0)" onclick="window.setFilter('year', '2024')">2024</a>
+                <a href="javascript:void(0)" onclick="window.setFilter('year', '2025')">2025</a>
               </div>
             </div>
 
             <div class="dropdown">
-              <button onclick="toggleDrop('deptDrop')" class="dropbtn">
+              <button onclick="window.toggleDrop('deptDrop')" class="dropbtn">
                 <span id="deptLabel">ALL DEPARTMENTS</span>
                 <i class="fa-solid fa-chevron-down"></i>
               </button>
               <div id="deptDrop" class="dropdown-content">
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'ALL')"
-                  >All Departments</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'AS')"
-                  >Arts & Sciences</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'BA')"
-                  >Business & Accountancy</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'CS')"
-                  >Computer Studies</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'CA')"
-                  >Criminology & Administration</a
-                >
-                <a
-                  href="javascript:void(0)"
-                  onclick="setFilter('dept', 'Engineering')"
-                  >Engineering</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'TE')"
-                  >Teacher Education</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'MET')"
-                  >Maritime Education & Training</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'ABM')"
-                  >ABM</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'STEM')"
-                  >STEM</a
-                >
-                <a
-                  href="javascript:void(0)"
-                  onclick="setFilter('dept', 'HUMSS')"
-                  >HUMSS</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'GAS')"
-                  >GAS</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'ICT')"
-                  >ICT</a
-                >
-                <a href="javascript:void(0)" onclick="setFilter('dept', 'HE')"
-                  >HE</a
-                >
+                <a href="javascript:void(0)" onclick="window.setFilter('dept', 'ALL')">All Departments</a>
+                <a href="javascript:void(0)" onclick="window.setFilter('dept', 'CS')">Computer Studies</a>
+                <a href="javascript:void(0)" onclick="window.setFilter('dept', 'BA')">Business & Accountancy</a>
               </div>
             </div>
           </div>
 
-          <div class="results-count" id="resultsCount">
-            Total Research Papers: 0
-          </div>
-
+          <div class="results-count" id="resultsCount">Total Research Papers: 0</div>
           <hr class="divider" />
 
-          <div class="research-grid" id="researchGrid">
-            <div
-              class="paper-card"
-              data-year="2024"
-              data-dept="CS"
-              onclick="openResearch('RES-001')"
-            >
-              <div class="paper-preview">
-                <img
-                  src="../img/sample-preview-1.jpg"
-                  alt="Research Thumbnail"
-                  class="preview-img"
-                />
-                <i class="fa-solid fa-file-pdf pdf-overlay-icon"></i>
-              </div>
-              <div class="paper-info">
-                <h3 class="paper-title">A Case Study on AI in ICCT Colleges</h3>
-                <p class="paper-meta">Authors: Dela Cruz, J., Smith, A.</p>
-                <div class="paper-tags">
-                  <span class="tag">CS</span>
-                  <span class="tag">2024</span>
-                </div>
-              </div>
-            </div>
+          <div class="research-grid papers-grid" id="researchGrid"></div>
 
-            <div
-              class="paper-card"
-              data-year="2024"
-              data-dept="BA"
-              onclick="openResearch('RES-002')"
-            >
-              <div class="paper-preview">
-                <img
-                  src="../img/sample-preview-2.jpg"
-                  alt="Research Thumbnail"
-                  class="preview-img"
-                />
-                <i class="fa-solid fa-file-pdf pdf-overlay-icon"></i>
-              </div>
-              <div class="paper-info">
-                <h3 class="paper-title">
-                  Business Logistics Management in Rizal
-                </h3>
-                <p class="paper-meta">Authors: Clara, M., Ibarra, C.</p>
-                <div class="paper-tags">
-                  <span class="tag">BA</span>
-                  <span class="tag">2024</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            id="noResults"
-            style="
-              display: none;
-              text-align: center;
-              margin-top: 50px;
-              color: rgba(255, 255, 255, 0.2);
-            "
-          >
-            <i
-              class="fa-solid fa-folder-open"
-              style="font-size: 3.5rem; margin-bottom: 15px"
-            ></i>
+          <div id="noResults" style="display: none; text-align: center; margin-top: 50px; color: rgba(255,255,255,0.2);">
+            <i class="fa-solid fa-folder-open" style="font-size: 3.5rem; margin-bottom: 15px"></i>
             <p>No matching research papers found.</p>
           </div>
         </div>
       </main>
     </div>
 
-    <script src="research.js"></script>
-    <script type="module" src="authGuard.js"></script>
+    <script type="module" src="../js/research.js"></script>
+    <script type="module" src="../js/authGuard.js"></script>
   </body>
 </html>
