@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ICCTory - Profile</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="profile.css" />
   </head>
   <body>
@@ -15,13 +12,13 @@
       <aside class="sidebar">
         <div class="sidebar-banner">
           <div class="logo-circle">
-            <img src="../img/icct.jpeg" alt="ICCT Logo" class="logo-img" />
+            <img src="icct.jpeg" alt="ICCT Logo" class="logo-img" />
           </div>
           <h1 class="brand-title">ICCTory</h1>
         </div>
 
         <nav class="nav-menu">
-          <a href="../index.html" class="nav-item">
+          <a href="publish.html" class="nav-item">
             <i class="fa-solid fa-house"></i> Home
           </a>
           <a href="upload.html" class="nav-item">
@@ -46,9 +43,7 @@
         <div class="page-wrapper">
           <header class="profile-header-text">
             <h2 class="page-title">User Profile</h2>
-            <p class="subtitle">
-              Manage your account information and settings.
-            </p>
+            <p class="subtitle">Manage your account information and settings.</p>
           </header>
 
           <div class="profile-card glass-card">
@@ -56,49 +51,33 @@
               <div class="avatar-wrapper">
                 <div class="profile-avatar" id="avatarPreview">
                   <i class="fas fa-user" id="defaultIcon"></i>
-                  <img
-                    src=""
-                    alt="Profile Preview"
-                    id="profileImg"
-                    style="display: none"
-                  />
+                  <img src="" alt="Profile Preview" id="profileImg" style="display: none" />
                 </div>
-                <input
-                  type="file"
-                  id="avatarInput"
-                  accept="image/*"
-                  style="display: none"
-                />
-                <button
-                  class="edit-avatar-btn"
-                  title="Change Avatar"
-                  onclick="document.getElementById('avatarInput').click()"
-                >
+                <input type="file" id="avatarInput" accept="image/*" style="display: none" />
+                <button class="edit-avatar-btn" title="Change Avatar" onclick="document.getElementById('avatarInput').click()">
                   <i class="fas fa-camera"></i>
                 </button>
               </div>
-              <!-- Populated by Firebase -->
               <h2 class="user-display-name">Loading...</h2>
-              <span class="user-role-badge">Verified Student</span>
+              <span class="user-role-badge" id="roleBadge">Verified Student</span>
             </div>
 
             <div class="info-grid">
               <div class="info-item" style="grid-column: span 2">
                 <label>Email Address</label>
-                <div class="info-box">—</div>
+                <div class="info-box" id="infoEmail">—</div>
               </div>
               <div class="info-item">
                 <label>First Name</label>
-                <div class="info-box">—</div>
+                <div class="info-box" id="infoFirstName">—</div>
               </div>
               <div class="info-item">
                 <label>Last Name</label>
-                <div class="info-box">—</div>
+                <div class="info-box" id="infoLastName">—</div>
               </div>
             </div>
 
             <div class="profile-actions-centered">
-              <!-- Logout handled by profile.js -->
               <button class="logout-btn-profile" onclick="confirmLogout()">
                 <i class="fa-solid fa-right-from-bracket"></i> Log Out
               </button>
@@ -110,6 +89,6 @@
 
     <script type="module" src="../js/firebase.js"></script>
     <script type="module" src="../js/profile.js"></script>
-    <script type="module" src="./js/authGuard.js"></script>
+    <script type="module" src="../js/authGuard.js"></script>
   </body>
 </html>
