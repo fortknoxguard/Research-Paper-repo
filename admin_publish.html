@@ -56,42 +56,69 @@
                     <span class="th">Status</span>
                     <span class="th">Action</span>
                 </div>
-                <div id="requestList" class="table-body">
-                    </div>
+                <div id="requestList" class="table-body"></div>
             </div>
         </main>
     </div>
 
-    <script>
-        const data = Array(15).fill({ 
-            user: 'Juan Dela Cruz', 
-            title: 'Design and Implementation of ICCT Online Archive', 
-            date: 'Feb 11, 2026', 
-            status: 'Published' 
-        });
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-        const container = document.getElementById('requestList');
-        data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'table-row';
-            row.innerHTML = `
-                <span class="td user-cell">
-                    <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-                    ${item.user}
-                </span>
-                <span class="td title-cell">${item.title}</span>
-                <span class="td">${item.date}</span>
-                <span class="td">
-                    <span class="status-pill published">${item.status}</span>
-                </span>
-                <span class="td">
-                    <button class="view-btn" title="View Paper">
-                        <i class="fa-solid fa-eye"></i>
-                    </button>
-                </span>
-            `;
-            container.appendChild(row);
-        });
+        const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
+        const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk";
+        const supabase = createClient(SUPABASE_URL, ANON_KEY);
+
+        const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/research papers`;
+
+        async function loadPublished() {
+            const container = document.getElementById('requestList');
+            
+            // Fetch only APPROVED papers for the "Published" tab
+            const { data, error } = await supabase
+                .from('research_papers')
+                .select('*')
+                .eq('status', 'approved');
+
+            if (error) {
+                console.error("Error:", error.message);
+                return;
+            }
+
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding:20px; color:gray;">No published papers yet.</p>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const cleanPath = item.file_path.startsWith('/') ? item.file_path.substring(1) : item.file_path;
+                const finalUrl = `${STORAGE_BASE_URL}/${cleanPath}`;
+                const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : "—";
+
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <span class="td user-cell">
+                        <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+                        ${item.Author || 'Unknown'}
+                    </span>
+                    <span class="td title-cell">${item.Title || 'Untitled'}</span>
+                    <span class="td">${dateStr}</span>
+                    <span class="td">
+                        <span class="status-pill published">Published</span>
+                    </span>
+                    <span class="td">
+                        <button class="view-btn" title="View Paper" onclick="window.open('${finalUrl}', '_blank')">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </span>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadPublished);
     </script>
 </body>
 </html>
