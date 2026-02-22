@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCTory - Rejected Requests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin_reject.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-banner">
+                <div class="logo-circle">
+                    <img src="../img/icct.jpeg" alt="ICCT Logo" class="logo-img">
+                </div>
+                <h1 class="brand-title">ICCTory</h1>
+                <span class="admin-badge">ADMIN PANEL</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="../admin_index.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="admin_publish.html" class="nav-item active">
+                    <i class="fa-solid fa-clipboard-list"></i> Requests
+                </a>
+                <a href="admin_research.html" class="nav-item">
+                    <i class="fa-solid fa-file-lines"></i> Research Papers
+                </a>
+                <a href="admin_about.html" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i> About
+                </a>
+                <a href="admin_profile.html" class="nav-item">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="content-header">
+                <h2 class="page-title">Publication Requests</h2>
+                <div class="filter-tabs">
+                    <a href="admin_publish.html" class="tab-link">Published</a>
+                    <a href="admin_pending.html" class="tab-link">Pending</a>
+                    <a href="admin_reject.html" class="tab-link active">Rejected</a>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <span class="th">User</span>
+                    <span class="th">Paper Title</span>
+                    <span class="th">Date Rejected</span>
+                    <span class="th">Status</span>
+                    <span class="th">Action</span>
+                </div>
+                
+                <div id="requestList" class="table-body">
+                    </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const data = Array(10).fill({ 
+            user: 'Student User', 
+            title: 'Sample Rejected Research Paper Title', 
+            date: 'Feb 11, 2026', 
+            status: 'Rejected' 
+        });
+
+        const container = document.getElementById('requestList');
+        data.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'table-row';
+            row.innerHTML = `
+                <span class="td user-cell">
+                    <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+                    ${item.user}
+                </span>
+                <span class="td title-cell">${item.title}</span>
+                <span class="td">${item.date}</span>
+                <span class="td">
+                    <span class="status-pill rejected">${item.status}</span>
+                </span>
+                <span class="td">
+                    <button class="action-btn delete" title="Delete Permanent">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </span>
+            `;
+            container.appendChild(row);
+        });
+    </script>
+</body>
+</html>
