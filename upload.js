@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "file_path": filePath,
                 "file_name": file.name,
                 "status": "pending",
-                "publish_year": yearValue, // Matches your DB column
+                "published_year": yearValue, // Matches your DB column
                 "Department": deptValue    // Matches your DB column (Capital D)
             });
 
