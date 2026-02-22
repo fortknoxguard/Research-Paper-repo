@@ -85,6 +85,20 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
+.admin-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #b184e1; /* Theme Violet */
+    background: rgba(177, 132, 225, 0.1); /* Very subtle tint */
+    padding: 4px 16px;
+    border-radius: 50px; /* Pill shape */
+    border: 1px solid rgba(177, 132, 225, 0.4); /* Thin violet border */
+    margin-top: 10px;
+    display: inline-block;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
 .nav-menu {
     padding: 0 15px;
     flex-grow: 1;
