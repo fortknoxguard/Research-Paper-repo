@@ -87,15 +87,14 @@
                     const userCredential = await signInWithEmailAndPassword(auth, email, password);
                     const user = userCredential.user;
 
-                    // --- NEW LOGIC: ADMIN CHECK ---
-                    // Query the 'admins' table for the logged-in UID
-                    const { data: adminData, error: adminError } = await supabase
-                        .from('admins')
-                        .select('*')
+                    // --- UPDATED LOGIC: CHECK user_roles TABLE ---
+                    const { data: roleData, error: roleError } = await supabase
+                        .from('user_roles') 
+                        .select('role')
                         .eq('user_id', user.uid)
                         .single();
 
-                    if (adminData) {
+                    if (roleData && roleData.role === 'admin') {
                         // User is an Admin
                         alert(`Welcome Admin, ${user.displayName || username}!`);
                         window.location.href = "admin_dashboard.html";
@@ -107,7 +106,7 @@
 
                 } catch (error) {
                     let msg = "Login failed.";
-                    if (error.code === "auth/user-not-found" || error.code === "auth/invalid-credential") {
+                    if (error.code === "auth/user-not-found" || error.code === "auth/invalid-credential" || error.code === "auth/wrong-password") {
                         msg = "Invalid username or password.";
                     } else if (error.code === "auth/too-many-requests") {
                         msg = "Too many failed attempts. Try again later.";
