@@ -41,35 +41,36 @@ body {
 }
 
 .sidebar-banner {
-    background: var(--login-glass);
-    padding: 40px 15px;
-    height: 280px;
-    text-align: center;
+    background: var(--login-glass); 
+    padding: 40px 15px; 
+    height: 280px; 
+    text-align: center; 
     clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .logo-circle {
-    width: 130px;
-    height: 130px;
+    width: 110px; 
+    height: 110px; 
     background: rgba(255, 255, 255, 0.1);
-    margin-bottom: 15px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
+    margin-bottom: 15px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
     justify-content: center;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2); 
     overflow: hidden;
 }
 
-.logo-img {
-    width: 110%;
-    height: 110%;
-    object-fit: cover;
+.logo-img { 
+    width: 110%; 
+    height: 110%; 
+    object-fit: cover; 
 }
 
 .brand-title {
