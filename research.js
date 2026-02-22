@@ -45,7 +45,7 @@ function renderCards(papers) {
 
         card.innerHTML = `
             <div class="paper-preview">
-                <img src="cat.jpg" class="preview-img" alt="Paper Preview">
+                <img src="cat-2.jpg" class="preview-img" alt="Paper Preview">
                 <div class="pdf-overlay-icon"><i class="fa-solid fa-file-pdf"></i></div>
             </div>
             <h3 class="paper-title">${paper.Title || "Untitled Research"}</h3>
