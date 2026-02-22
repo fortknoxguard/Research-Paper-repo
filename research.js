@@ -5,7 +5,7 @@ const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
 // THE GLUE: Handles the space in "research papers"
-const BUCKET_NAME = "research_papers";
+const BUCKET_NAME = "research papers";
 const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${encodeURIComponent(BUCKET_NAME)}/`;
 
 async function fetchResearchPapers() {
