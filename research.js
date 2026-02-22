@@ -5,21 +5,28 @@ const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk";
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
-// THE GLUE: This is the base path to your Supabase files
-const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/research papers/`;
+// THE GLUE: Encoding the space in "research papers" to "research%20papers"
+const BUCKET_NAME = "research papers"; 
+const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${encodeURIComponent(BUCKET_NAME)}/`;
 
 async function fetchResearchPapers() {
+    // 1. Fetch data
     const { data, error } = await supabase
         .from('research_papers')
-        .select('*')
-        .eq('status', 'approved'); // Only show published papers
+        .select('*');
 
     if (error) {
-        console.error("Error fetching papers:", error.message);
+        console.error("Database Error:", error.message);
         return;
     }
 
-    renderCards(data);
+    // 2. DEBUG: See exactly what is coming from Supabase in your browser console (F12)
+    console.log("Data received:", data);
+
+    // 3. FILTER: Check for 'approved' or 'Approved'
+    const published = data.filter(p => p.status && p.status.toLowerCase() === 'approved');
+
+    renderCards(published);
 }
 
 function renderCards(papers) {
@@ -27,14 +34,17 @@ function renderCards(papers) {
     if (!container) return;
     container.innerHTML = "";
 
+    if (papers.length === 0) {
+        container.innerHTML = `<p class="empty-msg">No approved papers found in the database.</p>`;
+        return;
+    }
+
     papers.forEach((paper) => {
-        // MATCHING YOUR TABLE SETUP
         const title = paper.Title || paper.title || "Untitled";
         const author = paper.Author || paper.author || "Unknown Author";
         const year = paper.Year || paper.year || "2024";
         const dept = paper.Department || paper.department || "General";
         
-        // THE FIX: Construct the full URL if it's just a filename
         const rawPath = paper.file_path || paper.file_url || "";
         const finalUrl = rawPath.startsWith('http') 
             ? rawPath 
@@ -42,8 +52,6 @@ function renderCards(papers) {
 
         const card = document.createElement("div");
         card.className = "research-card";
-        
-        // Making the whole card clickable to the file
         card.innerHTML = `
             <div class="card-content" onclick="window.open('${finalUrl}', '_blank')">
                 <div class="pdf-icon-top"><i class="fa-solid fa-file-pdf"></i></div>
@@ -59,5 +67,4 @@ function renderCards(papers) {
     });
 }
 
-// Initial Load
 fetchResearchPapers();
