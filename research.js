@@ -52,7 +52,7 @@ function renderCards(papers) {
             <p class="paper-meta">By ${paper.Author || "Unknown Author"}</p>
             <div class="paper-tags">
                 <span class="tag">${paper.Department || "General"}</span>
-                <span class="tag">${paper.publish_year || "No Year"}</span>
+                <span class="tag">${paper.published_year || "No Year"}</span>
             </div>
         `;
         container.appendChild(card);
