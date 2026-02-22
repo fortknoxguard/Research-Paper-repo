@@ -57,30 +57,13 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // ── Supabase (ESM version so it works inside module) ───────────────────────
+        // ── Supabase (ESM version) ───────────────────────
         import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
         const SUPABASE_URL = 'https://tgciqknubmwinyykuuve.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk';
 
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                autoRefreshToken: false,
-                persistSession: false,
-                async getAccessToken() {
-                    if (auth.currentUser) {
-                        try {
-                            const token = await auth.currentUser.getIdToken(false);
-                            console.log('Firebase token attached to Supabase');
-                            return token;
-                        } catch (err) {
-                            console.error('Failed to get Firebase token:', err);
-                        }
-                    }
-                    return null;
-                }
-            }
-        });
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ── Login Handler ──────────────────────────────────────────────────────────
         document.addEventListener("DOMContentLoaded", () => {
@@ -104,22 +87,33 @@
                     const userCredential = await signInWithEmailAndPassword(auth, email, password);
                     const user = userCredential.user;
 
-                    alert(`Welcome back, ${user.displayName || username}!`);
+                    // --- NEW LOGIC: ADMIN CHECK ---
+                    // Query the 'admins' table for the logged-in UID
+                    const { data: adminData, error: adminError } = await supabase
+                        .from('admins')
+                        .select('*')
+                        .eq('user_id', user.uid)
+                        .single();
 
-                    // Redirect after successful login
-                    window.location.href = "dashboard.html";  // ← change this if needed
+                    if (adminData) {
+                        // User is an Admin
+                        alert(`Welcome Admin, ${user.displayName || username}!`);
+                        window.location.href = "admin_dashboard.html";
+                    } else {
+                        // Regular Student
+                        alert(`Welcome back, ${user.displayName || username}!`);
+                        window.location.href = "dashboard.html";
+                    }
 
                 } catch (error) {
                     let msg = "Login failed.";
-                    if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+                    if (error.code === "auth/user-not-found" || error.code === "auth/invalid-credential") {
                         msg = "Invalid username or password.";
                     } else if (error.code === "auth/too-many-requests") {
                         msg = "Too many failed attempts. Try again later.";
-                    } else if (error.code === "auth/invalid-email") {
-                        msg = "Invalid email format.";
                     }
 
-                    alert(msg + "\n" + error.message);
+                    alert(msg);
                     console.error("Login error:", error);
                 }
             });
@@ -127,6 +121,3 @@
     </script>
 </body>
 </html>
-
-
-
