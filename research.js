@@ -39,16 +39,19 @@ function renderCards(papers) {
         const finalUrl = rawPath.startsWith('http') ? rawPath : `${STORAGE_BASE_URL}/${cleanPath}`;
 
         const card = document.createElement("div");
-        card.className = "research-card";
+        // We use 'research-card' to trigger your grid styling
+        card.className = "research-card"; 
+        
+        // Setting the click on the whole card
+        card.onclick = () => window.open(finalUrl, '_blank');
+
         card.innerHTML = `
-            <div class="card-content" onclick="window.open('${finalUrl}', '_blank')">
-                <div class="pdf-icon-top"><i class="fa-solid fa-file-pdf"></i></div>
-                <h3 class="card-title">${paper.Title || "Untitled"}</h3>
-                <p class="card-author">Author: ${paper.Author || "Unknown"}</p>
-                <div class="card-tags">
-                    <span class="tag-dept">${paper.Department || "General"}</span>
-                    <span class="tag-year">${paper.Year || "2026"}</span>
-                </div>
+            <div class="pdf-icon-top"><i class="fa-solid fa-file-pdf"></i></div>
+            <h3 class="card-title">${paper.Title || "Untitled"}</h3>
+            <p class="card-author">Author: ${paper.Author || "Unknown"}</p>
+            <div class="card-tags">
+                <span class="tag-dept">${paper.Department || "General"}</span>
+                <span class="tag-year">${paper.Year || "2026"}</span>
             </div>
         `;
         container.appendChild(card);
