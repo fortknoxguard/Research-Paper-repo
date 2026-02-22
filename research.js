@@ -10,7 +10,6 @@ const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}`
 let allPapers = []; 
 
 async function fetchResearchPapers() {
-    // Only fetch papers where status is 'approved'
     const { data, error } = await supabase
         .from('research_papers')
         .select('*')
@@ -39,7 +38,7 @@ function renderCards(papers) {
     papers.forEach((paper) => {
         const rawPath = paper.file_path || "";
         const cleanPath = rawPath.startsWith('/') ? rawPath.substring(1) : rawPath;
-        const finalUrl = rawPath.startsWith('http') ? rawPath : `${STORAGE_BASE_URL}/${cleanPath}`;
+        const finalUrl = `${STORAGE_BASE_URL}/${cleanPath}`;
 
         const card = document.createElement("div");
         card.className = "paper-card"; 
@@ -61,7 +60,7 @@ function renderCards(papers) {
     });
 }
 
-// --- SEARCH LOGIC ---
+// Search Logic
 document.getElementById("searchInput")?.addEventListener("input", (e) => {
     const term = e.target.value.toLowerCase();
     const filtered = allPapers.filter(p => 
@@ -71,42 +70,39 @@ document.getElementById("searchInput")?.addEventListener("input", (e) => {
     renderCards(filtered);
 });
 
-// --- FILTER LOGIC (FIXED) ---
+// Dropdown Toggle Logic
+window.toggleDrop = (id) => {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let d of dropdowns) {
+        if (d.id !== id) d.classList.remove("show");
+    }
+    document.getElementById(id).classList.toggle("show");
+};
+
+// Filter Logic
 window.setFilter = (type, value) => {
     let filtered = allPapers;
     
     if (value !== 'ALL') {
-        // FIXED: Column mapping to match your Supabase Screenshot
         const column = (type === 'year') ? 'published_year' : 'Department';
         filtered = allPapers.filter(p => String(p[column]) === String(value));
     }
     
     renderCards(filtered);
 
-    // Update UI labels
     const labelId = type === 'year' ? 'yearLabel' : 'deptLabel';
-    const labelElement = document.getElementById(labelId);
-    if (labelElement) {
-        labelElement.innerText = (value === 'ALL') ? `ALL ${type.toUpperCase()}S` : value;
-    }
+    document.getElementById(labelId).innerText = (value === 'ALL') ? `ALL ${type.toUpperCase()}S` : value;
     
-    // Close dropdown after selection
     const dropId = type === 'year' ? 'yearDrop' : 'deptDrop';
-    document.getElementById(dropId)?.classList.remove("show");
+    document.getElementById(dropId).classList.remove("show");
 };
 
-window.toggleDrop = (id) => {
-    document.getElementById(id).classList.toggle("show");
-};
-
-// Close dropdowns if user clicks outside
+// Close when clicking outside
 window.onclick = function(event) {
-  if (!event.target.matches('.drop-btn')) {
+  if (!event.target.matches('.dropbtn') && !event.target.closest('.dropbtn')) {
     const dropdowns = document.getElementsByClassName("dropdown-content");
-    for (let i = 0; i < dropdowns.length; i++) {
-      if (dropdowns[i].classList.contains('show')) {
-        dropdowns[i].classList.remove('show');
-      }
+    for (let d of dropdowns) {
+      d.classList.remove('show');
     }
   }
 }
