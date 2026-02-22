@@ -8,31 +8,37 @@ const BUCKET_ID = "research papers";
 const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}`;
 
 let allPapers = []; 
-let currentStatus = 'approved'; // Default view based on your screenshot
+let currentStatus = 'approved'; 
 
 async function fetchResearchPapers() {
-    // Admins usually want to see everything, but filtered by the buttons at the top
     const { data, error } = await supabase
         .from('research_papers')
         .select('*')
         .eq('status', currentStatus);
 
-    if (error) return console.error(error.message);
+    if (error) {
+        console.error("Error fetching papers:", error.message);
+        return;
+    }
     
     allPapers = data;
-    renderTable(allPapers);
+    renderAdminTable(allPapers);
 }
 
-// Render Table (Admin style)
-function renderTable(papers) {
+function renderAdminTable(papers) {
     const tableBody = document.getElementById("researchTableBody");
+    const resultsCount = document.getElementById("resultsCount");
+    
     if (!tableBody) return;
     tableBody.innerHTML = "";
 
+    if (resultsCount) resultsCount.innerText = `Total Managed Papers: ${papers.length}`;
+
     if (papers.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">No papers found.</td></tr>`;
+        document.getElementById("noResults").style.display = "block";
         return;
     }
+    document.getElementById("noResults").style.display = "none";
 
     papers.forEach((paper) => {
         const rawPath = paper.file_path || "";
@@ -42,18 +48,18 @@ function renderTable(papers) {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>
-                <div class="user-info">
-                    <span class="user-name">${paper.Author || "Unknown"}</span>
-                    <span class="user-dept">${paper.Department || "General"}</span>
+                <div class="admin-user-cell">
+                    <strong>${paper.Author || "Unknown"}</strong><br>
+                    <small>${paper.Department || "General"}</small>
                 </div>
             </td>
             <td>
-                <div class="research-info">
-                    <a href="${finalUrl}" target="_blank" class="paper-link">${paper.Title || "Untitled"}</a>
-                    <span class="paper-year">Year: ${paper.published_year || "N/A"}</span>
+                <div class="admin-title-cell">
+                    <a href="${finalUrl}" target="_blank" class="paper-title-link">${paper.Title || "Untitled"}</a><br>
+                    <small>Year: ${paper.published_year || "N/A"}</small>
                 </div>
             </td>
-            <td class="date-col">${paper.created_at ? new Date(paper.created_at).toLocaleDateString() : "—"}</td>
+            <td>${paper.created_at ? new Date(paper.created_at).toLocaleDateString() : "—"}</td>
             <td><span class="status-badge ${paper.status}">${paper.status}</span></td>
             <td>
                 <button class="action-btn delete" onclick="deletePaper('${paper.id}')">
@@ -65,37 +71,31 @@ function renderTable(papers) {
     });
 }
 
-// Status Tab Logic (Published, Pending, Rejected)
+// Global functions for HTML buttons
 window.filterByStatus = (status) => {
     currentStatus = status;
-    // Update button UI
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.toLowerCase() === status);
+    });
     fetchResearchPapers();
 };
 
-// Admin Delete Feature
 window.deletePaper = async (id) => {
-    if (confirm("Are you sure you want to remove this research paper from the repository?")) {
-        const { error } = await supabase
-            .from('research_papers')
-            .delete()
-            .eq('id', id);
-
+    if (confirm("Permanently delete this research paper?")) {
+        const { error } = await supabase.from('research_papers').delete().eq('id', id);
         if (error) alert(error.message);
         else fetchResearchPapers();
     }
 };
 
-// Search Logic
+// Search 
 document.getElementById("adminSearchInput")?.addEventListener("input", (e) => {
     const term = e.target.value.toLowerCase();
     const filtered = allPapers.filter(p => 
         p.Title?.toLowerCase().includes(term) || 
         p.Author?.toLowerCase().includes(term)
     );
-    renderTable(filtered);
+    renderAdminTable(filtered);
 });
 
-// Initial Fetch
 fetchResearchPapers();
