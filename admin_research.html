@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICCTory - Admin Research Papers</title>
+    <title>ICCTory - Admin Research Inventory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="admin_research.css">
 </head>
 <body>
-
-    <div class="app-container">
+    <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-banner">
                 <div class="logo-circle">
@@ -18,88 +17,46 @@
                 <h1 class="brand-title">ICCTory</h1>
                 <span class="admin-badge">ADMIN PANEL</span>
             </div>
-            
+
             <nav class="nav-menu">
-                <a href="admin_dashboard.html" class="nav-item">
-                    <i class="fa-solid fa-house"></i> Home
-                </a>
-                <a href="admin_publish.html" class="nav-item">
-                    <i class="fa-solid fa-clipboard-list"></i> Requests
-                </a>
-                <a href="admin_research.html" class="nav-item active">
-                    <i class="fa-solid fa-file-lines"></i> Research Papers
-                </a>
-                <a href="admin_about.html" class="nav-item">
-                    <i class="fa-solid fa-circle-info"></i> About
-                </a>
-                <a href="admin_profile.html" class="nav-item">
-                    <i class="fa-solid fa-user"></i> Profile
-                </a>
+                <a href="admin_dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="admin_publish.html" class="nav-item"><i class="fa-solid fa-clipboard-list"></i> Requests</a>
+                <a href="admin_research.html" class="nav-item active"><i class="fa-solid fa-file-lines"></i> Research Papers</a>
+                <a href="admin_about.html" class="nav-item"><i class="fa-solid fa-circle-info"></i> About</a>
+                <a href="admin_profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
             </nav>
         </aside>
 
-        <main class="content">
-            <div class="research-header">
-                <div class="header-left">
+        <main class="main-content">
+            <div class="page-wrapper">
+                <header class="research-header">
                     <h2 class="page-title">Research Inventory</h2>
-                    <p class="subtitle">Manage and monitor all submitted academic papers.</p>
-                </div>
-
-                <div class="status-tabs">
-                    <button class="tab-btn active" id="tab-approved" onclick="window.filterByStatus('approved')">PUBLISHED</button>
-                    <button class="tab-btn" id="tab-pending" onclick="window.filterByStatus('pending')">PENDING</button>
-                    <button class="tab-btn" id="tab-rejected" onclick="window.filterByStatus('rejected')">REJECTED</button>
-                </div>
-            </div>
-
-            <div class="toolbar">
-                <div class="search-container">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="adminSearchInput" class="search-bar" placeholder="Search by title, author, or keyword...">
-                </div>
-
-                <div class="filter-group">
-                    <div class="dropdown">
-                        <button onclick="toggleDrop('yearDrop')" class="dropbtn">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            <span id="yearLabel">ALL YEARS</span> 
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div id="yearDrop" class="dropdown-content">
-                            <a href="javascript:void(0)" onclick="setFilter('year', 'ALL')">All Years</a>
-                            </div>
+                    
+                    <div class="filter-group" style="margin-bottom: 10px;">
+                        <button class="tab-btn active" id="tab-approved" onclick="window.filterByStatus('approved')">PUBLISHED</button>
+                        <button class="tab-btn" id="tab-pending" onclick="window.filterByStatus('pending')">PENDING</button>
+                        <button class="tab-btn" id="tab-rejected" onclick="window.filterByStatus('rejected')">REJECTED</button>
                     </div>
 
-                    <div class="dropdown">
-                        <button onclick="toggleDrop('deptDrop')" class="dropbtn">
-                            <i class="fa-solid fa-building-columns"></i>
-                            <span id="deptLabel">ALL DEPARTMENTS</span> 
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div id="deptDrop" class="dropdown-content">
-                            <a href="javascript:void(0)" onclick="setFilter('dept', 'ALL')">All Departments</a>
-                            </div>
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="adminSearchInput" class="search-bar" placeholder="Search by Title, Author, or Keywords...">
                     </div>
-                </div>
-            </div>
+                </header>
 
-            <div class="results-meta">
                 <div class="results-count" id="resultsCount">Total Managed Papers: 0</div>
-            </div>
+                <hr class="divider">
 
-            <div class="research-grid" id="researchGrid">
+                <div class="research-grid" id="researchCardsContainer"></div>
+
+                <div id="noResults" style="display: none; text-align: center; margin-top: 50px; color: rgba(255,255,255,0.2);">
+                    <i class="fa-solid fa-folder-open" style="font-size: 3.5rem; margin-bottom: 15px"></i>
+                    <p>No research papers found in this category.</p>
                 </div>
-
-            <div id="noResults" class="empty-state" style="display: none;">
-                <i class="fa-solid fa-folder-open"></i>
-                <p>No research papers match your current filters.</p>
             </div>
         </main>
     </div>
 
     <script type="module" src="admin_research.js"></script>
-    <script>
-        // Existing toggle and UI scripts remain the same
-    </script>
 </body>
 </html>
