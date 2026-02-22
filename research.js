@@ -4,13 +4,21 @@ const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk";
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
-// THE FIX: Most Supabase buckets with spaces use a hyphen '-' internally.
+// CONFIRMED BUCKET ID: uses hyphen based on your working URL
 const BUCKET_ID = "research-papers"; 
-const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}/`;
+const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}`;
 
 async function fetchResearchPapers() {
-    const { data, error } = await supabase.from('research_papers').select('*');
-    if (error) return console.error(error.message);
+    console.log("Fetching papers...");
+    const { data, error } = await supabase
+        .from('research_papers')
+        .select('*');
+
+    if (error) {
+        console.error("Database Error:", error.message);
+        return;
+    }
+
     renderCards(data);
 }
 
@@ -19,13 +27,20 @@ function renderCards(papers) {
     if (!container) return;
     container.innerHTML = "";
 
+    if (!papers || papers.length === 0) {
+        container.innerHTML = "<p>No research papers found.</p>";
+        return;
+    }
+
     papers.forEach((paper) => {
         const rawPath = paper.file_path || paper.file_url || "";
         
-        // Clean the path: if it's a full URL, use it; otherwise, join it to the base
+        // CLEANER: Removes leading slash if it exists to prevent double slashes in URL
+        const cleanPath = rawPath.startsWith('/') ? rawPath.substring(1) : rawPath;
+
         const finalUrl = rawPath.startsWith('http') 
             ? rawPath 
-            : (rawPath ? STORAGE_BASE_URL + rawPath : "#");
+            : (rawPath ? `${STORAGE_BASE_URL}/${cleanPath}` : "#");
 
         const card = document.createElement("div");
         card.className = "research-card";
@@ -43,4 +58,5 @@ function renderCards(papers) {
         container.appendChild(card);
     });
 }
+
 fetchResearchPapers();
