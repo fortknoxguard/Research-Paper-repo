@@ -25,28 +25,38 @@ async function fetchResearchPapers() {
 function renderCards(papers) {
     const container = document.getElementById("researchCardsContainer");
     if (!container) return;
+    
     container.innerHTML = "";
 
+    // Update results count
+    const resultsCount = document.getElementById("resultsCount");
+    if (resultsCount) {
+        resultsCount.innerText = `Total Research Papers: ${papers.length}`;
+    }
+
     if (!papers || papers.length === 0) {
-        container.innerHTML = "<p>No research papers found.</p>";
+        document.getElementById("noResults").style.display = "block";
         return;
+    } else {
+        document.getElementById("noResults").style.display = "none";
     }
 
     papers.forEach((paper) => {
         const rawPath = paper.file_path || paper.file_url || "";
-        
-        // CLEANER: Removes leading slash if it exists to prevent double slashes in URL
         const cleanPath = rawPath.startsWith('/') ? rawPath.substring(1) : rawPath;
-
         const finalUrl = rawPath.startsWith('http') 
             ? rawPath 
-            : (rawPath ? `${STORAGE_BASE_URL}/${cleanPath}` : "#");
+            : `${STORAGE_BASE_URL}/${cleanPath}`;
 
         const card = document.createElement("div");
-        card.className = "research-card";
+        // Using your original CSS class
+        card.className = "research-card"; 
+        
         card.innerHTML = `
-            <div class="card-content" onclick="window.open('${finalUrl}', '_blank')" style="cursor:pointer;">
-                <div class="pdf-icon-top"><i class="fa-solid fa-file-pdf"></i></div>
+            <div class="card-content" onclick="window.open('${finalUrl}', '_blank')">
+                <div class="pdf-icon-top">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
                 <h3 class="card-title">${paper.Title || "Untitled"}</h3>
                 <p class="card-author">Author: ${paper.Author || "Unknown"}</p>
                 <div class="card-tags">
