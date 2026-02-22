@@ -19,19 +19,19 @@ async function fetchResearchPapers() {
 
 function renderCards(papers) {
     const container = document.getElementById("researchCardsContainer");
-    const resultsCount = document.getElementById("resultsCount");
-    const noResults = document.getElementById("noResults");
-    
     if (!container) return;
     container.innerHTML = "";
 
+    // Update the result count text
+    const resultsCount = document.getElementById("resultsCount");
     if (resultsCount) resultsCount.innerText = `Total Research Papers: ${papers.length}`;
 
+    // Handle empty state
     if (papers.length === 0) {
-        if (noResults) noResults.style.display = "block";
+        document.getElementById("noResults").style.display = "block";
         return;
     }
-    if (noResults) noResults.style.display = "none";
+    document.getElementById("noResults").style.display = "none";
 
     papers.forEach((paper) => {
         const rawPath = paper.file_path || paper.file_url || "";
@@ -39,19 +39,20 @@ function renderCards(papers) {
         const finalUrl = rawPath.startsWith('http') ? rawPath : `${STORAGE_BASE_URL}/${cleanPath}`;
 
         const card = document.createElement("div");
-        // We use 'research-card' to trigger your grid styling
-        card.className = "research-card"; 
-        
-        // Setting the click on the whole card
+        // FIX: Matches your CSS class ".paper-card"
+        card.className = "paper-card"; 
         card.onclick = () => window.open(finalUrl, '_blank');
 
         card.innerHTML = `
-            <div class="pdf-icon-top"><i class="fa-solid fa-file-pdf"></i></div>
-            <h3 class="card-title">${paper.Title || "Untitled"}</h3>
-            <p class="card-author">Author: ${paper.Author || "Unknown"}</p>
-            <div class="card-tags">
-                <span class="tag-dept">${paper.Department || "General"}</span>
-                <span class="tag-year">${paper.Year || "2026"}</span>
+            <div class="paper-preview">
+                <img src="bg%20pic.jpg" class="preview-img" alt="Paper Preview">
+                <div class="pdf-overlay-icon"><i class="fa-solid fa-file-pdf"></i></div>
+            </div>
+            <h3 class="paper-title">${paper.Title || "Untitled Research"}</h3>
+            <p class="paper-meta">By ${paper.Author || "Unknown Author"}</p>
+            <div class="paper-tags">
+                <span class="tag">${paper.Department || "General"}</span>
+                <span class="tag">${paper.Year || "2026"}</span>
             </div>
         `;
         container.appendChild(card);
