@@ -47,7 +47,7 @@ body {
 .sidebar-banner {
     background: var(--login-glass); 
     padding: 30px 15px; 
-    height: auto; /* Changed to auto so nothing gets cut off */
+    height: auto; 
     min-height: 260px; 
     text-align: center; 
     clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
