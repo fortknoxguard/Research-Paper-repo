@@ -62,36 +62,78 @@
         </main>
     </div>
 
-    <script>
-        const data = Array(10).fill({ 
-            user: 'Student User', 
-            title: 'Sample Rejected Research Paper Title', 
-            date: 'Feb 11, 2026', 
-            status: 'Rejected' 
-        });
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-        const container = document.getElementById('requestList');
-        data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'table-row';
-            row.innerHTML = `
-                <span class="td user-cell">
-                    <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-                    ${item.user}
-                </span>
-                <span class="td title-cell">${item.title}</span>
-                <span class="td">${item.date}</span>
-                <span class="td">
-                    <span class="status-pill rejected">${item.status}</span>
-                </span>
-                <span class="td">
-                    <button class="action-btn delete" title="Delete Permanent">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </span>
-            `;
-            container.appendChild(row);
-        });
+        const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
+        const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk";
+        const supabase = createClient(SUPABASE_URL, ANON_KEY);
+
+        async function loadRejected() {
+            const container = document.getElementById('requestList');
+            
+            // Fetch only REJECTED papers
+            const { data, error } = await supabase
+                .from('research_papers')
+                .select('*')
+                .eq('status', 'rejected');
+
+            if (error) {
+                console.error("Error fetching rejected:", error.message);
+                return;
+            }
+
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding:40px; color:rgba(255,255,255,0.3);">No rejected papers found.</p>`;
+                return;
+            }
+
+            data.forEach(item => {
+                // Formatting date from created_at or updated_at
+                const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : "—";
+
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <span class="td user-cell">
+                        <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+                        ${item.Author || 'Unknown User'}
+                    </span>
+                    <span class="td title-cell">${item.Title || 'Untitled'}</span>
+                    <span class="td">${dateStr}</span>
+                    <span class="td">
+                        <span class="status-pill rejected">Rejected</span>
+                    </span>
+                    <span class="td">
+                        <button class="action-btn delete" title="Delete Permanent" onclick="deletePermanent('${item.id}')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </span>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Global function for the trash button
+        window.deletePermanent = async (id) => {
+            if (!confirm("Are you sure you want to permanently delete this record? This cannot be undone.")) return;
+
+            const { error } = await supabase
+                .from('research_papers')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                alert("Error deleting record: " + error.message);
+            } else {
+                alert("Record deleted successfully.");
+                loadRejected();
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", loadRejected);
     </script>
 </body>
 </html>
