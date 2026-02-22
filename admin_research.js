@@ -22,80 +22,110 @@ async function fetchResearchPapers() {
     }
     
     allPapers = data;
-    renderAdminTable(allPapers);
+    renderAdminGrid(allPapers);
 }
 
-function renderAdminTable(papers) {
-    const tableBody = document.getElementById("researchTableBody");
+function renderAdminGrid(papers) {
+    const gridContainer = document.getElementById("researchGrid");
     const resultsCount = document.getElementById("resultsCount");
+    const noResults = document.getElementById("noResults");
     
-    if (!tableBody) return;
-    tableBody.innerHTML = "";
+    if (!gridContainer) return;
+    gridContainer.innerHTML = "";
 
     if (resultsCount) resultsCount.innerText = `Total Managed Papers: ${papers.length}`;
 
     if (papers.length === 0) {
-        document.getElementById("noResults").style.display = "block";
+        if (noResults) noResults.style.display = "block";
         return;
     }
-    document.getElementById("noResults").style.display = "none";
+    if (noResults) noResults.style.display = "none";
 
     papers.forEach((paper) => {
         const rawPath = paper.file_path || "";
         const cleanPath = rawPath.startsWith('/') ? rawPath.substring(1) : rawPath;
         const finalUrl = `${STORAGE_BASE_URL}/${cleanPath}`;
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>
-                <div class="admin-user-cell">
-                    <strong>${paper.Author || "Unknown"}</strong><br>
-                    <small>${paper.Department || "General"}</small>
+        const card = document.createElement("div");
+        card.className = "paper-card";
+        
+        // We use the same structure as the student page cards
+        card.innerHTML = `
+            <div class="paper-preview" onclick="window.open('${finalUrl}', '_blank')">
+                <img src="icct.jpeg" alt="Paper Thumbnail" class="preview-img">
+                <div class="pdf-icon-overlay">
+                    <i class="fa-solid fa-file-pdf"></i>
                 </div>
-            </td>
-            <td>
-                <div class="admin-title-cell">
-                    <a href="${finalUrl}" target="_blank" class="paper-title-link">${paper.Title || "Untitled"}</a><br>
-                    <small>Year: ${paper.published_year || "N/A"}</small>
+            </div>
+            <div class="paper-info">
+                <h3 class="paper-title">${paper.Title || "Untitled"}</h3>
+                <p class="paper-meta">By ${paper.Author || "Unknown Author"}</p>
+                <div class="card-tags">
+                    <span class="tag">${paper.Department || "General"}</span>
+                    <span class="tag">${paper.published_year || "No Year"}</span>
                 </div>
-            </td>
-            <td>${paper.created_at ? new Date(paper.created_at).toLocaleDateString() : "—"}</td>
-            <td><span class="status-badge ${paper.status}">${paper.status}</span></td>
-            <td>
-                <button class="action-btn delete" onclick="deletePaper('${paper.id}')">
+            </div>
+            <div class="admin-actions">
+                <button class="delete-btn" onclick="deletePaper('${paper.id}')" title="Delete Permanent">
                     <i class="fa-solid fa-trash"></i>
                 </button>
-            </td>
+            </div>
         `;
-        tableBody.appendChild(row);
+        gridContainer.appendChild(card);
     });
 }
 
-// Global functions for HTML buttons
+// Global functions for UI interaction
 window.filterByStatus = (status) => {
     currentStatus = status;
+    
+    // Update Active Tab UI
     document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.toLowerCase() === status);
+        btn.classList.toggle('active', btn.id === `tab-${status}`);
     });
+
     fetchResearchPapers();
 };
 
 window.deletePaper = async (id) => {
-    if (confirm("Permanently delete this research paper?")) {
+    if (confirm("Permanently delete this research paper from the database? This cannot be undone.")) {
         const { error } = await supabase.from('research_papers').delete().eq('id', id);
-        if (error) alert(error.message);
-        else fetchResearchPapers();
+        if (error) {
+            alert("Error: " + error.message);
+        } else {
+            fetchResearchPapers();
+        }
     }
 };
 
-// Search 
+// Search Logic
 document.getElementById("adminSearchInput")?.addEventListener("input", (e) => {
     const term = e.target.value.toLowerCase();
     const filtered = allPapers.filter(p => 
         p.Title?.toLowerCase().includes(term) || 
-        p.Author?.toLowerCase().includes(term)
+        p.Author?.toLowerCase().includes(term) ||
+        p.Department?.toLowerCase().includes(term)
     );
-    renderAdminTable(filtered);
+    renderAdminGrid(filtered);
 });
 
+// Dropdown Filters
+window.setFilter = (type, value) => {
+    let filtered = [...allPapers];
+    
+    if (type === 'year' && value !== 'ALL') {
+        filtered = allPapers.filter(p => p.published_year == value);
+        document.getElementById('yearLabel').innerText = value;
+    } else if (type === 'dept' && value !== 'ALL') {
+        filtered = allPapers.filter(p => p.Department == value);
+        document.getElementById('deptLabel').innerText = value;
+    } else {
+        if (type === 'year') document.getElementById('yearLabel').innerText = "ALL YEARS";
+        if (type === 'dept') document.getElementById('deptLabel').innerText = "ALL DEPARTMENTS";
+    }
+
+    renderAdminGrid(filtered);
+};
+
+// Initialize
 fetchResearchPapers();
