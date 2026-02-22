@@ -6,7 +6,7 @@ const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
 // THE GLUE: This is the base path to your Supabase files
-const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/research-files/`;
+const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/research papers/`;
 
 async function fetchResearchPapers() {
     const { data, error } = await supabase
