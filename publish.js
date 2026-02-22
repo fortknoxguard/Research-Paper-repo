@@ -34,7 +34,7 @@ async function loadPapers(status, containerId) {
 
     const user = auth.currentUser;
 
-    // Start Supabase Query
+    // Start Supabase Query - selecting all columns including Department and publish_year
     let query = supabase
         .from('research_papers')
         .select('*')
@@ -69,11 +69,15 @@ async function loadPapers(status, containerId) {
         const row = document.createElement("div");
         row.className = "request-row";
         
-        // Map table columns: Title, Author, file_path
+        // Map table columns: Title, Author, file_path, Department, and publish_year
         row.innerHTML = `
-            <span class="col-user">${paper.Author || "Unknown"}</span>
+            <span class="col-user">
+                <strong>${paper.Author || "Unknown"}</strong><br>
+                <small style="color: #b184e1;">${paper.Department || "General"}</small>
+            </span>
             <span class="col-title">
                 <a href="${paper.file_path || '#'}" target="_blank">${paper.Title || "Untitled"}</a>
+                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4)">Year: ${paper.publish_year || "2026"}</div>
             </span>
             <span class="col-date">${displayDate}</span>
             <span class="col-status">
