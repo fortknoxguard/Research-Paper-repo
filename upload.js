@@ -1,15 +1,12 @@
 // 1. IMPORT THE LIBRARIES CORRECTLY
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-import { auth } from "./firebase.js"; // This gets the login info from your other file
+import { auth } from "./firebase.js"; 
 
 const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk"; 
 const BUCKET_NAME = "research papers"; 
 
-// 2. INITIALIZE CLIENT (Notice we use 'createClient' directly now)
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
-
-console.log("Supabase initialized:", supabase);
 
 document.addEventListener("DOMContentLoaded", () => {
     const realFile = document.getElementById("real-file");
@@ -26,17 +23,20 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         
-        // Use the auth object we imported from firebase.js
         const user = auth.currentUser;
-
         if (!user) {
             alert("Please log in first.");
             return;
         }
 
+        // --- NEW CODE: GRABBING VALUES FROM DROPDOWNS ---
         const title = form.querySelector('[name="title"]').value.trim();
         const authors = form.querySelector('[name="authors"]').value.trim();
         const file = realFile.files[0];
+        
+        // Ensure these IDs match your <select id="..."> in upload.html
+        const yearValue = document.getElementById("yearSelect")?.value || "2026";
+        const deptValue = document.getElementById("deptSelect")?.value || "General";
 
         if (!file) {
             alert("Please select a file.");
@@ -57,14 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (uploadError) throw uploadError;
 
-            // Insert to Table
+            // --- UPDATED: INSERT TO TABLE WITH YEAR AND DEPARTMENT ---
             const { error: dbError } = await supabase.from("research_papers").insert({
                 "Title": title,
                 "Author": authors,
                 "user_id": user.uid,
                 "file_path": filePath,
                 "file_name": file.name,
-                "status": "pending"
+                "status": "pending",
+                "publish_year": yearValue, // Matches your DB column
+                "Department": deptValue    // Matches your DB column (Capital D)
             });
 
             if (dbError) throw dbError;
