@@ -8,27 +8,26 @@ const BUCKET_ID = "research papers";
 const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}`;
 
 let allPapers = []; 
-let currentStatus = 'approved'; 
 
 async function fetchResearchPapers() {
     const { data, error } = await supabase
         .from('research_papers')
         .select('*')
-        .eq('status', currentStatus);
+        .eq('status', 'approved');
 
     if (error) return console.error(error.message);
     
     allPapers = data;
-    renderAdminCards(allPapers);
+    renderCards(allPapers);
 }
 
-function renderAdminCards(papers) {
+function renderCards(papers) {
     const container = document.getElementById("researchCardsContainer");
     if (!container) return;
     container.innerHTML = "";
 
     const resultsCount = document.getElementById("resultsCount");
-    if (resultsCount) resultsCount.innerText = `Total Managed Papers: ${papers.length}`;
+    if (resultsCount) resultsCount.innerText = `Total Research Papers: ${papers.length}`;
 
     if (papers.length === 0) {
         document.getElementById("noResults").style.display = "block";
@@ -43,9 +42,10 @@ function renderAdminCards(papers) {
 
         const card = document.createElement("div");
         card.className = "paper-card"; 
+        card.onclick = () => window.open(finalUrl, '_blank');
 
         card.innerHTML = `
-            <div class="paper-preview" onclick="window.open('${finalUrl}', '_blank')">
+            <div class="paper-preview">
                 <img src="cat-2.jpg" class="preview-img" alt="Paper Preview">
                 <div class="pdf-overlay-icon"><i class="fa-solid fa-file-pdf"></i></div>
             </div>
@@ -55,39 +55,56 @@ function renderAdminCards(papers) {
                 <span class="tag">${paper.Department || "General"}</span>
                 <span class="tag">${paper.published_year || "No Year"}</span>
             </div>
-            <div class="admin-actions">
-                <button class="delete-btn" onclick="deletePaper('${paper.id}')">
-                    <i class="fa-solid fa-trash"></i> Delete
-                </button>
-            </div>
         `;
         container.appendChild(card);
     });
 }
 
-window.filterByStatus = (status) => {
-    currentStatus = status;
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.id === `tab-${status}`);
-    });
-    fetchResearchPapers();
-};
-
-window.deletePaper = async (id) => {
-    if (confirm("Permanently delete this research paper?")) {
-        const { error } = await supabase.from('research_papers').delete().eq('id', id);
-        if (error) alert(error.message);
-        else fetchResearchPapers();
-    }
-};
-
-document.getElementById("adminSearchInput")?.addEventListener("input", (e) => {
+// Search Logic
+document.getElementById("searchInput")?.addEventListener("input", (e) => {
     const term = e.target.value.toLowerCase();
     const filtered = allPapers.filter(p => 
         p.Title?.toLowerCase().includes(term) || 
         p.Author?.toLowerCase().includes(term)
     );
-    renderAdminCards(filtered);
+    renderCards(filtered);
 });
+
+// Dropdown Toggle Logic
+window.toggleDrop = (id) => {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let d of dropdowns) {
+        if (d.id !== id) d.classList.remove("show");
+    }
+    document.getElementById(id).classList.toggle("show");
+};
+
+// Filter Logic
+window.setFilter = (type, value) => {
+    let filtered = allPapers;
+    
+    if (value !== 'ALL') {
+        const column = (type === 'year') ? 'published_year' : 'Department';
+        filtered = allPapers.filter(p => String(p[column]) === String(value));
+    }
+    
+    renderCards(filtered);
+
+    const labelId = type === 'year' ? 'yearLabel' : 'deptLabel';
+    document.getElementById(labelId).innerText = (value === 'ALL') ? `ALL ${type.toUpperCase()}S` : value;
+    
+    const dropId = type === 'year' ? 'yearDrop' : 'deptDrop';
+    document.getElementById(dropId).classList.remove("show");
+};
+
+// Close when clicking outside
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn') && !event.target.closest('.dropbtn')) {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let d of dropdowns) {
+      d.classList.remove('show');
+    }
+  }
+}
 
 fetchResearchPapers();
