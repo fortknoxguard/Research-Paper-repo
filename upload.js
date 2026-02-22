@@ -29,14 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // --- NEW CODE: GRABBING VALUES FROM DROPDOWNS ---
         const title = form.querySelector('[name="title"]').value.trim();
         const authors = form.querySelector('[name="authors"]').value.trim();
         const file = realFile.files[0];
         
-        // Ensure these IDs match your <select id="..."> in upload.html
-        const yearValue = document.getElementById("yearSelect")?.value || "2026";
-        const deptValue = document.getElementById("deptSelect")?.value || "General";
+        // --- FIXED: GRABBING VALUES BY NAME ATTRIBUTE TO MATCH YOUR HTML ---
+        const yearValue = form.querySelector('[name="school_year"]').value;
+        const deptValue = form.querySelector('[name="department"]').options[form.querySelector('[name="department"]').selectedIndex].text;
 
         if (!file) {
             alert("Please select a file.");
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (uploadError) throw uploadError;
 
-            // --- UPDATED: INSERT TO TABLE WITH YEAR AND DEPARTMENT ---
+            // --- INSERT TO TABLE ---
             const { error: dbError } = await supabase.from("research_papers").insert({
                 "Title": title,
                 "Author": authors,
@@ -65,8 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 "file_path": filePath,
                 "file_name": file.name,
                 "status": "pending",
-                "published_year": yearValue, // Matches your DB column
-                "Department": deptValue    // Matches your DB column (Capital D)
+                "published_year": yearValue, 
+                "Department": deptValue    
             });
 
             if (dbError) throw dbError;
