@@ -41,30 +41,32 @@
         <main class="content">
             <div class="research-header">
                 <div class="header-left">
-                    <h2 class="page-title">Published</h2>
-                    <p class="subtitle">Your successfully published research papers.</p>
+                    <h2 class="page-title">Research Inventory</h2>
+                    <p class="subtitle">Manage and monitor all submitted academic papers.</p>
                 </div>
 
                 <div class="status-tabs">
-                    <button class="tab-btn active" onclick="window.filterByStatus('approved')">PUBLISHED</button>
-                    <button class="tab-btn" onclick="window.filterByStatus('pending')">PENDING</button>
-                    <button class="tab-btn" onclick="window.filterByStatus('rejected')">REJECTED</button>
+                    <button class="tab-btn active" id="tab-approved" onclick="window.filterByStatus('approved')">PUBLISHED</button>
+                    <button class="tab-btn" id="tab-pending" onclick="window.filterByStatus('pending')">PENDING</button>
+                    <button class="tab-btn" id="tab-rejected" onclick="window.filterByStatus('rejected')">REJECTED</button>
                 </div>
             </div>
 
             <div class="toolbar">
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="adminSearchInput" class="search-bar" placeholder="Search title or author...">
+                    <input type="text" id="adminSearchInput" class="search-bar" placeholder="Search by title, author, or keyword...">
                 </div>
 
                 <div class="filter-group">
                     <div class="dropdown">
                         <button onclick="toggleDrop('yearDrop')" class="dropbtn">
-                            <span id="yearLabel">ALL YEARS</span> <i class="fa-solid fa-chevron-down"></i>
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span id="yearLabel">ALL YEARS</span> 
+                            <i class="fa-solid fa-chevron-down"></i>
                         </button>
                         <div id="yearDrop" class="dropdown-content">
-                            <a href="javascript:void(0)" onclick="setFilter('year', 'ALL')">ALL YEARS</a>
+                            <a href="javascript:void(0)" onclick="setFilter('year', 'ALL')">All Years</a>
                             <a href="javascript:void(0)" onclick="setFilter('year', '2026')">2026</a>
                             <a href="javascript:void(0)" onclick="setFilter('year', '2025')">2025</a>
                             <a href="javascript:void(0)" onclick="setFilter('year', '2024')">2024</a>
@@ -73,10 +75,12 @@
 
                     <div class="dropdown">
                         <button onclick="toggleDrop('deptDrop')" class="dropbtn">
-                            <span id="deptLabel">ALL DEPARTMENTS</span> <i class="fa-solid fa-chevron-down"></i>
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span id="deptLabel">ALL DEPARTMENTS</span> 
+                            <i class="fa-solid fa-chevron-down"></i>
                         </button>
                         <div id="deptDrop" class="dropdown-content">
-                            <a href="javascript:void(0)" onclick="setFilter('dept', 'ALL')">ALL DEPARTMENTS</a>
+                            <a href="javascript:void(0)" onclick="setFilter('dept', 'ALL')">All Departments</a>
                             <a href="javascript:void(0)" onclick="setFilter('dept', 'CS')">Computer Studies</a>
                             <a href="javascript:void(0)" onclick="setFilter('dept', 'Engineering')">Engineering</a>
                             <a href="javascript:void(0)" onclick="setFilter('dept', 'BA')">Business & Accountancy</a>
@@ -85,17 +89,19 @@
                 </div>
             </div>
 
-            <div class="results-count" id="resultsCount">Total Managed Papers: 0</div>
+            <div class="results-meta">
+                <div class="results-count" id="resultsCount">Total Papers: 0</div>
+            </div>
 
             <div class="table-wrapper">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>USER</th>
+                            <th>USER / AUTHOR</th>
                             <th>RESEARCH TITLE</th>
-                            <th>DATE PUBLISHED</th>
+                            <th>DATE CREATED</th>
                             <th>STATUS</th>
-                            <th>ACTIONS</th>
+                            <th style="text-align: center;">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody id="researchTableBody">
@@ -103,9 +109,9 @@
                 </table>
             </div>
 
-            <div id="noResults" style="display: none; text-align: center; margin-top: 50px; color: rgba(255,255,255,0.2);">
-                <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                <p>No matching research papers found.</p>
+            <div id="noResults" class="empty-state" style="display: none;">
+                <i class="fa-solid fa-folder-open"></i>
+                <p>No research papers match your current filters.</p>
             </div>
         </main>
     </div>
@@ -124,6 +130,13 @@
             if (!event.target.closest('.dropdown')) {
                 document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
             }
+        };
+
+        // UI function to update tab visual state
+        window.updateTabUI = (status) => {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`tab-${status}`);
+            if (activeBtn) activeBtn.classList.add('active');
         };
     </script>
 </body>
