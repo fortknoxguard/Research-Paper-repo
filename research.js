@@ -5,7 +5,7 @@ const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
 // CONFIRMED BUCKET ID: uses hyphen based on your working URL
-const BUCKET_ID = "research-papers"; 
+const BUCKET_ID = "research papers"; 
 const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}`;
 
 async function fetchResearchPapers() {
