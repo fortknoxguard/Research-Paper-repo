@@ -10,7 +10,12 @@ const STORAGE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_ID}`
 let allPapers = []; 
 
 async function fetchResearchPapers() {
-    const { data, error } = await supabase.from('research_papers').select('*');
+    // Only fetch papers where status is 'approved'
+    const { data, error } = await supabase
+        .from('research_papers')
+        .select('*')
+        .eq('status', 'approved');
+
     if (error) return console.error(error.message);
     
     allPapers = data;
@@ -22,11 +27,9 @@ function renderCards(papers) {
     if (!container) return;
     container.innerHTML = "";
 
-    // Update the result count text
     const resultsCount = document.getElementById("resultsCount");
     if (resultsCount) resultsCount.innerText = `Total Research Papers: ${papers.length}`;
 
-    // Handle empty state
     if (papers.length === 0) {
         document.getElementById("noResults").style.display = "block";
         return;
@@ -34,12 +37,11 @@ function renderCards(papers) {
     document.getElementById("noResults").style.display = "none";
 
     papers.forEach((paper) => {
-        const rawPath = paper.file_path || paper.file_url || "";
+        const rawPath = paper.file_path || "";
         const cleanPath = rawPath.startsWith('/') ? rawPath.substring(1) : rawPath;
         const finalUrl = rawPath.startsWith('http') ? rawPath : `${STORAGE_BASE_URL}/${cleanPath}`;
 
         const card = document.createElement("div");
-        // FIX: Matches your CSS class ".paper-card"
         card.className = "paper-card"; 
         card.onclick = () => window.open(finalUrl, '_blank');
 
@@ -59,7 +61,7 @@ function renderCards(papers) {
     });
 }
 
-// --- SEARCH & FILTER LOGIC ---
+// --- SEARCH LOGIC ---
 document.getElementById("searchInput")?.addEventListener("input", (e) => {
     const term = e.target.value.toLowerCase();
     const filtered = allPapers.filter(p => 
@@ -69,19 +71,44 @@ document.getElementById("searchInput")?.addEventListener("input", (e) => {
     renderCards(filtered);
 });
 
+// --- FILTER LOGIC (FIXED) ---
 window.setFilter = (type, value) => {
     let filtered = allPapers;
+    
     if (value !== 'ALL') {
-        filtered = allPapers.filter(p => p[type === 'year' ? 'Year' : 'Department'] == value);
+        // FIXED: Column mapping to match your Supabase Screenshot
+        const column = (type === 'year') ? 'published_year' : 'Department';
+        filtered = allPapers.filter(p => String(p[column]) === String(value));
     }
+    
     renderCards(filtered);
+
     // Update UI labels
     const labelId = type === 'year' ? 'yearLabel' : 'deptLabel';
-    document.getElementById(labelId).innerText = value === 'ALL' ? `ALL ${type.toUpperCase()}S` : value;
+    const labelElement = document.getElementById(labelId);
+    if (labelElement) {
+        labelElement.innerText = (value === 'ALL') ? `ALL ${type.toUpperCase()}S` : value;
+    }
+    
+    // Close dropdown after selection
+    const dropId = type === 'year' ? 'yearDrop' : 'deptDrop';
+    document.getElementById(dropId)?.classList.remove("show");
 };
 
 window.toggleDrop = (id) => {
     document.getElementById(id).classList.toggle("show");
 };
+
+// Close dropdowns if user clicks outside
+window.onclick = function(event) {
+  if (!event.target.matches('.drop-btn')) {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+      if (dropdowns[i].classList.contains('show')) {
+        dropdowns[i].classList.remove('show');
+      }
+    }
+  }
+}
 
 fetchResearchPapers();
