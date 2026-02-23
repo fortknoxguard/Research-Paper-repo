@@ -67,9 +67,9 @@ async function loadRejected() {
         row.className = "request-row";
         row.innerHTML = `
             <span class="col-user">${paper.Author || "You"}</span>
-            <span class="col-title">
-                <a href="${paper.file_path || '#'}" target="_blank" title="View file">${paper.Title || "Untitled"}</a>
-            </span>
+<span class="col-title">
+    <span style="color: #fff; font-weight: 500;">${paper.Title || "Untitled"}</span>
+</span>
             <span class="col-date">${displayDate}</span>
             <span class="col-status">
             <span class="col-status">
