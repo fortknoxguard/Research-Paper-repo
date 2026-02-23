@@ -12,3 +12,26 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "index.html";
   }
 });
+
+
+
+
+async function updatePaperCount() {
+    const { count, error } = await supabase
+        .from('research_papers')
+        .select('*', { count: 'exact', head: true }) 
+        .eq('status', 'approved');
+
+    if (error) {
+        console.error("Error fetching count:", error.message);
+        document.getElementById('total-approved-count').innerText = "0";
+        return;
+    }
+
+ 
+    document.getElementById('total-approved-count').innerText = count;
+}
+
+
+
+document.addEventListener("DOMContentLoaded", updatePaperCount);
