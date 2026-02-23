@@ -72,7 +72,8 @@ async function loadRejected() {
             </span>
             <span class="col-date">${displayDate}</span>
             <span class="col-status">
-                <span class="badge badge-rejected" style="background: #dc3545; color: white; padding: 2px 8px; border-radius: 4px;">Rejected</span>
+            <span class="col-status">
+            <span class="status-pill rejected">Rejected</span>
             </span>
         `;
         container.appendChild(row);
