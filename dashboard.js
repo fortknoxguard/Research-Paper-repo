@@ -1,6 +1,6 @@
-import { auth } from "firebase.js";
+import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-import { supabase } from "./supabaseClient.js";
+import { supabase } from "./supabaseClient.js"; // Added the missing import
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -9,14 +9,16 @@ onAuthStateChanged(auth, (user) => {
     if (greetingEl) {
       greetingEl.textContent = `Welcome, ${displayName}!`;
     }
+
+    // Call the dynamic count function here
+    updatePaperCount();
+
   } else {
     window.location.href = "index.html";
   }
 });
 
-
-
-
+// Function to fetch the real count from Supabase
 async function updatePaperCount() {
     const { count, error } = await supabase
         .from('research_papers')
@@ -25,14 +27,13 @@ async function updatePaperCount() {
 
     if (error) {
         console.error("Error fetching count:", error.message);
-        document.getElementById('total-approved-count').innerText = "0";
+        const countEl = document.getElementById('total-approved-count');
+        if (countEl) countEl.innerText = "0";
         return;
     }
 
- 
-    document.getElementById('total-approved-count').innerText = count;
+    const countEl = document.getElementById('total-approved-count');
+    if (countEl) {
+        countEl.innerText = count;
+    }
 }
-
-
-
-document.addEventListener("DOMContentLoaded", updatePaperCount);
