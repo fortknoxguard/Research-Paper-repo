@@ -69,7 +69,13 @@ async function loadPapers(status, containerId) {
         const row = document.createElement("div");
         row.className = "request-row";
         
-        // Map table columns: Title, Author, file_path, Department, and publish_year
+
+
+
+
+
+
+        
         row.innerHTML = `
             <span class="col-user">
                 <strong>${paper.Author || "Unknown"}</strong><br>
@@ -81,8 +87,8 @@ async function loadPapers(status, containerId) {
             </span>
             <span class="col-date">${displayDate}</span>
             <span class="col-status">
-                <span class="badge badge-published">Published</span>
-            </span>
+    <span class="status-pill published">Published</span>
+</span>
         `;
         container.appendChild(row);
     });
