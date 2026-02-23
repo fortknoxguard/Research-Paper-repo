@@ -1,4 +1,3 @@
-// js/profile.js
 import { auth } from "./firebase.js"; 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -9,13 +8,13 @@ const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+
     const fullName = user.displayName || "User";
     const email = user.email || "";
     const nameParts = fullName.trim().split(" ");
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
 
-    // 1. Update Profile Info
     const displayNameElem = document.querySelector(".user-display-name");
     const infoBoxes = document.querySelectorAll(".info-box");
 
@@ -26,33 +25,88 @@ onAuthStateChanged(auth, async (user) => {
       infoBoxes[2].textContent = lastName;
     }
 
-    // 2. Update Role Badge (FIXED: Removed .single() to prevent 406 error)
-    const { data: roleData, error } = await supabase
+
+    const { data: profileData } = await supabase
+        .from('profiles')
+        .select('avatar_url')
+        .eq('id', user.uid)
+        .single();
+
+    if (profileData?.avatar_url) {
+        const img = document.getElementById("profileImg");
+        const icon = document.getElementById("defaultIcon");
+        if (img) {
+            img.src = profileData.avatar_url;
+            img.style.display = "block";
+            if (icon) icon.style.display = "none";
+        }
+    }
+
+
+    const { data: roleData } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', user.uid);
 
     const roleBadge = document.querySelector(".user-role-badge");
-    
     if (roleBadge) {
-        // If row exists, use the role; otherwise, default to student
         const actualRole = (roleData && roleData.length > 0) ? roleData[0].role : 'student';
-        
         if (actualRole === 'admin') {
             roleBadge.textContent = "Administrator";
-            roleBadge.style.background = "#ff4757"; // Admin Red
+            roleBadge.style.background = "#ff4757";
         } else {
             roleBadge.textContent = "Verified Student";
-            roleBadge.style.background = "#2ed573"; // Student Green (optional)
+            roleBadge.style.background = "#2ed573";
         }
     }
-
   } else {
     window.location.href = "../index.html"; 
   }
 });
 
-// Logout Function
+
+const avatarInput = document.getElementById("avatarInput");
+if (avatarInput) {
+  avatarInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    const user = auth.currentUser;
+    if (!file || !user) return;
+
+
+    const img = document.getElementById("profileImg");
+    const icon = document.getElementById("defaultIcon");
+    img.src = URL.createObjectURL(file);
+    img.style.display = "block";
+    if (icon) icon.style.display = "none";
+
+    try {
+        const fileExt = file.name.split('.').pop();
+        const filePath = `avatars/${user.uid}.${fileExt}`;
+
+
+        let { error: uploadError } = await supabase.storage
+            .from('profiles')
+            .upload(filePath, file, { upsert: true });
+
+        if (uploadError) throw uploadError;
+
+
+        const { data } = supabase.storage.from('profiles').getPublicUrl(filePath);
+        const publicUrl = data.publicUrl;
+
+        await supabase.from('profiles').upsert({ 
+            id: user.uid, 
+            avatar_url: publicUrl 
+        });
+
+        console.log("Profile picture saved permanently!");
+    } catch (err) {
+        console.error("Upload failed:", err.message);
+        alert("Failed to save image to database.");
+    }
+  });
+}
+
 window.confirmLogout = async () => {
   if (confirm("Are you sure you want to log out?")) {
     try {
@@ -63,23 +117,3 @@ window.confirmLogout = async () => {
     }
   }
 };
-
-// Avatar preview logic
-const avatarInput = document.getElementById("avatarInput");
-if (avatarInput) {
-  avatarInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = document.getElementById("profileImg");
-      const icon = document.getElementById("defaultIcon");
-      if (img && icon) {
-        img.src = ev.target.result;
-        img.style.display = "block";
-        icon.style.display = "none";
-      }
-    };
-    reader.readAsDataURL(file);
-  });
-}
