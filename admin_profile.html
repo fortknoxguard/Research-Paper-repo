@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>ICCTory - Admin Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="admin_profile.css">
@@ -48,10 +52,11 @@
                         <div class="profile-header">
                             <div class="avatar-wrapper">
                                 <div class="profile-avatar" id="imagePreview">
+                                    <img id="profileImg" src="" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: none;">
                                     <i class="fas fa-user-shield" id="defaultIcon"></i>
                                 </div>
-                                <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
-                                <button type="button" class="edit-avatar-btn" onclick="document.getElementById('fileInput').click()">
+                                <input type="file" id="avatarInput" accept="image/*" hidden>
+                                <button type="button" class="edit-avatar-btn" onclick="document.getElementById('avatarInput').click()">
                                     <i class="fa-solid fa-camera"></i>
                                 </button>
                             </div>
@@ -61,16 +66,16 @@
 
                         <div class="info-grid">
                             <div class="info-item">
-                                <label>Username</label>
-                                <input type="text" id="username" class="info-input" value="admin_icct2024">
+                                <label>Email Address</label>
+                                <div class="info-box user-email">Loading...</div>
                             </div>
                             <div class="info-item">
                                 <label>First Name</label>
-                                <input type="text" id="firstName" class="info-input" value="ICCTory">
+                                <div class="info-box first-name">Loading...</div>
                             </div>
                             <div class="info-item">
                                 <label>Last Name</label>
-                                <input type="text" id="lastName" class="info-input" value="Admin">
+                                <div class="info-box last-name">Loading...</div>
                             </div>
                             <div class="info-item">
                                 <label>Account Status</label>
@@ -79,7 +84,7 @@
                         </div>
 
                         <div class="profile-actions">
-                            <button type="button" class="logout-btn-profile" onclick="confirmLogout()">
+                            <button type="button" class="logout-btn-profile" onclick="window.confirmLogout()">
                                 <i class="fa-solid fa-right-from-bracket"></i> Log Out
                             </button>
                         </div>
@@ -89,34 +94,6 @@
         </main>
     </div>
 
-    <script>
-        function previewImage(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                const output = document.getElementById('imagePreview');
-                const icon = document.getElementById('defaultIcon');
-                
-                output.style.backgroundImage = `url('${reader.result}')`;
-                output.style.backgroundSize = 'cover';
-                output.style.backgroundPosition = 'center';
-                if (icon) icon.style.display = 'none';
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        function saveProfile() {
-            const user = document.getElementById('username').value;
-            const fname = document.getElementById('firstName').value;
-            const lname = document.getElementById('lastName').value;
-            document.getElementById('displayName').innerText = fname + " " + lname;
-            
-            alert("Profile successfully updated!\nNew Username: " + user);
-        }
-        function confirmLogout() {
-            if(confirm('Log out of ICCTory?')) {
-                window.location.href = "index.html";
-            }
-        }
-    </script>
+    <script type="module" src="admin_profile.js"></script>
 </body>
 </html>
