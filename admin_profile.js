@@ -20,8 +20,15 @@ function previewImage(event) {
             
             alert("Profile successfully updated!\nNew Username: " + user);
         }
-        function confirmLogout() {
-            if(confirm('Log out of ICCTory?')) {
-                window.location.href = "../login.html";
-            }
+window.confirmLogout = async () => {
+    if (confirm("Are you sure you want to log out?")) {
+        try {
+            await signOut(auth);
+
+            window.location.replace("../index.html"); 
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
+    }
+};
         }
