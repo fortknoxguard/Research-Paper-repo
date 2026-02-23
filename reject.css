@@ -243,6 +243,37 @@ body {
     color: white;
 }
 
+
+
+
+
+
+
+
+/* --- STATUS PILL STYLES --- */
+.status-pill {
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-block;
+    text-align: center;
+    min-width: 100px;
+    letter-spacing: 0.5px;
+}
+
+.status-pill.published {
+    background: rgba(46, 213, 115, 0.1);
+    color: #2ed573;
+    border: 1px solid rgba(46, 213, 115, 0.3);
+}
+
+.status-pill.pending {
+    background: rgba(255, 165, 2, 0.1);
+    color: #ffa502;
+    border: 1px solid rgba(255, 165, 2, 0.3);
+}
+
 .status-pill.rejected {
     background: rgba(255, 71, 87, 0.1);
     color: #ff4757;
