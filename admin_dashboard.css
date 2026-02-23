@@ -178,14 +178,63 @@ body {
     box-shadow: 0 15px 40px rgba(177, 132, 225, 0.5); 
 }
 
+/* Update your .stats-container to handle the layout */
 .stats-container {
     display: flex; 
     gap: 30px; 
     width: 100%; 
-    max-width: 900px; 
+    max-width: 1000px; 
     justify-content: center;
+    margin-top: 20px;
 }
 
+/* Fix for the "White Boxes" */
 .stat-card {
-    background: rgba(255, 255, 255, 0.03); 
-    border: 1px solid rgba(255, 255, 255
+    background: rgba(255, 255, 255, 0.05); /* Transparent glass effect */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1; /* Makes all cards equal width */
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    border-color: var(--login-violet);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    color: var(--login-violet);
+    background: rgba(177, 132, 225, 0.1);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
