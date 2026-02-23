@@ -1,27 +1,26 @@
-import { supabase } from "./supabase.js"; 
-
-updateAdminStats();
+import { supabase } from "./supabase.js";
 
 async function updateAdminStats() {
+    console.log("Admin script triggered...");
 
-    const { count: approvedCount } = await supabase
-        .from('research_papers')
-        .select('*', { count: 'exact', head: true }) 
-        .eq('status', 'approved');
+    try {
+        const { count, error } = await supabase
+            .from('research_papers')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'approved');
 
+        if (error) throw error;
 
-    const { count: pendingCount } = await supabase
-        .from('research_papers')
-        .select('*', { count: 'exact', head: true }) 
-        .eq('status', 'pending');
-
-
-    if (document.getElementById('total-approved-count')) {
-        document.getElementById('total-approved-count').innerText = approvedCount || 0;
-    }
-    
-
-    if (document.getElementById('total-pending-count')) {
-        document.getElementById('total-pending-count').innerText = pendingCount || 0;
+        console.log("Admin count fetched:", count);
+        
+        const countEl = document.getElementById('total-approved-count');
+        if (countEl) {
+            countEl.innerText = count || 0;
+        }
+    } catch (err) {
+        console.error("Admin Dashboard Error:", err.message);
     }
 }
+
+// Run immediately
+updateAdminStats();
