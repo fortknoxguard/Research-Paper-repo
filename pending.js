@@ -79,18 +79,32 @@ async function loadPending() {
             actionHTML = `<span class="badge-view-only">Under Review</span>`;
         }
 
+
+
+
+
+
+        
         row.innerHTML = `
             <span class="col-user">${paper.Author || "Student"}</span>
             <span class="col-title" style="cursor:pointer; color:#00abff;" onclick="window.open('${paper.file_path}', '_blank')">
                 ${paper.Title || "Untitled"}
             </span>
             <span class="col-date">${displayDate}</span>
-            <span class="col-status"><span class="badge badge-pending">Pending</span></span>
+           <span class="col-status">
+    <span class="status-pill pending">Pending</span>
+</span>
             <span class="col-actions">${actionHTML}</span>
         `;
         container.appendChild(row);
     });
 
+
+
+
+
+
+    
     // Re-attach listeners for Admins
     if (userRole === 'admin') {
         container.querySelectorAll(".accept-btn").forEach(btn => {
