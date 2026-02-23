@@ -87,9 +87,9 @@ async function loadPending() {
         
         row.innerHTML = `
             <span class="col-user">${paper.Author || "Student"}</span>
-            <span class="col-title" style="cursor:pointer; color:#00abff;" onclick="window.open('${paper.file_path}', '_blank')">
-                ${paper.Title || "Untitled"}
-            </span>
+            <span class="col-title">
+    <span style="color: #fff; font-weight: 500;">${paper.Title || "Untitled"}</span>
+</span>
             <span class="col-date">${displayDate}</span>
            <span class="col-status">
     <span class="status-pill pending">Pending</span>
