@@ -242,3 +242,9 @@ body {
     font-weight: 600;
     color: white;
 }
+
+.status-pill.rejected {
+    background: rgba(255, 71, 87, 0.1);
+    color: #ff4757;
+    border: 1px solid rgba(255, 71, 87, 0.3);
+}
