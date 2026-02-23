@@ -27,7 +27,7 @@ onAuthStateChanged(auth, async (user) => {
 
 
     const { data: profileData } = await supabase
-        .from('profiles')
+        .from('profile')
         .select('avatar_url')
         .eq('id', user.uid)
         .single();
@@ -85,16 +85,16 @@ if (avatarInput) {
 
 
         let { error: uploadError } = await supabase.storage
-            .from('profiles')
+            .from('profile')
             .upload(filePath, file, { upsert: true });
 
         if (uploadError) throw uploadError;
 
 
-        const { data } = supabase.storage.from('profiles').getPublicUrl(filePath);
+        const { data } = supabase.storage.from('profile').getPublicUrl(filePath);
         const publicUrl = data.publicUrl;
 
-        await supabase.from('profiles').upsert({ 
+        await supabase.from('profile').upsert({ 
             id: user.uid, 
             avatar_url: publicUrl 
         });
