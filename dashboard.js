@@ -1,6 +1,6 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-import { supabase } from "./supabaseClient.js"; // Added the missing import
+import { supabase } from "./supabase.js"; // Added the missing import
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
