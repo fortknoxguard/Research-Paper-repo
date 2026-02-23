@@ -20,20 +20,20 @@ onAuthStateChanged(auth, (user) => {
 
 // Function to fetch the real count from Supabase
 async function updatePaperCount() {
-    const { count, error } = await supabase
-        .from('research_papers')
-        .select('*', { count: 'exact', head: true }) 
-        .eq('status', 'approved');
+    try {
+        const { count, error } = await supabase
+            .from('research_papers')
+            .select('*', { count: 'exact', head: true }) 
+            .eq('status', 'approved');
 
-    if (error) {
-        console.error("Error fetching count:", error.message);
+        if (error) throw error;
+
         const countEl = document.getElementById('total-approved-count');
-        if (countEl) countEl.innerText = "0";
-        return;
-    }
-
-    const countEl = document.getElementById('total-approved-count');
-    if (countEl) {
-        countEl.innerText = count;
+        if (countEl) countEl.innerText = count || 0;
+        
+    } catch (err) {
+        console.error("DEBUG ERROR:", err.message);
+        // This will tell you if the table name is wrong or connection failed
+        document.getElementById('total-approved-count').innerText = "Error";
     }
 }
