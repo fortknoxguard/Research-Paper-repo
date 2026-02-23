@@ -82,9 +82,9 @@ async function loadPapers(status, containerId) {
                 <small style="color: #b184e1;">${paper.Department || "General"}</small>
             </span>
             <span class="col-title">
-                <a href="${paper.file_path || '#'}" target="_blank">${paper.Title || "Untitled"}</a>
-                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4)">Year: ${paper.publish_year || "2026"}</div>
-            </span>
+    <span style="color: white; font-weight: bold;">${paper.Title || "Untitled"}</span>
+    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4)">Year: ${paper.publish_year || "2026"}</div>
+</span>
             <span class="col-date">${displayDate}</span>
             <span class="col-status">
     <span class="status-pill published">Published</span>
