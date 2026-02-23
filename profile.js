@@ -26,12 +26,14 @@ onAuthStateChanged(auth, async (user) => {
     }
 
 
-    const { data: profileData } = await supabase
-        .from('profile')
-        .select('avatar_url')
-        .eq('id', user.uid)
-        .single();
+const { data: profileRows } = await supabase
+    .from('profile')
+    .select('avatar_url')
+    .eq('id', user.uid);
 
+const profileData = profileRows?.[0];
+
+    
     if (profileData?.avatar_url) {
         const img = document.getElementById("profileImg");
         const icon = document.getElementById("defaultIcon");
