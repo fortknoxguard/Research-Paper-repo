@@ -43,7 +43,7 @@
                     A Centralized Repository of Verified Research Papers from ICCT students.
                 </h2>
 
-                <button class="browse-btn" onclick="location.href='adminpage/admin_research.html'">
+                <button class="browse-btn" onclick="location.href='admin_research.html'">
                     <i class="fa-solid fa-magnifying-glass big-search-icon"></i>
                     <span>Browse All Papers</span>
                 </button>
@@ -53,11 +53,9 @@
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fa-solid fa-file-circle-check"></i></div>
                     <div class="stat-info">
-                        <div class="stat-card">
-                            <div class="stat-row">
-    Total Published: <strong id="total-approved-count">Loading...</strong>
-</div>
-
+                        <span class="stat-value" id="total-approved-count">Loading...</span>
+                        <span class="stat-label">Total Published</span>
+                    </div>
                 </div>
                 
                 <div class="stat-card">
@@ -78,5 +76,7 @@
             </div>
         </main>
     </div>
+
+    <script type="module" src="admin_dashboard.js"></script>
 </body>
 </html>
