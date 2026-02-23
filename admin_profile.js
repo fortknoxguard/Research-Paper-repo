@@ -43,7 +43,7 @@ window.confirmLogout = async () => {
         try {
             await signOut(auth);
             
-            window.location.replace("../index.html"); 
+            window.location.replace("index.html"); 
         } catch (error) {
             console.error("Logout Error:", error);
         }
