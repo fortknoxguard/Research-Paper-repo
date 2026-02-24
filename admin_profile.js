@@ -33,8 +33,8 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById("displayName").innerText = `${firstName} ${lastName}`;
         } else if (error) {
             console.error("Supabase Error:", error.message);
-            document.querySelector(".first-name").innerText = "Not Found";
-            document.querySelector(".last-name").innerText = "Not Found";
+            document.querySelector(".first_name").innerText = "Not Found";
+            document.querySelector(".last_name").innerText = "Not Found";
         }
     }
 });
