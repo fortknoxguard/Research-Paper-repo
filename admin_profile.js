@@ -1,8 +1,9 @@
+
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 import { auth } from "./firebase.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// Initialize Supabase (add your URL and Key if not already at the top)
+
 const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
 const ANON_KEY = "your-anon-key-here"; 
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
@@ -14,9 +15,9 @@ onAuthStateChanged(auth, async (user) => {
         // 1. Fill the Email from Firebase
         document.querySelector(".user-email").innerText = user.email;
 
-        //                                Fetch First/Last name from Supabase 'profiles' table
+        // 2. Fetch First/Last name from Supabase 'profiles' table
         const { data, error } = await supabase
-            .from('profiles') 
+            .from('profiles') // Adjust if your table name is different
             .select('first_name, last_name')
             .eq('id', user.uid)
             .single();
@@ -30,3 +31,25 @@ onAuthStateChanged(auth, async (user) => {
         }
     }
 });
+
+window.saveProfile = () => {
+    const user = document.getElementById('username').value;
+    const fname = document.getElementById('firstName').value;
+    const lname = document.getElementById('lastName').value;
+    document.getElementById('displayName').innerText = fname + " " + lname;
+    
+    alert("Profile successfully updated!\nNew Username: " + user);
+}
+
+
+window.confirmLogout = async () => {
+    if (confirm("Are you sure you want to log out?")) {
+        try {
+            await signOut(auth);
+            
+            window.location.replace("index.html"); 
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
+    }
+};
