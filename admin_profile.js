@@ -3,8 +3,8 @@ import { auth } from "./firebase.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const SUPABASE_URL = "https://tgciqknubmwinyykuuve.supabase.co";
-// REMEMBER: Paste your real long ANON_KEY here
-const ANON_KEY = "your-anon-key-here"; 
+
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnY2lxa251Ym13aW55eWt1dXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNTA2NDMsImV4cCI6MjA4NTgyNjY0M30.eO5YV5ip9e4XNX7QtfZAnrMx_vCCv_HQSfdhD5HhKYk"; 
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
 onAuthStateChanged(auth, async (user) => {
