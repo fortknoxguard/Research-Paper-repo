@@ -12,27 +12,27 @@ onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.replace("index.html");
     } else {
-        // 1. Fill Email (Working)
+        // 1. Fill Email
         document.querySelector(".user-email").innerText = user.email;
 
         // 2. Fetch First/Last name
-        // IMPORTANT: Check if your table is 'profiles' or 'users'
         const { data, error } = await supabase
             .from('user_role') 
-            .select('*')
+            .select('first_name, last_name')
             .eq('id', user.uid)
             .single();
 
         if (data) {
-            // Check your Supabase column names! Are they 'first_name' or 'First_Name'?
-            const firstName = data.first_name || data.First_Name || "N/A";
-            const lastName = data.last_name || data.Last_Name || "N/A";
+            const firstName = data.first_name || "N/A";
+            const lastName = data.last_name || "N/A";
 
+            // Use the correct dash "-" selectors
             document.querySelector(".first-name").innerText = firstName;
             document.querySelector(".last-name").innerText = lastName;
             document.getElementById("displayName").innerText = `${firstName} ${lastName}`;
-        } else if (error) {
-            console.error("Supabase Error:", error.message);
+        } else {
+            console.error("Supabase Error:", error ? error.message : "No data found");
+            // FIXED: Changed underscore to dash to match your HTML
             document.querySelector(".first_name").innerText = "Not Found";
             document.querySelector(".last_name").innerText = "Not Found";
         }
