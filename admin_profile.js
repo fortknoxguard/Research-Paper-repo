@@ -12,22 +12,29 @@ onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.replace("index.html");
     } else {
-        // 1. Fill the Email from Firebase
+        // 1. Fill Email (Working)
         document.querySelector(".user-email").innerText = user.email;
 
-        // 2. Fetch First/Last name from Supabase 'profiles' table
+        // 2. Fetch First/Last name
+        // IMPORTANT: Check if your table is 'profiles' or 'users'
         const { data, error } = await supabase
-            .from('profiles') // Adjust if your table name is different
-            .select('first_name, last_name')
+            .from('profiles') 
+            .select('*')
             .eq('id', user.uid)
             .single();
 
         if (data) {
-            document.querySelector(".first-name").innerText = data.first_name;
-            document.querySelector(".last-name").innerText = data.last_name;
-            document.getElementById("displayName").innerText = `${data.first_name} ${data.last_name}`;
-        } else {
-            console.log("No profile found in Supabase for this user.");
+            // Check your Supabase column names! Are they 'first_name' or 'First_Name'?
+            const firstName = data.first_name || data.First_Name || "N/A";
+            const lastName = data.last_name || data.Last_Name || "N/A";
+
+            document.querySelector(".first-name").innerText = firstName;
+            document.querySelector(".last-name").innerText = lastName;
+            document.getElementById("displayName").innerText = `${firstName} ${lastName}`;
+        } else if (error) {
+            console.error("Supabase Error:", error.message);
+            document.querySelector(".first-name").innerText = "Not Found";
+            document.querySelector(".last-name").innerText = "Not Found";
         }
     }
 });
