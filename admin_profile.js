@@ -11,38 +11,25 @@ onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.replace("index.html");
     } else {
-        // 1. Fill Email
-        const emailEl = document.querySelector(".user-email");
-        if (emailEl) emailEl.innerText = user.email;
+        document.querySelector(".user-email").innerText = user.email;
 
-        // 2. Fetch from Supabase
         const { data, error } = await supabase
-            .from('user_role') 
+            .from('user_roles') // Fixed: added 's'
             .select('first_name, last_name')
-            .eq('id', user.uid)
+            .eq('user_id', user.uid) // Fixed: changed 'id' to 'user_id'
             .single();
 
-        if (data) {
-            const firstName = data.first_name || "N/A";
-            const lastName = data.last_name || "N/A";
-
-            // Target the DASH versions to match CSS/HTML
-            const fNameEl = document.querySelector(".first-name");
-            const lNameEl = document.querySelector(".last-name");
-            const displayEl = document.getElementById("displayName");
-
-            if (fNameEl) fNameEl.innerText = firstName;
-            if (lNameEl) lNameEl.innerText = lastName;
-            if (displayEl) displayEl.innerText = `${firstName} ${lastName}`;
-        } else {
-            // Detailed error logging to fix the "Object" message in DevTools
-            console.error("Supabase Error Details:", error);
+        if (data && data.first_name) {
+            const fName = data.first_name;
+            const lName = data.last_name || "";
             
-            // Fallback UI
-            const fNameBox = document.querySelector(".first-name");
-            const lNameBox = document.querySelector(".last-name");
-            if (fNameBox) fNameBox.innerText = "Not Found";
-            if (lNameBox) lNameBox.innerText = "Not Found";
+            document.querySelector(".first-name").innerText = fName;
+            document.querySelector(".last-name").innerText = lName;
+            document.getElementById("displayName").innerText = `${fName} ${lName}`;
+        } else {
+            console.error("Supabase error or missing names:", error);
+            document.querySelector(".first-name").innerText = "Admin";
+            document.querySelector(".last-name").innerText = "User";
         }
     }
 });
