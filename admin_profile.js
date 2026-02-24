@@ -18,7 +18,7 @@ onAuthStateChanged(auth, async (user) => {
         // 2. Fetch First/Last name
         // IMPORTANT: Check if your table is 'profiles' or 'users'
         const { data, error } = await supabase
-            .from('profiles') 
+            .from('user_role') 
             .select('*')
             .eq('id', user.uid)
             .single();
