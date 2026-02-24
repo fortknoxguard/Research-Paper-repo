@@ -13,9 +13,10 @@ onAuthStateChanged(auth, async (user) => {
         window.location.replace("index.html");
     } else {
         // 1. Fill Email
-        document.querySelector(".user-email").innerText = user.email;
+        const emailEl = document.querySelector(".user-email");
+        if (emailEl) emailEl.innerText = user.email;
 
-        // 2. Fetch First/Last name
+        // 2. Fetch from Supabase
         const { data, error } = await supabase
             .from('user_role') 
             .select('first_name, last_name')
@@ -26,15 +27,18 @@ onAuthStateChanged(auth, async (user) => {
             const firstName = data.first_name || "N/A";
             const lastName = data.last_name || "N/A";
 
-            // Use the correct dash "-" selectors
-            document.querySelector(".first-name").innerText = firstName;
-            document.querySelector(".last-name").innerText = lastName;
-            document.getElementById("displayName").innerText = `${firstName} ${lastName}`;
+            // Target the DASH versions
+            const fNameEl = document.querySelector(".first-name");
+            const lNameEl = document.querySelector(".last-name");
+            const displayEl = document.getElementById("displayName");
+
+            if (fNameEl) fNameEl.innerText = firstName;
+            if (lNameEl) lNameEl.innerText = lastName;
+            if (displayEl) displayEl.innerText = `${firstName} ${lastName}`;
         } else {
-            console.error("Supabase Error:", error ? error.message : "No data found");
-            // FIXED: Changed underscore to dash to match your HTML
-            document.querySelector(".first_name").innerText = "Not Found";
-            document.querySelector(".last_name").innerText = "Not Found";
+            console.error("Supabase Error:", error);
+            document.querySelector(".first-name").innerText = "Not Found";
+            document.querySelector(".last-name").innerText = "Not Found";
         }
     }
 });
